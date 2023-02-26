@@ -24,6 +24,7 @@ export default defineConfig({
         })
       ]
     }),
+    // 默认自动导入 src/components 下的组件
     Components({
       resolvers: [
         // 自动导入 Element Plus 组件
@@ -35,7 +36,7 @@ export default defineConfig({
       ]
     }),
     Icons({
-      // 从 iconify 自动安装图标集
+      // 从 @iconify-json 自动安装图标集
       autoInstall: true
     })
   ],
