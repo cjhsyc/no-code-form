@@ -1,0 +1,12 @@
+@mixin scrollbar($width: 6px, $backgroundColor: #0003) {
+  // 整个滚动条
+  &::-webkit-scrollbar {
+    width: $width;
+    height: $width;
+  }
+  // 滚动条上的滚动滑块
+  &::-webkit-scrollbar-thumb {
+    border-radius: calc($width / 2);
+    background-color: $backgroundColor;
+  }
+}
