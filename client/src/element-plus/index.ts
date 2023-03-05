@@ -1,1 +1,24 @@
-export { ElButton, ElIcon } from 'element-plus'
+export {
+  ElButton,
+  ElIcon,
+  ElSelect,
+  ElRadio,
+  ElRate,
+  ElCheckbox,
+  ElCheckboxGroup,
+  ElCascader,
+  ElColorPicker,
+  ElDatePicker,
+  ElInputNumber,
+  ElSlider,
+  ElTimePicker,
+  ElTimeSelect,
+  ElUpload,
+  ElInput,
+  ElConfigProvider,
+  ElCollapse,
+  ElCollapseItem,
+  ElForm,
+  ElFormItem,
+  ElEmpty
+} from 'element-plus'

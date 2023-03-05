@@ -5,6 +5,10 @@ declare interface Metadata {
   component: string
   name: string
   props: Record<string, PropConfig>
+  /**
+   * 分类
+   */
+  category: 'form' | 'basic'
 }
 
 /**

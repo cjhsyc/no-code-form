@@ -1,9 +1,11 @@
 <template>
   <skeleton ref="skeletonRef">
     <template #mainLeft>
-      <test></test>
+      <AssetsPanel :metadataList="metadataList"></AssetsPanel>
     </template>
-    <template #mainCenter></template>
+    <template #mainCenter>
+      <FormCanvas></FormCanvas>
+    </template>
     <template #mainRight>
       <div class="close" @click="skeletonRef.closeMainRight">close</div>
     </template>
@@ -11,7 +13,10 @@
 </template>
 
 <script setup lang="ts">
-import Test from './Test.vue'
+import AssetsPanel from '@/components/assets-panel/AssetsPanel.vue'
+import FormCanvas from '@/components/canvas/FormCanvas.vue'
+import { metadataList } from '@/data/metadataList'
+
 const skeletonRef = ref()
 </script>
 

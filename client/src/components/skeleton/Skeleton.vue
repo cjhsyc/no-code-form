@@ -147,6 +147,7 @@ provide('closeMainRight', closeMainRight)
     overflow: hidden;
     .main-left {
       height: 100%;
+      // 超出隐藏，防止收起动画时内部元素超出外边框
       overflow: hidden;
       border-right: 1px solid var(--color-border);
     }
