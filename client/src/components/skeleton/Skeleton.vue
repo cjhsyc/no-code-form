@@ -26,7 +26,7 @@
           v-show="isCloseMainLeft"
         >
           <el-icon :size="20">
-            <i-ep-expand></i-ep-expand>
+            <expand></expand>
           </el-icon>
         </div>
       </Transition>
@@ -38,7 +38,7 @@
           v-show="isCloseMainRight"
         >
           <el-icon :size="20">
-            <i-ep-fold></i-ep-fold>
+            <fold></fold>
           </el-icon>
         </div>
       </Transition>

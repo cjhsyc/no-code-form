@@ -3,6 +3,7 @@
     <template #mainLeft>
       <test></test>
     </template>
+    <template #mainCenter></template>
     <template #mainRight>
       <div class="close" @click="skeletonRef.closeMainRight">close</div>
     </template>
