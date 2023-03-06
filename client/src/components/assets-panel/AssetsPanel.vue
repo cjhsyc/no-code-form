@@ -7,6 +7,7 @@
         placeholder="搜索组件"
         prefix-icon="Search"
         size="large"
+        clearable
       ></el-input>
       <div class="close-button" @click="closeMainLeft">
         <el-icon :size="30">
@@ -74,8 +75,13 @@ const basicComponents = computed(() => {
       margin-right: 12px;
     }
     .close-button {
-      height: 30px;
+      height: 38px;
       cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      &:hover {
+        background-color: var(--color-background-blue);
+      }
     }
   }
   .category {

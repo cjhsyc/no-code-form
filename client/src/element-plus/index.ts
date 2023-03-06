@@ -20,5 +20,6 @@ export {
   ElCollapseItem,
   ElForm,
   ElFormItem,
-  ElEmpty
+  ElEmpty,
+  ElCard
 } from 'element-plus'

@@ -171,7 +171,7 @@ provide('closeMainRight', closeMainRight)
       cursor: pointer;
       border-radius: 8px;
       box-shadow: 0 8px 12px rgb(0 0 0 / 8%), 0 0 4px rgb(0 0 0 / 8%);
-      background: #fff;
+      background: var(--color-background);
     }
     .open-main-left {
       left: 10px;
