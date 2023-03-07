@@ -3,6 +3,11 @@
  */
 declare interface ComponentData extends Metadata {
   id: string
+  /**
+   * 栅格占据的列数
+   */
+  span?: number
+  formItemProps?: FormItemProps
 }
 
 /**
@@ -11,20 +16,22 @@ declare interface ComponentData extends Metadata {
 declare interface Metadata {
   component: string
   name: string
-  props: Record<string, PropConfig>
+  props: Record<string, PropConfig<unknown>>
   /**
    * 分类
    */
   category: 'form' | 'basic'
-  formItemProps: FormItemProps
 }
 
 /**
  * 组件属性配置
  */
 declare interface PropConfig<T> {
-  type: string
   value: T
+  /**
+   * 属性设置器
+   */
+  setter?: string
   [key as string]: any
 }
 

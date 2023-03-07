@@ -16,3 +16,16 @@ export const uuid = (prefix: string = 'id') => {
 export const deepClone = <T extends Record<string, any>>(obj: T): T => {
   return JSON.parse(JSON.stringify(obj))
 }
+
+/**
+ * 将props配置转化为真实的props对象
+ * @param props props配置
+ * @returns 真实的props对象
+ */
+export const toRealProps = (props: Record<string, PropConfig<unknown>>) => {
+  const realProps: Record<string, any> = {}
+  for (const prop in props) {
+    realProps[prop] = props[prop].value
+  }
+  return realProps
+}
