@@ -51,9 +51,9 @@ import { useElementBounding, useWindowSize } from '@vueuse/core'
 
 const { proxy } = getCurrentInstance()!
 
-const showHeaderCenter = computed(() => Boolean(proxy?.$slots.globalNav))
-const showHeaderLeft = computed(() => Boolean(proxy?.$slots.brandArea) || showHeaderCenter.value)
-const showHeaderRight = computed(() => Boolean(proxy?.$slots.actionArea) || showHeaderCenter.value)
+const showHeaderCenter = computed(() => Boolean(proxy?.$slots.headerCenter))
+const showHeaderLeft = computed(() => Boolean(proxy?.$slots.headerLeft) || showHeaderCenter.value)
+const showHeaderRight = computed(() => Boolean(proxy?.$slots.headerRight) || showHeaderCenter.value)
 const showHeader = computed(
   () => showHeaderCenter.value || showHeaderLeft.value || showHeaderRight.value
 )

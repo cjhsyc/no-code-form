@@ -8,7 +8,7 @@
     item-key="component"
   >
     <template #item="{ element }">
-      <el-button class="draggable" plain type="primary">{{ element.name }}</el-button>
+      <el-button class="draggable" plain size="large">{{ element.name }}</el-button>
     </template>
   </VueDraggable>
 </template>
@@ -31,7 +31,6 @@ const onClone = (original: Metadata): ComponentData => {
   return {
     id: uuid(original.name),
     ...deepClone(original),
-    span: 24,
     formItemProps: {
       label: original.name,
       labelWidth: 100
@@ -48,6 +47,10 @@ const onClone = (original: Metadata): ComponentData => {
   .draggable {
     width: 120px;
     margin: 10px 10px 0;
+    &:hover {
+      border-style: dashed;
+      border-width: 2px;
+    }
   }
 }
 </style>
