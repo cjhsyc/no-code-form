@@ -3,6 +3,8 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
 export const useDesignerStore = defineStore('designerStore', () => {
+  /* state */
+
   // 画布表单中的组件列表
   const componentList = ref<ComponentData[]>([])
   // 初始组件列表
@@ -10,16 +12,24 @@ export const useDesignerStore = defineStore('designerStore', () => {
   // 当前选中的组件
   const currentComponent = ref<CurrComponent>(null)
   // 表单属性配置
-  const formProps = ref<FormProps>({})
+  const formProps = ref<FormProps>({
+    labelPosition: 'right',
+    size: 'default',
+    requireAsteriskPosition: 'left'
+  })
   // 历史记录
   const history = ref<ComponentData[][]>([[]])
   // 历史记录指针
   const historyIndex = ref<number>(0)
 
+  /* getter */
+
   // 是否为最新的记录
   const latestHistory = computed(() => historyIndex.value === history.value.length - 1)
   // 是否为最老的记录
   const oldestHistory = computed(() => historyIndex.value === 0)
+
+  /* action */
 
   /**
    * 添加历史记录
@@ -28,6 +38,7 @@ export const useDesignerStore = defineStore('designerStore', () => {
     historyIndex.value++
     history.value.splice(historyIndex.value, 0, deepClone(componentList.value))
     history.value.length = historyIndex.value + 1
+    console.log('pushHistory')
   }
   /**
    * 切换至上一级历史记录
@@ -35,6 +46,9 @@ export const useDesignerStore = defineStore('designerStore', () => {
   const lastHistory = () => {
     if (historyIndex.value > 0) {
       componentList.value = history.value[--historyIndex.value]
+      if (!componentList.value.some((component) => component.id === currentComponent.value?.id)) {
+        currentComponent.value = null
+      }
     }
   }
   /**
@@ -43,6 +57,9 @@ export const useDesignerStore = defineStore('designerStore', () => {
   const nextHistory = () => {
     if (historyIndex.value < history.value.length - 1) {
       componentList.value = history.value[++historyIndex.value]
+      if (!componentList.value.some((component) => component.id === currentComponent.value?.id)) {
+        currentComponent.value = null
+      }
     }
   }
   /**

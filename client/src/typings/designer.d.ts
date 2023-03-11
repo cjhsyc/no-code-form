@@ -26,8 +26,8 @@ declare interface Metadata {
 /**
  * 组件属性配置
  */
-declare interface PropConfig<T> {
-  value: T
+declare interface PropConfig {
+  value: any
   /**
    * 属性设置器
    */
@@ -41,13 +41,13 @@ declare interface PropConfig<T> {
 declare type CurrComponent = ComponentData | null
 
 /**
- * 表单渲染属性
+ * 表单属性
  */
 declare interface FormProps {
   /**
    * 表单域标签的位置
    */
-  labelPosition?: 'left' | 'right' | 'top'
+  labelPosition: 'left' | 'right' | 'top'
   /**
    * 是否隐藏必填字段标签旁边的红色星号
    */
@@ -55,7 +55,7 @@ declare interface FormProps {
   /**
    * 星号的位置
    */
-  requireAsteriskPosition?: 'left' | 'right'
+  requireAsteriskPosition: 'left' | 'right'
   /**
    * 是否显示校验错误信息
    */
@@ -71,7 +71,7 @@ declare interface FormProps {
   /**
    * 用于控制该表单内组件的尺寸
    */
-  size?: 'large' | 'default' | 'small'
+  size: 'large' | 'default' | 'small'
   /**
    * 是否禁用该表单内的所有组件
    */
@@ -82,6 +82,9 @@ declare interface FormProps {
   scrollToError?: boolean
 }
 
+/**
+ * 表单项属性
+ */
 declare interface FormItemProps {
   /**
    * 标签文本

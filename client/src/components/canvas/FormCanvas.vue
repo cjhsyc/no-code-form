@@ -11,18 +11,18 @@
             item-key="id"
             @change="onchange"
           >
-            <template #item="{ element }">
+            <template #item="{ element, index }">
               <el-col
                 :span="(element as ComponentData).span || 24"
                 class="item-col"
                 :class="{
-                  hover: isHover === element.id,
+                  hover: hoverId === element.id,
                   activated: element.id === designerStore.currentComponent?.id
                 }"
                 @dragstart="ondragstart(element)"
                 @dragend="hasMouseEvent = true"
-                @mouseenter="hasMouseEvent && (isHover = element.id)"
-                @mouseleave="hasMouseEvent && (isHover = '')"
+                @mouseenter="hasMouseEvent && (hoverId = element.id)"
+                @mouseleave="hasMouseEvent && (hoverId = '')"
                 @click="onclick(element)"
               >
                 <el-form-item v-bind="(element as ComponentData).formItemProps" class="form-item">
@@ -31,8 +31,25 @@
                     v-bind="toRealProps((element as ComponentData).props)"
                   ></component>
                 </el-form-item>
-                <div class="toolbar" v-show="isHover === element.id">
-                  <el-button icon="Edit" size="small" circle />
+                <div class="toolbar" v-show="hoverId === element.id">
+                  <el-button
+                    icon="CopyDocument"
+                    size="small"
+                    circle
+                    plain
+                    title="复制"
+                    type="primary"
+                    @click="ropyComponent(index)"
+                  />
+                  <el-button
+                    icon="Delete"
+                    size="small"
+                    circle
+                    plain
+                    title="删除"
+                    type="danger"
+                    @click="removeComponent(index)"
+                  />
                 </div>
               </el-col>
             </template>
@@ -45,17 +62,17 @@
 
 <script setup lang="ts">
 import VueDraggable from 'vuedraggable'
-import { toRealProps } from '@/utils'
+import { toRealProps, deepClone, uuid } from '@/utils'
 
 import { useDesignerStore } from '@/stores/designer'
 
 const designerStore = useDesignerStore()
-const isHover = ref('')
+const hoverId = ref('') // hover时显示轮廓的组件id
 const hasMouseEvent = ref(true)
 
 // 开始拖动时设置为当前选中组件
 const ondragstart = (component: ComponentData) => {
-  isHover.value = component.id
+  hoverId.value = component.id
   hasMouseEvent.value = false
 }
 
@@ -72,6 +89,29 @@ const onchange = ({ added }: { added: { element: ComponentData } }) => {
   // 添加历史记录
   designerStore.pushHistory()
 }
+
+// 删除组件
+const removeComponent = (index: number) => {
+  designerStore.componentList.splice(index, 1)
+  // 添加历史记录
+  designerStore.pushHistory()
+}
+
+// 复制组件
+const ropyComponent = (index: number) => {
+  const newComponent = {
+    ...deepClone(designerStore.componentList[index]),
+    id: uuid(designerStore.componentList[index].component)
+  }
+  designerStore.componentList.splice(index, 0, newComponent)
+  // 添加历史记录
+  designerStore.pushHistory()
+}
+
+onMounted(() => {
+  // 清空历史记录
+  designerStore.clearHistory()
+})
 </script>
 
 <style scoped lang="scss">
@@ -106,12 +146,11 @@ const onchange = ({ added }: { added: { element: ComponentData } }) => {
           }
           .form-item {
             margin: 10px 0;
-            pointer-events: none;
           }
           .toolbar {
             position: absolute;
-            right: 8px;
-            top: 4px;
+            right: 12px;
+            top: -12px;
           }
         }
       }

@@ -1,20 +1,21 @@
 <template>
   <skeleton ref="skeletonRef">
-    <template #headerCenter><History /></template>
+    <template #headerCenter>
+      <History />
+    </template>
     <template #mainLeft>
-      <AssetsPanel :metadataList="metadataList"></AssetsPanel>
+      <AssetsPanel :metadataList="metadataList" />
     </template>
     <template #mainCenter>
-      <FormCanvas></FormCanvas>
+      <FormCanvas />
     </template>
-    <template #mainRight> </template>
+    <template #mainRight>
+      <PropPanel />
+    </template>
   </skeleton>
 </template>
 
 <script setup lang="ts">
-import AssetsPanel from '@/components/assets-panel/AssetsPanel.vue'
-import FormCanvas from '@/components/canvas/FormCanvas.vue'
-import History from '@/components/plugins/history/History.vue'
 import widgets from '@/components/widgets'
 import { metadataList } from '@/data/metadataList'
 

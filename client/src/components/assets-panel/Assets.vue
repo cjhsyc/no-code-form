@@ -47,7 +47,10 @@ const onClone = (original: Metadata): ComponentData => {
   .draggable {
     width: 120px;
     margin: 10px 10px 0;
+    border-color: transparent;
+    background-color: var(--color-background-blue);
     &:hover {
+      border-color: unset;
       border-style: dashed;
       border-width: 2px;
     }
