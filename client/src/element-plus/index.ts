@@ -10,6 +10,7 @@ export {
   ElColorPicker,
   ElConfigProvider,
   ElDatePicker,
+  ElDialog,
   ElEmpty,
   ElForm,
   ElFormItem,
@@ -29,5 +30,6 @@ export {
   ElTabs,
   ElTimePicker,
   ElTimeSelect,
+  ElTooltip,
   ElUpload
 } from 'element-plus'

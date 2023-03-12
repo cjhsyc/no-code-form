@@ -3,7 +3,7 @@
     <div class="prop">
       <div class="label">表单项标签的位置</div>
       <div class="setter">
-        <RadioButton
+        <SetterRadioButton
           v-model="designerStore.formProps.labelPosition"
           :options="labelPositionOptions"
         />
@@ -12,19 +12,19 @@
     <div class="prop">
       <div class="label">组件的尺寸</div>
       <div class="setter">
-        <RadioButton v-model="designerStore.formProps.size" :options="sizeOptions" />
+        <SetterRadioButton v-model="designerStore.formProps.size" :options="sizeOptions" />
       </div>
     </div>
     <div class="prop">
       <div class="label">是否隐藏必填字段的星号</div>
       <div class="setter">
-        <Switch v-model="designerStore.formProps.hideRequiredAsterisk" />
+        <el-switch v-model="designerStore.formProps.hideRequiredAsterisk" />
       </div>
     </div>
     <div class="prop">
       <div class="label">星号的位置</div>
       <div class="setter">
-        <RadioButton
+        <SetterRadioButton
           v-model="designerStore.formProps.requireAsteriskPosition"
           :options="requireAsteriskPositionOptions"
         />
@@ -33,31 +33,31 @@
     <div class="prop">
       <div class="label">是否显示校验错误信息</div>
       <div class="setter">
-        <Switch v-model="designerStore.formProps.showMessage" />
+        <el-switch v-model="designerStore.formProps.showMessage" />
       </div>
     </div>
     <div class="prop">
       <div class="label">是否以行内形式展示校验信息</div>
       <div class="setter">
-        <Switch v-model="designerStore.formProps.inlineMessage" />
+        <el-switch v-model="designerStore.formProps.inlineMessage" />
       </div>
     </div>
     <div class="prop">
       <div class="label">是否在输入框中显示校验结果反馈图标</div>
       <div class="setter">
-        <Switch v-model="designerStore.formProps.statusIcon" />
+        <el-switch v-model="designerStore.formProps.statusIcon" />
       </div>
     </div>
     <div class="prop">
       <div class="label">当校验失败时，滚动到第一个错误表单项</div>
       <div class="setter">
-        <Switch v-model="designerStore.formProps.scrollToError" />
+        <el-switch v-model="designerStore.formProps.scrollToError" />
       </div>
     </div>
     <div class="prop">
       <div class="label">是否禁用所有组件</div>
       <div class="setter">
-        <Switch v-model="designerStore.formProps.disabled" />
+        <el-switch v-model="designerStore.formProps.disabled" />
       </div>
     </div>
   </div>
@@ -68,7 +68,7 @@ import { useDesignerStore } from '@/stores/designer'
 
 const designerStore = useDesignerStore()
 
-const labelPositionOptions = ref([
+const labelPositionOptions = ref<Option[]>([
   {
     value: 'left',
     name: '左对齐'
@@ -82,7 +82,7 @@ const labelPositionOptions = ref([
     name: '顶部对齐'
   }
 ])
-const sizeOptions = ref([
+const sizeOptions = ref<Option[]>([
   {
     value: 'large',
     name: '较大'
@@ -96,7 +96,7 @@ const sizeOptions = ref([
     name: '较小'
   }
 ])
-const requireAsteriskPositionOptions = ref([
+const requireAsteriskPositionOptions = ref<Option[]>([
   {
     value: 'left',
     name: '标签左侧'

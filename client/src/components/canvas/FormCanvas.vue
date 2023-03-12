@@ -1,7 +1,7 @@
 <template>
   <div class="canvas">
     <el-card class="form-card">
-      <el-form v-bind="designerStore.formProps" class="form">
+      <el-form v-bind="designerStore.formProps" class="form" @submit.prevent>
         <el-row :gutter="10">
           <VueDraggable
             class="draggable-panel"
@@ -29,6 +29,7 @@
                   <component
                     :is="(element as ComponentData).component"
                     v-bind="toRealProps((element as ComponentData).props)"
+                    @update:modelValue="(newValue: any) => element.props.modelValue.value = newValue"
                   ></component>
                 </el-form-item>
                 <div class="toolbar" v-show="hoverId === element.id">
@@ -55,6 +56,7 @@
             </template>
           </VueDraggable>
         </el-row>
+        <div class="empty-tips" v-show="!designerStore.componentList.length">从左侧拖入组件进行表单设计</div>
       </el-form>
     </el-card>
   </div>
@@ -154,6 +156,13 @@ onMounted(() => {
           }
         }
       }
+    }
+    .empty-tips {
+      position: absolute;
+      font-size: large;
+      color: var(--color-text-primary);
+      top: 80px;
+      left: calc(50% - 117px);
     }
   }
 }

@@ -16,7 +16,7 @@ declare interface ComponentData extends Metadata {
 declare interface Metadata {
   component: string
   name: string
-  props: Record<string, PropConfig<unknown>>
+  props: Record<string, PropConfig>
   /**
    * 分类
    */
@@ -27,12 +27,38 @@ declare interface Metadata {
  * 组件属性配置
  */
 declare interface PropConfig {
-  value: any
+  /**
+   * 初始值
+   */
+  value?: any
+  label: string
   /**
    * 属性设置器
    */
-  setter?: string
-  [key as string]: any
+  setter: string
+  /**
+   * 设置器属性
+   */
+  attrs?: Record<string, any>
+  required?: boolean
+  /**
+   * 提示
+   */
+  tips?: string
+}
+
+/**
+ * 组件属性可选项
+ */
+declare interface Option {
+  /**
+   * 值
+   */
+  value: string
+  /**
+   * 中文名
+   */
+  name: string
 }
 
 /**

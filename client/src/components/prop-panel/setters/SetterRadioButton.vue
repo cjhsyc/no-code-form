@@ -1,5 +1,5 @@
 <template>
-  <el-radio-group v-model="value">
+  <el-radio-group v-model="value" v-bind="$attrs">
     <el-radio-button v-for="option in options" :key="option.value" :label="option.value">
       {{ option.name }}
     </el-radio-button>

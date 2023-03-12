@@ -17,11 +17,12 @@
 
 <script setup lang="ts">
 import widgets from '@/components/widgets'
-import { metadataList } from '@/data/metadataList'
+import { metadataList } from '@/data/metadata-list'
 
 const { appContext } = getCurrentInstance()!
 // 注册所有二次封装的素材组件
 appContext.app.use(widgets)
+
 </script>
 
 <style scoped lang="scss"></style>
