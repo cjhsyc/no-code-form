@@ -10,7 +10,7 @@ export const useDesignerStore = defineStore('designerStore', () => {
   // 初始组件列表
   const initialComponentList = ref<ComponentData[]>([])
   // 当前选中的组件
-  const currentComponent = ref<CurrComponent>(null)
+  const currentComponent = ref<ComponentData | null>(null)
   // 表单属性配置
   const formProps = ref<FormProps>({
     labelPosition: 'right',
@@ -35,9 +35,8 @@ export const useDesignerStore = defineStore('designerStore', () => {
    * 添加历史记录
    */
   const pushHistory = () => {
-    historyIndex.value++
-    history.value.splice(historyIndex.value, 0, deepClone(componentList.value))
-    history.value.length = historyIndex.value + 1
+    history.value.length = ++historyIndex.value
+    history.value.push(deepClone(componentList.value))
     console.log('pushHistory')
   }
   /**

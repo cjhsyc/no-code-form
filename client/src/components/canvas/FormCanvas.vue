@@ -1,5 +1,6 @@
 <template>
   <div class="canvas">
+    {{ designerStore.currentComponent?.id }}
     <el-card class="form-card">
       <el-form v-bind="designerStore.formProps" class="form" @submit.prevent>
         <el-row :gutter="10">
@@ -40,7 +41,7 @@
                     plain
                     title="复制"
                     type="primary"
-                    @click="ropyComponent(index)"
+                    @click.stop="ropyComponent(index)"
                   />
                   <el-button
                     icon="Delete"
@@ -49,14 +50,16 @@
                     plain
                     title="删除"
                     type="danger"
-                    @click="removeComponent(index)"
+                    @click.stop="removeComponent(index)"
                   />
                 </div>
               </el-col>
             </template>
           </VueDraggable>
         </el-row>
-        <div class="empty-tips" v-show="!designerStore.componentList.length">从左侧拖入组件进行表单设计</div>
+        <div class="empty-tips" v-show="!designerStore.componentList.length">
+          从左侧拖入组件进行表单设计
+        </div>
       </el-form>
     </el-card>
   </div>
@@ -94,6 +97,9 @@ const onchange = ({ added }: { added: { element: ComponentData } }) => {
 
 // 删除组件
 const removeComponent = (index: number) => {
+  if (designerStore.componentList[index].id === designerStore.currentComponent?.id) {
+    designerStore.currentComponent = null
+  }
   designerStore.componentList.splice(index, 1)
   // 添加历史记录
   designerStore.pushHistory()
@@ -105,7 +111,7 @@ const ropyComponent = (index: number) => {
     ...deepClone(designerStore.componentList[index]),
     id: uuid(designerStore.componentList[index].component)
   }
-  designerStore.componentList.splice(index, 0, newComponent)
+  designerStore.componentList.splice(index + 1, 0, newComponent)
   // 添加历史记录
   designerStore.pushHistory()
 }

@@ -32,9 +32,14 @@ const designerStore = useDesignerStore()
 </script>
 
 <style scoped lang="scss">
+@use '@/styles/mixin.scss' as *;
+
 .component-props {
+  height: 100%;
   width: 300px;
   padding: 0 10px;
+  overflow: scroll;
+  @include scrollbar();
   .prop {
     & + .prop {
       margin-top: 8px;

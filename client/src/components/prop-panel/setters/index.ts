@@ -1,5 +1,5 @@
-import SetterRadioButtonVue from './SetterRadioButton.vue'
-import SetterSelectIcon from './SetterSelectIcon.vue'
+import SetterRadioButtonVue from './RadioButton.vue'
+import SetterSelectIcon from './SelectIcon.vue'
 
 import type { Plugin } from 'vue'
 

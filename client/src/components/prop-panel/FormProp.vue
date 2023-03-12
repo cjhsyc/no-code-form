@@ -3,7 +3,7 @@
     <div class="prop">
       <div class="label">表单项标签的位置</div>
       <div class="setter">
-        <SetterRadioButton
+        <RadioButton
           v-model="designerStore.formProps.labelPosition"
           :options="labelPositionOptions"
         />
@@ -12,7 +12,7 @@
     <div class="prop">
       <div class="label">组件的尺寸</div>
       <div class="setter">
-        <SetterRadioButton v-model="designerStore.formProps.size" :options="sizeOptions" />
+        <RadioButton v-model="designerStore.formProps.size" :options="sizeOptions" />
       </div>
     </div>
     <div class="prop">
@@ -24,7 +24,7 @@
     <div class="prop">
       <div class="label">星号的位置</div>
       <div class="setter">
-        <SetterRadioButton
+        <RadioButton
           v-model="designerStore.formProps.requireAsteriskPosition"
           :options="requireAsteriskPositionOptions"
         />

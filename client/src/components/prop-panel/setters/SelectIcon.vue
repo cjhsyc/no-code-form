@@ -2,7 +2,7 @@
   <div>
     <el-input v-model.trim="selectedIcon" :suffix-icon="selectedIcon" v-bind="$attrs">
       <template #append>
-        <el-button icon="Pointer" @click="selectIcon">选择</el-button>
+        <el-button @click="selectIcon">点击选择</el-button>
       </template>
     </el-input>
     <el-dialog v-model="showDialog" width="70%" top="10vh" class="search-dialog">
@@ -93,9 +93,6 @@ const clickIcon = (icon: string) => {
       }
       .name {
         margin-top: 10px;
-      }
-      &.selected-icon {
-        background-color: var(--color-background-soft);
       }
     }
   }

@@ -1,6 +1,6 @@
-import WidgetSelect from './WidgetSelect.vue'
-import WidgetButton from './WidgetButton.vue'
-import WidgetTextarea from './WidgetTextarea.vue'
+import WidgetSelect from './Select.vue'
+import WidgetButton from './Button.vue'
+import WidgetTextarea from './Textarea.vue'
 
 import type { Plugin } from 'vue'
 

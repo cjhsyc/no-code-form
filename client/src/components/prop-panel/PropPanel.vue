@@ -1,6 +1,6 @@
 <template>
   <div class="prop-panel">
-    <el-tabs v-model="activeName" stretch>
+    <el-tabs v-model="activeName" stretch class="panel-tabs">
       <el-tab-pane label="组件配置" name="component">
         <ComponentProp />
       </el-tab-pane>
@@ -33,4 +33,17 @@ watch(
 )
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.prop-panel {
+  height: 100%;
+  .panel-tabs {
+    height: 100%;
+    &:deep(.el-tabs__content) {
+      height: calc(100% - 55px);
+    }
+    .el-tab-pane {
+      height: 100%;
+    }
+  }
+}
+</style>

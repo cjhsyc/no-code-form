@@ -62,11 +62,6 @@ declare interface Option {
 }
 
 /**
- * 当前选中的组件
- */
-declare type CurrComponent = ComponentData | null
-
-/**
  * 表单属性
  */
 declare interface FormProps {
