@@ -12,7 +12,7 @@ export default <Plugin>{
         const componentName = key.match(/.\/(\w+).vue/)?.[1]
         if (componentName) {
           app.component(
-            'widget' + componentName,
+            'setter' + componentName,
             defineAsyncComponent(widgets[key] as () => Promise<Component>)
           )
         }

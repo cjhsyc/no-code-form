@@ -21,6 +21,8 @@ export const useDesignerStore = defineStore('designerStore', () => {
   const history = ref<ComponentData[][]>([[]])
   // 历史记录指针
   const historyIndex = ref<number>(0)
+  // 属性配置面板显示的tab页
+  const propPanelTab = ref<'component' | 'form'>('component')
 
   /* getter */
 
@@ -75,6 +77,7 @@ export const useDesignerStore = defineStore('designerStore', () => {
     initialComponentList,
     currentComponent,
     formProps,
+    propPanelTab,
     /* getter */
     latestHistory,
     oldestHistory,

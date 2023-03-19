@@ -6,8 +6,8 @@ declare interface ComponentData extends Metadata {
   /**
    * 栅格占据的列数
    */
-  span?: number
-  formItemProps?: FormItemProps
+  span: PropConfig<number>
+  formItemProps: FormItemProps
 }
 
 /**
@@ -26,11 +26,11 @@ declare interface Metadata {
 /**
  * 组件属性配置
  */
-declare interface PropConfig {
+declare interface PropConfig<T> {
   /**
    * 初始值
    */
-  value?: any
+  value?: T
   label: string
   /**
    * 属性设置器
@@ -47,18 +47,35 @@ declare interface PropConfig {
   tips?: string
 }
 
+
 /**
- * 组件属性可选项
+ * 表单项属性
  */
-declare interface Option {
+declare interface FormItemProps {
   /**
-   * 值
+   * 标签文本
    */
-  value: string
+  label?: PropConfig<string>
   /**
-   * 中文名
+   * 标签宽度
    */
-  name: string
+  labelWidth?: PropConfig<number | string>
+  /**
+   * 是否为必填项
+   */
+  required?: PropConfig<boolean>
+  /**
+   * 表单域验证错误时的提示信息
+   */
+  error?: PropConfig<string>
+  /**
+   * 是否显示校验错误信息
+   */
+  showMessage?: PropConfig<boolean>
+  /**
+   * 是否以行内形式展示校验信息
+   */
+  inlineMessage?: PropConfig<boolean>
 }
 
 /**
@@ -101,34 +118,4 @@ declare interface FormProps {
    * 当校验失败时，滚动到第一个错误表单项
    */
   scrollToError?: boolean
-}
-
-/**
- * 表单项属性
- */
-declare interface FormItemProps {
-  /**
-   * 标签文本
-   */
-  label?: string
-  /**
-   * 标签宽度
-   */
-  labelWidth?: number | string
-  /**
-   * 是否为必填项
-   */
-  required?: boolean
-  /**
-   * 表单域验证错误时的提示信息
-   */
-  error?: string
-  /**
-   * 是否显示校验错误信息
-   */
-  showMessage?: boolean
-  /**
-   * 是否以行内形式展示校验信息
-   */
-  inlineMessage?: boolean
 }

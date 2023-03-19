@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="prop">
-      <div class="label">星号的位置</div>
+      <div class="label">必填星号的位置</div>
       <div class="setter">
         <RadioButton
           v-model="designerStore.formProps.requireAsteriskPosition"
@@ -111,7 +111,7 @@ const requireAsteriskPositionOptions = ref<Option[]>([
 <style scoped lang="scss">
 .form-props {
   width: 300px;
-  padding: 0 10px;
+  padding: 10px 14px 0;
   .prop {
     & + .prop {
       margin-top: 8px;

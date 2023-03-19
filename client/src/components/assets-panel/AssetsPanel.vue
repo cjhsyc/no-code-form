@@ -86,6 +86,7 @@ const basicComponents = computed(() => {
   }
   .category {
     .category-title {
+      user-select: none;
       padding-left: 20px;
       font-weight: bolder;
       font-size: 16px;

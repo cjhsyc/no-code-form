@@ -3,6 +3,7 @@ export {
   ElCard,
   ElCascader,
   ElCheckbox,
+  ElCheckboxButton,
   ElCheckboxGroup,
   ElCol,
   ElCollapse,

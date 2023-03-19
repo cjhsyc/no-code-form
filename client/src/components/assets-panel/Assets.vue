@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { deepClone, uuid } from '@/utils'
+import { deepClone, uuid, getInitialFormItemProps } from '@/utils'
 import VueDraggable from 'vuedraggable'
 
 const props = defineProps({
@@ -26,15 +26,24 @@ const props = defineProps({
 
 const metadataList = computed(() => props.metadataList)
 
-// 拖入新组件时添加id并深拷贝
+// 拖入新组件时添加id和表单项属性并深拷贝
 const onClone = (original: Metadata): ComponentData => {
+  const formItemProps = getInitialFormItemProps(original.name)
   return {
     id: uuid(original.name),
-    ...deepClone(original),
-    formItemProps: {
-      label: original.name,
-      labelWidth: 100
-    }
+    formItemProps,
+    span: {
+      setter: 'el-slider',
+      label: '栅格宽度',
+      value: 24,
+      attrs: {
+        min: 6,
+        max: 24,
+        step: 2,
+        showInput: true,
+      }
+    },
+    ...deepClone(original)
   }
 }
 </script>

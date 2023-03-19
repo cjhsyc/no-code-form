@@ -172,6 +172,10 @@ provide('closeMainRight', closeMainRight)
       border-radius: 8px;
       box-shadow: 0 8px 12px rgb(0 0 0 / 8%), 0 0 4px rgb(0 0 0 / 8%);
       background: var(--color-background);
+      opacity: 0.8;
+      &:hover{
+        opacity: 1;
+      }
     }
     .open-main-left {
       left: 10px;

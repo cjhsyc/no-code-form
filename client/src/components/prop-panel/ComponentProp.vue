@@ -3,8 +3,8 @@
     <div v-if="designerStore.currentComponent">
       <div
         class="prop"
-        v-for="(prop, index) in designerStore.currentComponent.props"
-        :key="designerStore.currentComponent.id + index"
+        v-for="(prop, key) in renderProps"
+        :key="designerStore.currentComponent.id + key"
       >
         <div class="label">
           <div class="title">{{ prop.label }}</div>
@@ -27,8 +27,33 @@
 
 <script setup lang="ts">
 import { useDesignerStore } from '@/stores/designer'
+import { objectFilter } from '@/utils'
 
 const designerStore = useDesignerStore()
+
+// 需显示的所有属性配置
+const renderProps = computed<Record<string, PropConfig<unknown>>>(() => {
+  const span = designerStore.currentComponent?.span
+  // 表单项属性配置
+  const renderProps: Record<string, PropConfig<unknown>> = {
+    ...designerStore.currentComponent?.formItemProps
+  }
+  // 栅格宽度配置
+  if (span) {
+    renderProps.span = span
+  }
+  // 组件属性配置，需过滤setter设置为none的属性
+  Object.assign(
+    renderProps,
+    objectFilter(
+      {
+        ...designerStore.currentComponent?.props
+      },
+      (item: PropConfig<any>) => item.setter !== 'none'
+    )
+  )
+  return renderProps
+})
 </script>
 
 <style scoped lang="scss">
@@ -37,9 +62,16 @@ const designerStore = useDesignerStore()
 .component-props {
   height: 100%;
   width: 300px;
-  padding: 0 10px;
+  padding: 10px 14px 0;
   overflow: scroll;
   @include scrollbar();
+  .title {
+    .name {
+      border-left: 4px solid var(--color-primary);
+      padding-left: 10px;
+      font-weight: bolder;
+    }
+  }
   .prop {
     & + .prop {
       margin-top: 8px;

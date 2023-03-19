@@ -1,8 +1,15 @@
 <template>
   <div class="canvas">
-    {{ designerStore.currentComponent?.id }}
     <el-card class="form-card">
-      <el-form v-bind="designerStore.formProps" class="form" @submit.prevent>
+      <el-form
+        v-bind="designerStore.formProps"
+        class="form"
+        :class="{ hover: formHover && !hoverId }"
+        @mouseover="onmouseenter"
+        @mouseout="onmouseleave"
+        @click="onClickForm"
+        @submit.prevent
+      >
         <el-row :gutter="10">
           <VueDraggable
             class="draggable-panel"
@@ -14,7 +21,7 @@
           >
             <template #item="{ element, index }">
               <el-col
-                :span="(element as ComponentData).span || 24"
+                :span="(element as ComponentData).span.value || 24"
                 class="item-col"
                 :class="{
                   hover: hoverId === element.id,
@@ -24,9 +31,12 @@
                 @dragend="hasMouseEvent = true"
                 @mouseenter="hasMouseEvent && (hoverId = element.id)"
                 @mouseleave="hasMouseEvent && (hoverId = '')"
-                @click="onclick(element)"
+                @click.stop="onclick(element)"
               >
-                <el-form-item v-bind="(element as ComponentData).formItemProps" class="form-item">
+                <el-form-item
+                  v-bind="toRealProps((element as ComponentData).formItemProps as Record<string, PropConfig<any>>)"
+                  class="form-item"
+                >
                   <component
                     :is="(element as ComponentData).component"
                     v-bind="toRealProps((element as ComponentData).props)"
@@ -41,7 +51,7 @@
                     plain
                     title="复制"
                     type="primary"
-                    @click.stop="ropyComponent(index)"
+                    @click.stop="copyComponent(index)"
                   />
                   <el-button
                     icon="Delete"
@@ -73,7 +83,22 @@ import { useDesignerStore } from '@/stores/designer'
 
 const designerStore = useDesignerStore()
 const hoverId = ref('') // hover时显示轮廓的组件id
-const hasMouseEvent = ref(true)
+const hasMouseEvent = ref(true) // 表单项是否具有鼠标进入和离开事件
+const formHover = ref(false)
+
+// 鼠标进入和离开表单
+const onmouseenter = () => {
+  formHover.value = true
+}
+const onmouseleave = () => {
+  formHover.value = false
+}
+
+// 点击表单时显示表单属性配置
+const onClickForm = () => {
+  designerStore.propPanelTab = 'form'
+  designerStore.currentComponent = null
+}
 
 // 开始拖动时设置为当前选中组件
 const ondragstart = (component: ComponentData) => {
@@ -106,7 +131,7 @@ const removeComponent = (index: number) => {
 }
 
 // 复制组件
-const ropyComponent = (index: number) => {
+const copyComponent = (index: number) => {
   const newComponent = {
     ...deepClone(designerStore.componentList[index]),
     id: uuid(designerStore.componentList[index].component)
@@ -135,7 +160,10 @@ onMounted(() => {
     min-height: 100%;
     .form {
       outline: 2px dashed var(--color-border);
-      outline-offset: 12px;
+      padding: 12px;
+      &.hover {
+        outline-color: var(--color-primary);
+      }
       .draggable-panel {
         display: flex;
         flex-wrap: wrap;
@@ -149,7 +177,7 @@ onMounted(() => {
           cursor: pointer;
           &.hover,
           &.activated {
-            outline: 2px dashed var(--el-color-primary);
+            outline: 2px dashed var(--color-primary);
             outline-offset: -4px;
           }
           .form-item {

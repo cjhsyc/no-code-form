@@ -9,7 +9,7 @@ import router from './router'
 import './styles/base.css'
 
 // 组件
-import * as ElementPlusComponents from '@/element-plus/index'
+import * as ElementPlusComponents from '@/element-plus'
 // 图标
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 

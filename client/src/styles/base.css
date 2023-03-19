@@ -15,9 +15,11 @@
 
 body {
   min-height: 100vh;
-  color: var(--color-text);
   background: var(--color-background);
+  /* body不显示滚动条 */
+  overflow: hidden;
   /* 和字体相关的样式写在body中，因为默认会被继承 */
+  color: var(--color-text);
   font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
     Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   font-weight: normal;

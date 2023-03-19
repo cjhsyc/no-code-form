@@ -1,6 +1,6 @@
 <template>
   <div class="prop-panel">
-    <el-tabs v-model="activeName" stretch class="panel-tabs">
+    <el-tabs v-model="designerStore.propPanelTab" stretch class="panel-tabs">
       <el-tab-pane label="组件配置" name="component">
         <ComponentProp />
       </el-tab-pane>
@@ -12,11 +12,10 @@
 </template>
 
 <script setup lang="ts">
-import setters from './setters'
+import setters from '../setters'
 import { useDesignerStore } from '@/stores/designer'
 
 const designerStore = useDesignerStore()
-const activeName = ref('component')
 
 const { appContext } = getCurrentInstance()!
 // 注册所有属性设置器组件
@@ -27,7 +26,7 @@ watch(
   () => designerStore.currentComponent,
   (newComponent) => {
     if (newComponent !== null) {
-      activeName.value = 'component'
+      designerStore.propPanelTab = 'component'
     }
   }
 )
@@ -39,7 +38,10 @@ watch(
   .panel-tabs {
     height: 100%;
     &:deep(.el-tabs__content) {
-      height: calc(100% - 55px);
+      height: calc(100% - 40px);
+    }
+    :deep(.el-tabs__header.is-top) {
+      margin: 0;
     }
     .el-tab-pane {
       height: 100%;
