@@ -1,7 +1,10 @@
 <template>
   <skeleton ref="skeletonRef">
     <template #headerCenter>
-      <History />
+      <div class="header-center">
+        <!-- <History /> -->
+        <Size />
+      </div>
     </template>
     <template #mainLeft>
       <AssetsPanel :metadataList="metadataList" />
@@ -22,7 +25,11 @@ import { metadataList } from '@/data/metadata-list'
 const { appContext } = getCurrentInstance()!
 // 注册所有二次封装的素材组件
 appContext.app.use(widgets)
-
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.header-center {
+  display: flex;
+  width: calc(100%);
+}
+</style>

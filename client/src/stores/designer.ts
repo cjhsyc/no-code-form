@@ -23,6 +23,8 @@ export const useDesignerStore = defineStore('designerStore', () => {
   const historyIndex = ref<number>(0)
   // 属性配置面板显示的tab页
   const propPanelTab = ref<'component' | 'form'>('component')
+  // 表单宽度
+  const width = ref('auto')
 
   /* getter */
 
@@ -78,6 +80,7 @@ export const useDesignerStore = defineStore('designerStore', () => {
     currentComponent,
     formProps,
     propPanelTab,
+    width,
     /* getter */
     latestHistory,
     oldestHistory,

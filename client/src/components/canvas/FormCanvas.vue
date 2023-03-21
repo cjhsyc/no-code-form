@@ -1,6 +1,6 @@
 <template>
   <div class="canvas">
-    <el-card class="form-card">
+    <el-card class="form-card" :style="style">
       <el-form
         v-bind="designerStore.formProps"
         class="form"
@@ -86,6 +86,12 @@ const hoverId = ref('') // hover时显示轮廓的组件id
 const hasMouseEvent = ref(true) // 表单项是否具有鼠标进入和离开事件
 const formHover = ref(false)
 
+const style = computed(() => {
+  return {
+    maxWidth: designerStore.width === 'auto' ? 'unset' : designerStore.width
+  }
+})
+
 // 鼠标进入和离开表单
 const onmouseenter = () => {
   formHover.value = true
@@ -151,12 +157,15 @@ onMounted(() => {
 @use '@/styles/mixin.scss' as *;
 
 .canvas {
+  display: flex;
+  justify-content: center;
   height: 100%;
   padding: 10px;
   background-color: var(--color-background-blue);
   overflow: auto;
   @include scrollbar();
   .form-card {
+    width: 100%;
     min-height: 100%;
     .form {
       outline: 2px dashed var(--color-border);

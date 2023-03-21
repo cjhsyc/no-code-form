@@ -8,6 +8,7 @@
         <FormProp />
       </el-tab-pane>
     </el-tabs>
+    <!-- <el-button class="close" icon="ArrowRightBold" circle size="small" type="primary" /> -->
   </div>
 </template>
 
@@ -46,6 +47,12 @@ watch(
     .el-tab-pane {
       height: 100%;
     }
+  }
+  .close {
+    position: absolute;
+    top: 12px;
+    left: -4px;
+    z-index: 10;
   }
 }
 </style>
