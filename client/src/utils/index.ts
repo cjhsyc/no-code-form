@@ -25,7 +25,9 @@ export const deepClone = <T extends Record<string, any>>(obj: T): T => {
 export const toRealProps = (props: Record<string, PropConfig<any>>) => {
   const realProps: Record<string, any> = {}
   for (const prop in props) {
-    realProps[prop] = props[prop].value
+    if (!props[prop].unbind) {
+      realProps[prop] = props[prop].value
+    }
   }
   return realProps
 }
@@ -75,7 +77,7 @@ export const objectFilter = <T extends Record<string, any>>(
  * @param label
  * @returns
  */
-export const getInitialFormItemProps = (label: string): FormItemProps => {
+export const getInitialFormItemProps = (label: string, category: string): FormItemProps => {
   return {
     label: {
       setter: 'el-input',
@@ -87,21 +89,14 @@ export const getInitialFormItemProps = (label: string): FormItemProps => {
         resize: 'none'
       }
     },
-    labelWidth: {
-      setter: 'setter-input-with-unit',
-      label: '标签宽度',
-      value: 100,
-      attrs: {
-        unit: 'px',
-        min: 0,
-        max: 1000
-      },
-      tips: '标签为顶部对齐时不生效'
+    showLabel: {
+      setter: 'el-switch',
+      label: '是否显示标签',
+      value: category === 'form'
     },
     required: {
-      setter: 'el-switch',
-      label: '是否必填',
-      value: false
+      setter: category === 'form' ? 'el-switch' : 'none',
+      label: '是否必填'
     }
     // error: {
     //   setter: 'el-input',

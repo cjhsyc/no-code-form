@@ -1,10 +1,11 @@
 import input from './input'
 import textarea from './textarea'
-import inputNumber from './inputNumber'
+import inputNumber from './input-number'
 import select from './select'
 import checkbox from './checkbox'
-import colorPicker from './colorPicker'
+import colorPicker from './color-picker'
 import rate from './rate'
+import submitButton from './submit-button'
 
 /**
  * 素材组件元数据列表
@@ -17,6 +18,7 @@ export const metadataList: Metadata[] = [
   checkbox,
   colorPicker,
   rate,
+  submitButton,
   {
     name: '滑块',
     component: 'el-slider',
@@ -80,11 +82,5 @@ export const metadataList: Metadata[] = [
         tips: '只读，在画布中设置组件的默认值'
       }
     }
-  },
-  {
-    name: '按钮',
-    component: 'widget-button',
-    category: 'basic',
-    props: {}
   }
 ]

@@ -25,8 +25,8 @@
           v-if="showMainLeft"
           v-show="isCloseMainLeft"
         >
-          <el-icon :size="20">
-            <expand></expand>
+          <el-icon :size="12">
+            <ArrowRightBold></ArrowRightBold>
           </el-icon>
         </div>
       </Transition>
@@ -37,8 +37,8 @@
           v-if="showMainRight"
           v-show="isCloseMainRight"
         >
-          <el-icon :size="20">
-            <fold></fold>
+          <el-icon :size="12">
+            <ArrowLeftBold></ArrowLeftBold>
           </el-icon>
         </div>
       </Transition>
@@ -125,11 +125,15 @@ const openMainRight = () => {
 
 defineExpose({
   closeMainLeft,
-  closeMainRight
+  closeMainRight,
+  openMainLeft,
+  openMainRight
 })
 
 provide('closeMainLeft', closeMainLeft)
 provide('closeMainRight', closeMainRight)
+provide('openMainLeft', openMainLeft)
+provide('openMainRight', openMainRight)
 </script>
 
 <style scoped lang="scss">
@@ -164,24 +168,26 @@ provide('closeMainRight', closeMainRight)
     .open-button {
       position: absolute;
       top: 10px;
-      padding: 5px;
+      padding: 4px;
       display: flex;
       justify-content: center;
       align-items: center;
       cursor: pointer;
-      border-radius: 8px;
       box-shadow: 0 8px 12px rgb(0 0 0 / 8%), 0 0 4px rgb(0 0 0 / 8%);
-      background: var(--color-background);
+      background: var(--color-primary);
+      color: white;
       opacity: 0.8;
-      &:hover{
+      &:hover {
         opacity: 1;
       }
     }
     .open-main-left {
-      left: 10px;
+      border-radius: 0 8px 8px 0;
+      left: -4px;
     }
     .open-main-right {
-      right: 10px;
+      border-radius: 8px 0 0 8px;
+      right: -4px;
     }
   }
 }
@@ -211,7 +217,7 @@ provide('closeMainRight', closeMainRight)
 }
 .open-main-left-enter-from,
 .open-main-left-leave-to {
-  transform: translateX(-150%);
+  transform: translateX(-20px);
 }
 // 打开右侧区域按钮动画
 .open-main-right-enter-active,
@@ -223,6 +229,6 @@ provide('closeMainRight', closeMainRight)
 }
 .open-main-right-enter-from,
 .open-main-right-leave-to {
-  transform: translateX(150%);
+  transform: translateX(20px);
 }
 </style>

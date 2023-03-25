@@ -2,7 +2,7 @@
   <div class="canvas">
     <el-card class="form-card" :style="style">
       <el-form
-        v-bind="designerStore.formProps"
+        v-bind="toRealProps(designerStore.formProps)"
         class="form"
         :class="{ hover: formHover && !hoverId }"
         @mouseover="onmouseenter"
@@ -33,8 +33,9 @@
                 @mouseleave="hasMouseEvent && (hoverId = '')"
                 @click.stop="onclick(element)"
               >
-                <el-form-item
-                  v-bind="toRealProps((element as ComponentData).formItemProps as Record<string, PropConfig<any>>)"
+                <form-item
+                  :label-width="designerStore.formProps.labelWidth.value"
+                  v-bind="toRealProps((element as ComponentData).formItemProps)"
                   class="form-item"
                 >
                   <component
@@ -42,7 +43,7 @@
                     v-bind="toRealProps((element as ComponentData).props)"
                     @update:modelValue="(newValue: any) => element.props.modelValue.value = newValue"
                   ></component>
-                </el-form-item>
+                </form-item>
                 <div class="toolbar" v-show="hoverId === element.id">
                   <el-button
                     icon="CopyDocument"
@@ -160,13 +161,17 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   height: 100%;
-  padding: 10px;
+  padding: 10px 20px;
   background-color: var(--color-background-blue);
   overflow: auto;
   @include scrollbar();
   .form-card {
     width: 100%;
+    height: min-content;
     min-height: 100%;
+    &:deep(.el-card__body) {
+      padding: 6px;
+    }
     .form {
       outline: 2px dashed var(--color-border);
       padding: 12px;
@@ -177,8 +182,8 @@ onMounted(() => {
         display: flex;
         flex-wrap: wrap;
         align-content: flex-start;
-        min-height: 200px;
         width: 100%;
+        min-height: 200px;
         padding-bottom: 30px;
         .item-col {
           border-radius: 6px;
@@ -201,10 +206,11 @@ onMounted(() => {
       }
     }
     .empty-tips {
+      user-select: none;
       position: absolute;
       font-size: large;
       color: var(--color-text-primary);
-      top: 80px;
+      top: 90px;
       left: calc(50% - 117px);
     }
   }

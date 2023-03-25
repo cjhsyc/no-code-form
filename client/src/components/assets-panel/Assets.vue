@@ -28,9 +28,9 @@ const metadataList = computed(() => props.metadataList)
 
 // 拖入新组件时添加id和表单项属性并深拷贝
 const onClone = (original: Metadata): ComponentData => {
-  const formItemProps = getInitialFormItemProps(original.name)
+  const formItemProps = getInitialFormItemProps(original.name, original.category)
   return {
-    id: uuid(original.name),
+    id: uuid(original.component),
     formItemProps,
     span: {
       setter: 'el-slider',
@@ -40,7 +40,7 @@ const onClone = (original: Metadata): ComponentData => {
         min: 6,
         max: 24,
         step: 2,
-        showInput: true,
+        showInput: true
       }
     },
     ...deepClone(original)

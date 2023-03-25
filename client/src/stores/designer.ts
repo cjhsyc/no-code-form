@@ -1,6 +1,7 @@
 import { deepClone } from '@/utils'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
+import defaultFormProps from '@/data/form-props'
 
 export const useDesignerStore = defineStore('designerStore', () => {
   /* state */
@@ -11,12 +12,8 @@ export const useDesignerStore = defineStore('designerStore', () => {
   const initialComponentList = ref<ComponentData[]>([])
   // 当前选中的组件
   const currentComponent = ref<ComponentData | null>(null)
-  // 表单属性配置
-  const formProps = ref<FormProps>({
-    labelPosition: 'right',
-    size: 'default',
-    requireAsteriskPosition: 'left'
-  })
+  // 表单属性
+  const formProps = ref<FormProps>(defaultFormProps)
   // 历史记录
   const history = ref<ComponentData[][]>([[]])
   // 历史记录指针

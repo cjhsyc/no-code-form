@@ -12,14 +12,16 @@
 <script setup lang="ts">
 const props = defineProps({
   options: {
-    type: Array as PropType<SelectOption[]>
+    type: Array as PropType<SelectOption[]>,
+    default: new Array()
   },
   multiple: {
     type: Boolean,
     default: false
   },
   modelValue: {
-    type: [String, Array] as PropType<string | string[]>
+    type: [String, Array] as PropType<string | string[]>,
+    default: ''
   }
 })
 

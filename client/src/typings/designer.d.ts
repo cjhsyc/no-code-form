@@ -16,7 +16,7 @@ declare interface ComponentData extends Metadata {
 declare interface Metadata {
   component: string
   name: string
-  props: Record<string, PropConfig>
+  props: Record<string, PropConfig<any>>
   /**
    * 分类
    */
@@ -31,7 +31,7 @@ declare interface PropConfig<T> {
    * 初始值
    */
   value?: T
-  label: string
+  label?: string
   /**
    * 属性设置器
    */
@@ -45,13 +45,16 @@ declare interface PropConfig<T> {
    * 提示
    */
   tips?: string
+  /**
+   * 是否是组件不需要绑定的属性
+   */
+  unbind?: boolean
 }
-
 
 /**
  * 表单项属性
  */
-declare interface FormItemProps {
+declare interface FormItemProps extends Record<string, PropConfig<any>> {
   /**
    * 标签文本
    */
@@ -64,6 +67,10 @@ declare interface FormItemProps {
    * 是否为必填项
    */
   required?: PropConfig<boolean>
+  /**
+   * 是否显示标签
+   */
+  showLabel?: PropConfig<boolean>
   /**
    * 表单域验证错误时的提示信息
    */
@@ -81,41 +88,33 @@ declare interface FormItemProps {
 /**
  * 表单属性
  */
-declare interface FormProps {
+declare interface FormProps extends Record<string, PropConfig<any>> {
   /**
    * 表单域标签的位置
    */
-  labelPosition: 'left' | 'right' | 'top'
+  labelPosition: PropConfig<'left' | 'right' | 'top'>
+  /**
+   * 标签宽度
+   */
+  labelWidth: PropConfig<number>
   /**
    * 是否隐藏必填字段标签旁边的红色星号
    */
-  hideRequiredAsterisk?: boolean
+  hideRequiredAsterisk?: PropConfig<boolean>
   /**
    * 星号的位置
    */
-  requireAsteriskPosition: 'left' | 'right'
-  /**
-   * 是否显示校验错误信息
-   */
-  showMessage?: boolean
-  /**
-   * 是否以行内形式展示校验信息
-   */
-  inlineMessage?: boolean
-  /**
-   * 是否在输入框中显示校验结果反馈图标
-   */
-  statusIcon?: boolean
+  requireAsteriskPosition: PropConfig<'left' | 'right'>
   /**
    * 用于控制该表单内组件的尺寸
    */
-  size: 'large' | 'default' | 'small'
+  size: PropConfig<'large' | 'default' | 'small'>
   /**
    * 是否禁用该表单内的所有组件
    */
-  disabled?: boolean
+  disabled?: PropConfig<boolean>
   /**
    * 当校验失败时，滚动到第一个错误表单项
    */
-  scrollToError?: boolean
+  scrollToError?: PropConfig<boolean>
 }

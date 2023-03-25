@@ -6,6 +6,9 @@
         <Size />
       </div>
     </template>
+    <template #headerRight>
+      <Preview />
+    </template>
     <template #mainLeft>
       <AssetsPanel :metadataList="metadataList" />
     </template>

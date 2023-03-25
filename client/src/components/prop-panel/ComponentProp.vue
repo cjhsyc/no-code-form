@@ -32,10 +32,10 @@ import { objectFilter } from '@/utils'
 const designerStore = useDesignerStore()
 
 // 需显示的所有属性配置
-const renderProps = computed<Record<string, PropConfig<unknown>>>(() => {
+const renderProps = computed<Record<string, PropConfig<any>>>(() => {
   const span = designerStore.currentComponent?.span
   // 表单项属性配置
-  const renderProps: Record<string, PropConfig<unknown>> = {
+  const renderProps: Record<string, PropConfig<any>> = {
     ...designerStore.currentComponent?.formItemProps
   }
   // 栅格宽度配置
@@ -52,7 +52,11 @@ const renderProps = computed<Record<string, PropConfig<unknown>>>(() => {
       (item: PropConfig<any>) => item.setter !== 'none'
     )
   )
-  return renderProps
+
+  return objectFilter(renderProps, (item: PropConfig<any>) => item.setter !== 'none') as Record<
+    string,
+    PropConfig<any>
+  >
 })
 </script>
 
