@@ -9,7 +9,7 @@
 <script setup lang="ts">
 const props = defineProps({
   modelValue: {
-    type: Number,
+    type: [Number, String],
     default: 0
   },
   unit: {
@@ -21,20 +21,26 @@ const props = defineProps({
   },
   max: {
     type: Number
+  },
+  stringValue: {
+    type: Boolean,
+    default: false
   }
 })
 
 const emit = defineEmits(['update:modelValue'])
 
 const value = computed({
-  get: () => props.modelValue,
+  get: () => {
+    return typeof props.modelValue === 'number' ? props.modelValue : parseFloat(props.modelValue) || 0
+  },
   set: (newValue: number) => {
-    if(props.min && newValue < props.min) {
-      emit('update:modelValue', props.min)
-    } else if(props.max && newValue > props.max) {
-      emit('update:modelValue', props.max)
+    if (props.min && newValue < props.min) {
+      emit('update:modelValue', props.stringValue ? props.min + props.unit : props.min)
+    } else if (props.max && newValue > props.max) {
+      emit('update:modelValue', props.stringValue ? props.max + props.unit : props.max)
     } else {
-      emit('update:modelValue', newValue)
+      emit('update:modelValue', props.stringValue ? newValue + props.unit : newValue)
     }
   }
 })

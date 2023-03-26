@@ -124,7 +124,7 @@ const onchange = ({ added }: { added: { element: ComponentData } }) => {
     designerStore.currentComponent = added.element
   }
   // 添加历史记录
-  designerStore.pushHistory()
+  // designerStore.pushHistory()
 }
 
 // 删除组件
@@ -134,7 +134,8 @@ const removeComponent = (index: number) => {
   }
   designerStore.componentList.splice(index, 1)
   // 添加历史记录
-  designerStore.pushHistory()
+  // designerStore.pushHistory()
+  hoverId.value = ''
 }
 
 // 复制组件
@@ -145,12 +146,12 @@ const copyComponent = (index: number) => {
   }
   designerStore.componentList.splice(index + 1, 0, newComponent)
   // 添加历史记录
-  designerStore.pushHistory()
+  // designerStore.pushHistory()
 }
 
 onMounted(() => {
   // 清空历史记录
-  designerStore.clearHistory()
+  // designerStore.clearHistory()
 })
 </script>
 

@@ -25,13 +25,13 @@ export {
   ElRadioGroup,
   ElRate,
   ElRow,
+  ElScrollbar,
   ElSelect,
   ElSlider,
   ElSwitch,
   ElTabPane,
   ElTabs,
   ElTimePicker,
-  ElTimeSelect,
   ElTooltip,
   ElUpload
 } from 'element-plus'

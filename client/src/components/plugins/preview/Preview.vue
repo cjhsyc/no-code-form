@@ -1,7 +1,7 @@
 <template>
   <div class="preview">
     <el-button type="success" @click="onclick">预览</el-button>
-    <el-drawer v-model="showPreview" direction="btt" size="100%">
+    <el-drawer v-model="showPreview" direction="btt" size="100%" title="预览">
       <form-render
         :componentList="designerStore.componentList"
         :formProps="designerStore.formProps"
@@ -22,4 +22,18 @@ const onclick = () => {
 }
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+@use '@/styles/mixin.scss' as *;
+.preview {
+  :deep(.el-drawer) {
+    .el-drawer__header {
+      margin: 0;
+      padding: 20px;
+    }
+    .el-drawer__body {
+      overflow: auto;
+      @include scrollbar();
+    }
+  }
+}
+</style>

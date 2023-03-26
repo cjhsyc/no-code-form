@@ -13,7 +13,7 @@ defineProps({
     default: '提交'
   },
   width: {
-    type: Number,
+    type: [Number, String],
     default: 120
   }
 })

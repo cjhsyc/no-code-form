@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <el-input v-model.trim="selectedIcon" :suffix-icon="selectedIcon" v-bind="$attrs">
+  <div class="select-icon">
+    <el-input v-model.trim="selectedIcon" :suffix-icon="selectedIcon" clearable v-bind="$attrs">
       <template #append>
         <el-button @click="selectIcon">点击选择</el-button>
       </template>
@@ -66,6 +66,11 @@ const clickIcon = (icon: string) => {
 @use '@/styles/mixin.scss' as *;
 
 .search-dialog {
+  :deep(.el-dialog__body) {
+    padding: 10px;
+    height: calc(65vh + 20px);
+    box-sizing: border-box;
+  }
   .header {
     display: inline-flex;
     align-items: center;
@@ -96,13 +101,5 @@ const clickIcon = (icon: string) => {
       }
     }
   }
-}
-</style>
-
-<style lang="scss">
-.search-dialog .el-dialog__body {
-  padding: 10px;
-  height: calc(65vh + 20px);
-  box-sizing: border-box;
 }
 </style>
