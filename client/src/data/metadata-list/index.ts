@@ -9,6 +9,8 @@ import submitButton from './submit-button'
 import slider from './slider'
 import _switch from './switch'
 import timePicker from './time-picker'
+import radio from './radio'
+import datePicker from './date-picker'
 
 /**
  * 素材组件元数据列表
@@ -18,12 +20,14 @@ export const metadataList: Metadata[] = [
   input,
   textarea,
   inputNumber,
+  radio,
   select,
   checkbox,
   colorPicker,
   rate,
   slider,
   _switch,
+  datePicker,
   timePicker,
   // 其他组件
   submitButton

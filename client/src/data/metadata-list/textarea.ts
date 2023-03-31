@@ -26,10 +26,12 @@ export default <Metadata>{
       label: '最小输入长度',
       setter: 'el-input-number'
     },
-
     placeholder: {
       label: '占位文本',
-      setter: 'el-input'
+      setter: 'el-input',
+      attrs: {
+        clearable: true
+      }
     },
     readonly: {
       label: '是否只读',

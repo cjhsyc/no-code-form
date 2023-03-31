@@ -10,7 +10,7 @@
 <script setup lang="ts">
 const props = defineProps({
   modelValue: {
-    type: [String, Array] as PropType<String | Date[] | undefined>
+    type: [String, Array] as PropType<String | String[] | undefined>
   },
   isRange: {
     type: Boolean,

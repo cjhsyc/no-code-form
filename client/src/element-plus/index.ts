@@ -25,7 +25,6 @@ export {
   ElRadioGroup,
   ElRate,
   ElRow,
-  ElScrollbar,
   ElSelect,
   ElSlider,
   ElSwitch,

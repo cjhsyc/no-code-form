@@ -73,7 +73,10 @@ export default <Metadata>{
     },
     placeholder: {
       label: '占位文本',
-      setter: 'el-input'
+      setter: 'el-input',
+      attrs: {
+        clearable: true
+      }
     }
   }
 }

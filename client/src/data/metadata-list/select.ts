@@ -75,7 +75,10 @@ export default <Metadata>{
     placeholder: {
       label: '占位文本',
       setter: 'el-input',
-      value: '请选择'
+      value: '请选择',
+      attrs: {
+        clearable: true
+      }
     },
     allowCreate: {
       label: '是否允许用户创建新选项',
