@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import setters from '../setters'
+import setters from '@/materials/setters'
 import { useDesignerStore } from '@/stores/designer'
 
 const designerStore = useDesignerStore()

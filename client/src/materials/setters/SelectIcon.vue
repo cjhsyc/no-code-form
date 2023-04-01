@@ -9,7 +9,7 @@
       <template #header="{ titleClass }">
         <div class="header">
           <div class="title" :class="titleClass">选择图标</div>
-          <el-input v-model.trim="searchValue" placeholder="请输入图标名" prefix-icon="Search" />
+          <el-input v-model.trim="searchValue" placeholder="请输入图标名" prefix-icon="Search" clearable/>
         </div>
       </template>
       <div class="icon-list">

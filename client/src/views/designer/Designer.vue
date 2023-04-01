@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import widgets from '@/components/widgets'
+import widgets from '@/materials/widgets'
 import { metadataList } from '@/data/metadata-list'
 
 const { appContext } = getCurrentInstance()!

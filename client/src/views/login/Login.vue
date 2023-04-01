@@ -7,28 +7,108 @@
           <el-tab-pane label="登录" name="login"></el-tab-pane>
           <el-tab-pane label="注册" name="signup"></el-tab-pane>
         </el-tabs>
-        <el-form class="login" label-position="top">
-          <el-form-item label="账号">
-            <el-input></el-input>
+        <el-form
+          :model="formData"
+          :rules="rules"
+          ref="formRef"
+          class="login"
+          label-position="top"
+          hide-required-asterisk
+        >
+          <el-form-item label="账号" prop="account">
+            <el-input v-model.trim="formData.account" prefix-icon="Avatar" clearable></el-input>
           </el-form-item>
-          <el-form-item label="密码">
-            <el-input></el-input>
+          <el-form-item label="密码" prop="password">
+            <el-input v-model.trim="formData.password" type="password" prefix-icon="Lock" show-password clearable></el-input>
           </el-form-item>
-          <Transition name="confirm">
+          <Transition name="confirm" prop="confirm">
             <el-form-item label="确认密码" v-show="activeName === 'signup'" class="confirm">
-              <el-input></el-input>
+              <el-input v-model.trim="formData.confirm" type="password" prefix-icon="Lock" show-password clearable></el-input>
             </el-form-item>
           </Transition>
         </el-form>
-        <el-button v-show="activeName === 'login'" class="button" type="success">登录</el-button>
-        <el-button v-show="activeName === 'signup'" class="button" type="success">注册</el-button>
+        <el-button v-show="activeName === 'login'" class="button" type="success" @click="login">
+          登录
+        </el-button>
+        <el-button v-show="activeName === 'signup'" class="button" type="success" @click="signup">
+          注册
+        </el-button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import type { FormInstance, FormRules } from 'element-plus'
+
 const activeName = ref('login')
+
+const formData = ref({
+  account: '',
+  password: '',
+  confirm: ''
+})
+const formRef = ref<FormInstance>()
+
+const rules = computed<FormRules>(() => {
+  const account = [{ required: true, message: '请输入账号', trigger: 'change' }]
+  if (activeName.value === 'login') {
+    return {
+      account,
+      password: [{ required: true, message: '请输入密码', trigger: 'change' }]
+    }
+  } else {
+    return {
+      account,
+      password: [{ validator: validatePass, trigger: 'change' }],
+      confirm: [{ validator: validateConfirm, trigger: 'change' }]
+    }
+  }
+})
+
+const validatePass = (rule: any, value: any, callback: any) => {
+  if (value === '') {
+    callback(new Error('请输入密码'))
+  } else {
+    if (formData.value.confirm !== '') {
+      if (!formRef.value) return
+      formRef.value.validateField('confirm', () => null)
+    }
+    callback()
+  }
+}
+
+const validateConfirm = (rule: any, value: any, callback: any) => {
+  if (value === '') {
+    callback(new Error('请再次输入密码'))
+  } else if (value !== formData.value.password) {
+    callback(new Error('两次密码不一致'))
+  } else {
+    callback()
+  }
+}
+
+watch(activeName, () => {
+  setTimeout(() => {
+    formRef.value?.resetFields()
+  })
+})
+
+const login = () => {
+  formRef.value?.validate((valid) => {
+    if (valid) {
+      console.log('submit!')
+    }
+  })
+}
+
+const signup = () => {
+  formRef.value?.validate((valid) => {
+    if (valid) {
+      console.log('submit!')
+    }
+  })
+}
 </script>
 
 <style scoped lang="scss">
@@ -41,16 +121,12 @@ const activeName = ref('login')
   }
   .right {
     height: 100%;
-    width: 600px;
     display: flex;
-    padding-top: 20%;
+    padding: 20vh 10vw 0;
     justify-content: center;
     .login-box {
       width: 400px;
       .login {
-        .confirm {
-          overflow: hidden;
-        }
         .confirm-enter-active {
           animation: confirm 0.4s ease-in-out;
         }
@@ -61,6 +137,7 @@ const activeName = ref('login')
           0% {
             height: 0;
             margin: 0;
+            overflow: hidden;
           }
           100% {
             height: 62px;
