@@ -15,15 +15,27 @@
           label-position="top"
           hide-required-asterisk
         >
-          <el-form-item label="账号" prop="account">
-            <el-input v-model.trim="formData.account" prefix-icon="Avatar" clearable></el-input>
+          <el-form-item label="账号" prop="username">
+            <el-input v-model.trim="formData.username" prefix-icon="Avatar" clearable></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
-            <el-input v-model.trim="formData.password" type="password" prefix-icon="Lock" show-password clearable></el-input>
+            <el-input
+              v-model.trim="formData.password"
+              type="password"
+              prefix-icon="Lock"
+              show-password
+              clearable
+            ></el-input>
           </el-form-item>
           <Transition name="confirm" prop="confirm">
             <el-form-item label="确认密码" v-show="activeName === 'signup'" class="confirm">
-              <el-input v-model.trim="formData.confirm" type="password" prefix-icon="Lock" show-password clearable></el-input>
+              <el-input
+                v-model.trim="formData.confirm"
+                type="password"
+                prefix-icon="Lock"
+                show-password
+                clearable
+              ></el-input>
             </el-form-item>
           </Transition>
         </el-form>
@@ -39,27 +51,28 @@
 </template>
 
 <script setup lang="ts">
-import type { FormInstance, FormRules } from 'element-plus'
+import { reqLogin } from '@/api'
+import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 
 const activeName = ref('login')
 
 const formData = ref({
-  account: '',
+  username: '',
   password: '',
   confirm: ''
 })
 const formRef = ref<FormInstance>()
 
 const rules = computed<FormRules>(() => {
-  const account = [{ required: true, message: '请输入账号', trigger: 'change' }]
+  const username = [{ required: true, message: '请输入账号', trigger: 'change' }]
   if (activeName.value === 'login') {
     return {
-      account,
+      username,
       password: [{ required: true, message: '请输入密码', trigger: 'change' }]
     }
   } else {
     return {
-      account,
+      username,
       password: [{ validator: validatePass, trigger: 'change' }],
       confirm: [{ validator: validateConfirm, trigger: 'change' }]
     }
@@ -97,7 +110,15 @@ watch(activeName, () => {
 const login = () => {
   formRef.value?.validate((valid) => {
     if (valid) {
-      console.log('submit!')
+      reqLogin({
+        username: formData.value.username,
+        password: formData.value.password
+      }).then((result) => {
+        ElMessage({
+          type: result.type,
+          message: result.message
+        })
+      })
     }
   })
 }

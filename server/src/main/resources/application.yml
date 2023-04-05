@@ -2,14 +2,19 @@ spring:
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/c_music
+      url: jdbc:mysql://localhost:3306/no_code_form
       username: root
-      password: "123456"
+      password: "090807"
   # 访问本地带有中文、特殊字符资源404的解决方法
   # 更改springboot2.6之后的默认程序映射请求策略
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  # spring boot上传文件默认是1MB的大小限制，此处修改为最大支持20MB的文件
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      enabled: true
 
 # 应用服务 WEB 访问端口
 server:

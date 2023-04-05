@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const request = axios.create({
-  baseURL: import.meta.env.BASE_URL,
+const request: RequestInstance = axios.create({
+  baseURL: import.meta.env.VITE_REQUEST_BASE_URL,
   timeout: 5000
 })
 
