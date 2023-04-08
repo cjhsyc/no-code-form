@@ -1,7 +1,9 @@
 package com.example.config;
 
+import com.example.constants.Constants;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -18,5 +20,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .exposedHeaders("*")
                 // 是否发送Cookie
                 .allowCredentials(true);
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/img/avatar/**").addResourceLocations(Constants.AVATAR_PATH);
     }
 }

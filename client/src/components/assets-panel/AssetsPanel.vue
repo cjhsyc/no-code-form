@@ -29,11 +29,12 @@
         <Assets :metadata-list="basicComponents"></Assets>
       </el-collapse-item>
     </el-collapse>
-    <el-empty v-show="searchedComponents.length === 0" description="未找到相关组件"/>
+    <el-empty v-show="searchedComponents.length === 0" description="未找到相关组件" />
   </div>
 </template>
 
 <script setup lang="ts">
+import type { CloseMainLeft, Metadata } from '@/types'
 import Assets from './Assets.vue'
 
 const props = defineProps({

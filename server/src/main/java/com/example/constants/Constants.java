@@ -5,5 +5,5 @@ public class Constants {
     public static String PROJECT_PATH = System.getProperty("user.dir");
 
     // 用户头像所在路径
-    public static String avatar_PATH = "file:" + PROJECT_PATH + "/img/avatar/";
+    public static String AVATAR_PATH = "file:" + PROJECT_PATH + "/img/avatar/";
 }

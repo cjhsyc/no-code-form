@@ -77,8 +77,9 @@
 </template>
 
 <script setup lang="ts">
+import type { ComponentData } from '@/types'
+import { deepClone, toRealProps, uuid } from '@/utils'
 import VueDraggable from 'vuedraggable'
-import { toRealProps, deepClone, uuid } from '@/utils'
 
 import { useDesignerStore } from '@/stores/designer'
 

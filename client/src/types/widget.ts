@@ -1,7 +1,7 @@
 /**
  * 选择器选项
  */
-declare interface SelectOption {
+export interface SelectOption {
   label?: string
   value: string
   id: string
@@ -10,7 +10,7 @@ declare interface SelectOption {
 /**
  * 单选按钮可选项
  */
-declare interface Option {
+export interface Option {
   /**
    * 值
    */

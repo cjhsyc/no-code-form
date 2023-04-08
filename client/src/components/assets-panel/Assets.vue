@@ -14,7 +14,8 @@
 </template>
 
 <script setup lang="ts">
-import { deepClone, uuid, getInitialFormItemProps } from '@/utils'
+import type { ComponentData, Metadata } from '@/types'
+import { deepClone, getInitialFormItemProps, uuid } from '@/utils'
 import VueDraggable from 'vuedraggable'
 
 const props = defineProps({

@@ -1,4 +1,5 @@
 import { uuid } from '@/utils'
+import type { Metadata } from '@/types'
 
 /**
  * 多选框组件元数据

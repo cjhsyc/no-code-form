@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -20,7 +21,7 @@ public class UserController {
     private UserServiceImpl userService;
 
     @PostMapping
-    public Message signup(User user) {
+    public Message signup(@RequestBody User user) {
         if (!userService.searchUserByAccount(user.getUsername()).isEmpty()) {
             return new Message("warning", "该用户名已存在");
         } else if (Boolean.TRUE.equals(userService.addUser(user))) {
@@ -32,15 +33,21 @@ public class UserController {
 
     @PostMapping("login")
     public Message login(@RequestBody User user) {
-        if (!userService.searchUser(user.getUsername(), user.getPassword()).isEmpty()) {
-            return new Message("success", "登录成功");
+        List<User> users = userService.searchUser(user.getUsername(), user.getPassword());
+        if (!users.isEmpty()) {
+            User userData = new User();
+            userData.setId(users.get(0).getId());
+            userData.setRole(users.get(0).getRole());
+            userData.setAvatar(users.get(0).getAvatar());
+            userData.setUsername(user.getUsername());
+            return new Message("success", "登录成功", userData);
         } else {
             return new Message("error", "用户名或密码错误");
         }
     }
 
     @PutMapping("password")
-    public Message updatePassword(PasswordUpdateData passwordUpdateData) {
+    public Message updatePassword(@RequestBody PasswordUpdateData passwordUpdateData) {
         String oldPassword = userService.getById(passwordUpdateData.getId()).getPassword();
         if (oldPassword.equals(passwordUpdateData.getOldPassword())) {
             User user = new User();

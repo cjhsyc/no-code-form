@@ -1,3 +1,4 @@
+import type { Metadata } from '@/types'
 /**
  * 计数器组件元数据
  */

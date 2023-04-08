@@ -1,3 +1,4 @@
+import type { Metadata } from '@/types'
 /**
  * 评分组件元数据
  */

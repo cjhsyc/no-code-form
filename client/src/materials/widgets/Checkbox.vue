@@ -18,6 +18,7 @@
 </template>
 
 <script setup lang="ts">
+import type { SelectOption } from '@/types'
 const props = defineProps({
   options: {
     type: Array as PropType<SelectOption[]>,

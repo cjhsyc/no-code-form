@@ -1,3 +1,5 @@
+import type { Metadata } from '@/types'
+
 /**
  * 时间输入框组件元数据
  */

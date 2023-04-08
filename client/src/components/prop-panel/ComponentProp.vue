@@ -26,8 +26,9 @@
 </template>
 
 <script setup lang="ts">
-import { useDesignerStore } from '@/stores/designer'
-import { objectFilter } from '@/utils'
+import { useDesignerStore } from '@/stores/designer';
+import type { PropConfig } from '@/types';
+import { objectFilter } from '@/utils';
 
 const designerStore = useDesignerStore()
 

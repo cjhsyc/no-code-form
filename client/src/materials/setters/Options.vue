@@ -34,8 +34,9 @@
 </template>
 
 <script setup lang="ts">
+import type { SelectOption } from '@/types'
 import VueDraggable from 'vuedraggable'
-import {uuid} from '@/utils'
+import { uuid } from '@/utils'
 
 const props = defineProps({
   modelValue: {

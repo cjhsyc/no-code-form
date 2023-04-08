@@ -1,3 +1,4 @@
+import type { Metadata } from '@/types'
 /**
  * 提交按钮组件元数据
  */

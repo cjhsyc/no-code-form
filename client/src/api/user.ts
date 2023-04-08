@@ -1,4 +1,5 @@
 import request from './request'
+import type { LoginParams, SignupParams, UpdatePasswordParams, UpdateAvatarParams } from '@/types'
 
 // 登录
 export const reqLogin = (params: LoginParams) => request.post('user/login', params)

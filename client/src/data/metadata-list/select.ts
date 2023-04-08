@@ -1,4 +1,5 @@
 import { uuid } from '@/utils'
+import type { Metadata } from '@/types'
 
 /**
  * 下拉框组件元数据

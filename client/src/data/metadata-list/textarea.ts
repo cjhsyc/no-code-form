@@ -1,3 +1,4 @@
+import type { Metadata } from '@/types'
 /**
  * 文本域组件元数据
  */

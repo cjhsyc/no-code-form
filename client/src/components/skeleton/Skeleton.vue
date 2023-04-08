@@ -8,13 +8,25 @@
     </div>
     <div class="main" v-if="showMain" ref="mainRef" :style="{ height }">
       <Transition name="main-left">
-        <div class="main-left" v-if="showMainLeft" v-show="!isCloseMainLeft" ref="mainLeftRef">
+        <div
+          class="main-left"
+          :class="{ border }"
+          v-if="showMainLeft"
+          v-show="!isCloseMainLeft"
+          ref="mainLeftRef"
+        >
           <slot name="mainLeft" />
         </div>
       </Transition>
       <div class="main-center"><slot name="mainCenter" /></div>
       <Transition name="main-right">
-        <div class="main-right" v-if="showMainRight" v-show="!isCloseMainRight" ref="mainRightRef">
+        <div
+          class="main-right"
+          :class="{ border }"
+          v-if="showMainRight"
+          v-show="!isCloseMainRight"
+          ref="mainRightRef"
+        >
           <slot name="mainRight" />
         </div>
       </Transition>
@@ -48,6 +60,13 @@
 
 <script setup lang="ts">
 import { useElementBounding, useWindowSize } from '@vueuse/core'
+
+defineProps({
+  border: {
+    type: Boolean,
+    default: true
+  }
+})
 
 const { proxy } = getCurrentInstance()!
 
@@ -153,7 +172,9 @@ provide('openMainRight', openMainRight)
       height: 100%;
       // 超出隐藏，防止收起动画时内部元素超出外边框
       overflow: hidden;
-      border-right: 1px solid var(--color-border);
+      &.border {
+        border-right: 1px solid var(--color-border);
+      }
     }
     .main-center {
       flex: 1;
@@ -163,7 +184,9 @@ provide('openMainRight', openMainRight)
     .main-right {
       height: 100%;
       overflow: hidden;
-      border-left: 1px solid var(--color-border);
+      &.border {
+        border-left: 1px solid var(--color-border);
+      }
     }
     .open-button {
       position: absolute;

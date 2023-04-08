@@ -7,6 +7,8 @@
 </template>
 
 <script setup lang="ts">
+import type { Option } from '@/types'
+
 const props = defineProps({
   modelValue: {
     type: String,

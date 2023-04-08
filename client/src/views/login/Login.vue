@@ -39,10 +39,22 @@
             </el-form-item>
           </Transition>
         </el-form>
-        <el-button v-show="activeName === 'login'" class="button" type="success" @click="login">
+        <el-button
+          v-show="activeName === 'login'"
+          class="button"
+          type="success"
+          @click="login"
+          :loading="isLoading"
+        >
           登录
         </el-button>
-        <el-button v-show="activeName === 'signup'" class="button" type="success" @click="signup">
+        <el-button
+          v-show="activeName === 'signup'"
+          class="button"
+          type="success"
+          @click="signup"
+          :loading="isLoading"
+        >
           注册
         </el-button>
       </div>
@@ -53,8 +65,13 @@
 <script setup lang="ts">
 import { reqLogin } from '@/api'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
+import { useUserStore } from '@/stores/user'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
+const userStore = useUserStore()
 const activeName = ref('login')
+const isLoading = ref(false)
 
 const formData = ref({
   username: '',
@@ -110,14 +127,18 @@ watch(activeName, () => {
 const login = () => {
   formRef.value?.validate((valid) => {
     if (valid) {
+      isLoading.value = true
       reqLogin({
         username: formData.value.username,
         password: formData.value.password
       }).then((result) => {
+        isLoading.value = true
+        userStore.setUserData(result.data)
         ElMessage({
           type: result.type,
           message: result.message
         })
+        router.push('./home')
       })
     }
   })

@@ -38,6 +38,7 @@
 </template>
 
 <script setup lang="ts">
+import type { ComponentData, FormProps } from '@/types'
 import { toRealProps } from '@/utils'
 
 const props = defineProps({

@@ -1,3 +1,4 @@
+import type { Metadata } from '@/types'
 /**
  * 颜色选择器组件元数据
  */

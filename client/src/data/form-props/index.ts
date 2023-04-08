@@ -1,3 +1,4 @@
+import type { FormProps } from '@/types'
 export default <FormProps>{
   labelPosition: {
     label: '表单项标签的位置',

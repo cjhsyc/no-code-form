@@ -1,3 +1,4 @@
+import type { Metadata } from '@/types'
 /**
  * 滑块组件元数据
  */

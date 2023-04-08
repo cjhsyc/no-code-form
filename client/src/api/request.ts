@@ -1,4 +1,6 @@
 import axios from 'axios'
+import type { RequestInstance } from '@/types'
+import { ElMessage } from 'element-plus'
 
 const request: RequestInstance = axios.create({
   baseURL: import.meta.env.VITE_REQUEST_BASE_URL,
@@ -19,6 +21,10 @@ request.interceptors.response.use(
     return response.data
   },
   (error) => {
+    ElMessage({
+      type: 'error',
+      message: error.message
+    })
     return Promise.reject(error)
   }
 )

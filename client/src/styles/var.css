@@ -1,6 +1,6 @@
 :root {
   --vt-c-white: #ffffff;
-  --vt-c-white-soft: #f8f8f8;
+  --vt-c-white-soft: #f5f6f7;
   --vt-c-white-mute: #f2f2f2;
 
   --vt-c-black: #181818;
@@ -25,15 +25,20 @@
   --color-background-soft: var(--vt-c-white-soft);
   --color-background-mute: var(--vt-c-white-mute);
   --color-background-blue: #f5f7fa;
+  --color-background-black: #545c64;
+  --color-background-hover: rgba(31, 35, 41, 0.1);
 
   --color-border: var(--vt-c-divider-light-2);
   --color-border-hover: var(--vt-c-divider-light-1);
 
   --color-heading: var(--vt-c-text-light-1);
   --color-text: var(--vt-c-text-light-1);
+  --color-text-2: var(--vt-c-text-light-2);
+  --color-text-gray: gray;
   --color-text-primary: var(--el-color-primary-light-3);
   --color-primary: var(--el-color-primary);
   --color-danger: var(--el-color-danger);
+  --color-deep: #3370ff;
 
   --section-gap: 160px;
 }

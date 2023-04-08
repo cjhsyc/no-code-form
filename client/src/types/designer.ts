@@ -1,7 +1,7 @@
 /**
  * 组件数据
  */
-declare interface ComponentData extends Metadata {
+export interface ComponentData extends Metadata {
   id: string
   /**
    * 栅格占据的列数
@@ -13,7 +13,7 @@ declare interface ComponentData extends Metadata {
 /**
  * 组件元数据
  */
-declare interface Metadata {
+export interface Metadata {
   component: string
   name: string
   props: Record<string, PropConfig<any>>
@@ -26,7 +26,7 @@ declare interface Metadata {
 /**
  * 组件属性配置
  */
-declare interface PropConfig<T> {
+export interface PropConfig<T> {
   /**
    * 初始值
    */
@@ -54,7 +54,7 @@ declare interface PropConfig<T> {
 /**
  * 表单项属性
  */
-declare interface FormItemProps extends Record<string, PropConfig<any>> {
+export interface FormItemProps extends Record<string, PropConfig<any> | undefined> {
   /**
    * 标签文本
    */
@@ -88,7 +88,7 @@ declare interface FormItemProps extends Record<string, PropConfig<any>> {
 /**
  * 表单属性
  */
-declare interface FormProps extends Record<string, PropConfig<any>> {
+export interface FormProps extends Record<string, PropConfig<any> | undefined> {
   /**
    * 表单域标签的位置
    */

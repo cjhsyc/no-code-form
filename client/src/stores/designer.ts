@@ -2,6 +2,7 @@ import { deepClone } from '@/utils'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import defaultFormProps from '@/data/form-props'
+import type { ComponentData, FormProps } from '@/types'
 
 export const useDesignerStore = defineStore('designerStore', () => {
   /* state */

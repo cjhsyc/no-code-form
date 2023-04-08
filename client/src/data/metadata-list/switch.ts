@@ -1,3 +1,4 @@
+import type { Metadata } from '@/types'
 /**
  * 开关组件元数据
  */

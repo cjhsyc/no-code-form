@@ -1,3 +1,4 @@
+import type { Metadata } from '@/types'
 /**
  * 输入框组件元数据
  */

@@ -1,3 +1,4 @@
+import type { PropConfig, FormItemProps } from '@/types'
 /**
  * 生成随机id
  * @param prefix 前缀，默认为`id`

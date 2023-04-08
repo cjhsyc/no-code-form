@@ -11,6 +11,7 @@ import _switch from './switch'
 import timePicker from './time-picker'
 import radio from './radio'
 import datePicker from './date-picker'
+import type { Metadata } from '@/types'
 
 /**
  * 素材组件元数据列表

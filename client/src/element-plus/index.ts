@@ -1,4 +1,5 @@
 export {
+  ElAvatar,
   ElButton,
   ElCard,
   ElCascader,
@@ -19,6 +20,9 @@ export {
   ElIcon,
   ElInput,
   ElInputNumber,
+  ElMenu,
+  ElMenuItem,
+  ElMenuItemGroup,
   ElOption,
   ElRadio,
   ElRadioButton,
@@ -27,6 +31,7 @@ export {
   ElRow,
   ElSelect,
   ElSlider,
+  ElSubMenu,
   ElSwitch,
   ElTabPane,
   ElTabs,
