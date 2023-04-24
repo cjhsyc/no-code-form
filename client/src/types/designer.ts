@@ -8,6 +8,10 @@ export interface ComponentData extends Metadata {
    */
   span: PropConfig<number>
   formItemProps: FormItemProps
+  /**
+   * 是否隐藏
+   */
+  hidden: PropConfig<boolean>
 }
 
 /**
@@ -20,7 +24,11 @@ export interface Metadata {
   /**
    * 分类
    */
-  category: 'form' | 'basic'
+  category: 'input' | 'basic'
+  /**
+   * 是否唯一
+   */
+  only?: boolean
 }
 
 /**

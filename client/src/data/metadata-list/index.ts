@@ -11,12 +11,16 @@ import _switch from './switch'
 import timePicker from './time-picker'
 import radio from './radio'
 import datePicker from './date-picker'
+import title from './title'
 import type { Metadata } from '@/types'
 
 /**
  * 素材组件元数据列表
  */
 export const metadataList: Metadata[] = [
+  // 基础组件
+  submitButton,
+  title,
   // 输入型组件
   input,
   textarea,
@@ -29,7 +33,5 @@ export const metadataList: Metadata[] = [
   slider,
   _switch,
   datePicker,
-  timePicker,
-  // 其他组件
-  submitButton
+  timePicker
 ]

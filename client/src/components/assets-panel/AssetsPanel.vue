@@ -16,17 +16,17 @@
       </div>
     </div>
     <el-collapse v-model="activeNames" class="category">
-      <el-collapse-item name="form" v-show="formComponents.length">
-        <template #title>
-          <div class="category-title">表单组件</div>
-        </template>
-        <Assets :metadata-list="formComponents"></Assets>
-      </el-collapse-item>
       <el-collapse-item name="basic" v-show="basicComponents.length">
         <template #title>
           <div class="category-title">基础组件</div>
         </template>
         <Assets :metadata-list="basicComponents"></Assets>
+      </el-collapse-item>
+      <el-collapse-item name="input" v-show="inputComponents.length">
+        <template #title>
+          <div class="category-title">输入型组件</div>
+        </template>
+        <Assets :metadata-list="inputComponents"></Assets>
       </el-collapse-item>
     </el-collapse>
     <el-empty v-show="searchedComponents.length === 0" description="未找到相关组件" />
@@ -47,16 +47,16 @@ const props = defineProps({
 // 搜索词
 const searchValue = ref('')
 // 关闭素材面板
-const closeMainLeft = inject<CloseMainLeft>('closeMainLeft')
+const closeMainLeft = inject<CloseMainLeft>('closeMainLeft')!
 // 展开的组件分类
-const activeNames = ref<string[]>(['form', 'basic'])
+const activeNames = ref<string[]>(['input', 'basic'])
 // 搜索过滤后的组件列表
 const searchedComponents = computed(() => {
   return props.metadataList.filter((item) => item.name.indexOf(searchValue.value) > -1)
 })
 // 表单组件列表
-const formComponents = computed(() => {
-  return searchedComponents.value.filter((item) => item.category === 'form')
+const inputComponents = computed(() => {
+  return searchedComponents.value.filter((item) => item.category === 'input')
 })
 // 基础组件列表
 const basicComponents = computed(() => {

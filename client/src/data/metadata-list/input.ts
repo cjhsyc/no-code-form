@@ -5,7 +5,7 @@ import type { Metadata } from '@/types'
 export default <Metadata>{
   name: '输入框',
   component: 'el-input',
-  category: 'form',
+  category: 'input',
   props: {
     modelValue: {
       label: '默认值',

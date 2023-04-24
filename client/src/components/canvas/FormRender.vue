@@ -14,6 +14,7 @@
             :key="component.id"
             :span="component.span.value || 24"
             class="item-col"
+            v-show="!component.hidden.value"
           >
             <form-item
               :prop="component.id"

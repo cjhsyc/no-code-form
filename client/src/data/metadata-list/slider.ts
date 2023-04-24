@@ -5,7 +5,7 @@ import type { Metadata } from '@/types'
 export default <Metadata>{
   name: '滑块',
   component: 'widget-slider',
-  category: 'form',
+  category: 'input',
   props: {
     modelValue: {
       label: '默认值',

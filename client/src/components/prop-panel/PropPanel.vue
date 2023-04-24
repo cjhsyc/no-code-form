@@ -16,8 +16,6 @@ import { useDesignerStore } from '@/stores/designer'
 
 const designerStore = useDesignerStore()
 
-
-
 // 选中组件变化时，自动显示组件配置
 watch(
   () => designerStore.currentComponent,

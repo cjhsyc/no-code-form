@@ -5,7 +5,7 @@ import type { Metadata } from '@/types'
 export default <Metadata>{
   name: '开关',
   component: 'el-switch',
-  category: 'form',
+  category: 'input',
   props: {
     modelValue: {
       label: '默认值',

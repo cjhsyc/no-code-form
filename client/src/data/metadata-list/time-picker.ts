@@ -6,7 +6,7 @@ import type { Metadata } from '@/types'
 export default <Metadata>{
   name: '时间输入框',
   component: 'widget-time-picker',
-  category: 'form',
+  category: 'input',
   props: {
     modelValue: {
       label: '默认值',

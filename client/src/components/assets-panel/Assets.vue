@@ -44,6 +44,11 @@ const onClone = (original: Metadata): ComponentData => {
         showInput: true
       }
     },
+    hidden: {
+      setter: 'el-switch',
+      label: '是否隐藏',
+      tips: '仅在预览或发布后生效'
+    },
     ...deepClone(original)
   }
 }

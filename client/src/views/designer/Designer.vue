@@ -1,7 +1,7 @@
 <template>
   <skeleton ref="skeletonRef">
     <template #headerLeft>
-
+      <Back :path="'/home/form'" :title="'新建表单'"/>
     </template>
     <template #headerCenter>
       <div class="header-center">

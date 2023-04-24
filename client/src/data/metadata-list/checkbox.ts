@@ -7,7 +7,7 @@ import type { Metadata } from '@/types'
 export default <Metadata>{
   name: '多选框',
   component: 'widget-checkbox',
-  category: 'form',
+  category: 'input',
   props: {
     modelValue: {
       label: '默认值',

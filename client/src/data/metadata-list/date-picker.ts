@@ -5,7 +5,7 @@ import type { Metadata } from '@/types'
 export default <Metadata>{
   name: '日期选择器',
   component: 'widget-date-picker',
-  category: 'form',
+  category: 'input',
   props: {
     modelValue: {
       label: '默认值',

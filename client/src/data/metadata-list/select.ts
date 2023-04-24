@@ -7,7 +7,7 @@ import type { Metadata } from '@/types'
 export default <Metadata>{
   name: '下拉框',
   component: 'widget-select',
-  category: 'form',
+  category: 'input',
   props: {
     modelValue: {
       label: '默认值',

@@ -5,7 +5,7 @@ import type { Metadata } from '@/types'
 export default <Metadata>{
   name: '文本域',
   component: 'widget-textarea',
-  category: 'form',
+  category: 'input',
   props: {
     modelValue: {
       label: '默认值',

@@ -93,25 +93,11 @@ export const getInitialFormItemProps = (label: string, category: string): FormIt
     showLabel: {
       setter: 'el-switch',
       label: '是否显示标签',
-      value: category === 'form'
+      value: category === 'input'
     },
     required: {
-      setter: category === 'form' ? 'el-switch' : 'none',
+      setter: category === 'input' ? 'el-switch' : 'none',
       label: '是否必填'
     }
-    // error: {
-    //   setter: 'el-input',
-    //   label: '验证错误时的提示信息'
-    // },
-    // showMessage: {
-    //   setter: 'el-switch',
-    //   label: '是否显示校验错误信息',
-    //   value: true
-    // },
-    // inlineMessage: {
-    //   setter: 'el-switch',
-    //   label: '是否以行内形式展示校验信息',
-    //   value: false
-    // }
   }
 }

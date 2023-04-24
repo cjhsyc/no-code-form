@@ -7,7 +7,7 @@ import type { Metadata } from '@/types'
 export default <Metadata>{
   name: '单选框',
   component: 'widget-radio',
-  category: 'form',
+  category: 'input',
   props: {
     modelValue: {
       label: '默认值',

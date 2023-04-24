@@ -5,7 +5,7 @@ import type { Metadata } from '@/types'
 export default <Metadata>{
   name: '数字输入框',
   component: 'el-input-number',
-  category: 'form',
+  category: 'input',
   props: {
     modelValue: {
       value: 0,

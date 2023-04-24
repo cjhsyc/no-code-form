@@ -23,6 +23,7 @@ export {
   ElMenu,
   ElMenuItem,
   ElOption,
+  ElPageHeader,
   ElRadio,
   ElRadioButton,
   ElRadioGroup,

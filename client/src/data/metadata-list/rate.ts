@@ -5,7 +5,7 @@ import type { Metadata } from '@/types'
 export default <Metadata>{
   name: '评分',
   component: 'el-rate',
-  category: 'form',
+  category: 'input',
   props: {
     modelValue: {
       label: '默认值',

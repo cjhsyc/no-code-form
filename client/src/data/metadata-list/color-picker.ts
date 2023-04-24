@@ -5,7 +5,7 @@ import type { Metadata } from '@/types'
 export default <Metadata>{
   name: '颜色选择器',
   component: 'el-color-picker',
-  category: 'form',
+  category: 'input',
   props: {
     modelValue: {
       label: '默认值',

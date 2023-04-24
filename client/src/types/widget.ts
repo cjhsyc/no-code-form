@@ -20,3 +20,8 @@ export interface Option {
    */
   name: string
 }
+
+/**
+ * 对齐方式
+ */
+export type Align = 'left' | 'center' | 'right'
