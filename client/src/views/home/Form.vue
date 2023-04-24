@@ -9,9 +9,6 @@
       </div>
     </div>
     <div class="forms">
-      <div class="add-form flex-box">
-        <el-icon :size="30"><plus /></el-icon>
-      </div>
       <el-card class="form-card flex-box" shadow="hover">
         <div class="card-header">
           <div class="icon">
@@ -39,14 +36,30 @@
         </div>
       </template>
       <div class="dialog-content">
-        <div class="formwork-menu"></div>
-        <div class="formwork"></div>
+        <div class="template empty">
+          <div class="title">空白表单</div>
+          <div class="content">
+            <div class="add-form flex-box" @click="addForm">
+              <el-icon :size="30"><plus /></el-icon>
+            </div>
+          </div>
+        </div>
+        <div class="template mine">
+          <div class="title">我的模板</div>
+          <div class="content"></div>
+        </div>
+        <div class="template recommend">
+          <div class="title">推荐模板</div>
+          <div class="content"></div>
+        </div>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
+const router = useRouter()
+
 const showAddFormDialog = ref(false)
 const searchValue = ref('')
 
@@ -55,6 +68,10 @@ const openAddFormDialog = () => {
 }
 const closeAddFormDialog = () => {
   showAddFormDialog.value = false
+}
+
+const addForm = () => {
+  router.push('/designer')
 }
 </script>
 
@@ -78,18 +95,6 @@ const closeAddFormDialog = () => {
       margin: 10px;
       height: 160px;
       width: 160px;
-    }
-    .add-form {
-      border-radius: 6px;
-      border: 2px dashed var(--color-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: var(--color-text-2);
-      &:hover {
-        border-color: var(--color-border-hover);
-      }
     }
     .form-card {
       &:deep(.el-card__body) {
@@ -142,6 +147,35 @@ const closeAddFormDialog = () => {
     }
     .dialog-content {
       height: 75vh;
+      padding: 10px;
+      .template {
+        .title {
+          padding: 10px;
+          font-weight: bolder;
+        }
+        .content {
+          min-height: 160px;
+          padding: 0 10px;
+        }
+        &.empty {
+          .flex-box {
+            height: 160px;
+            width: 160px;
+          }
+          .add-form {
+            border-radius: 6px;
+            border: 2px dashed var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--color-text-2);
+            &:hover {
+              border-color: var(--color-border-hover);
+            }
+          }
+        }
+      }
     }
   }
 }

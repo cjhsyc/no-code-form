@@ -12,6 +12,10 @@ import './styles/base.css'
 import * as ElementPlusComponents from '@/element-plus'
 // 图标
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+// 二次封装的素材组件
+import widgets from '@/materials/widgets'
+// 属性设置器
+import setters from '@/materials/setters'
 
 const app = createApp(App)
 
@@ -23,6 +27,10 @@ for (const [key, component] of Object.entries(ElementPlusComponents)) {
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
+// 注册所有二次封装的素材组件
+app.use(widgets)
+// 注册所有属性设置器组件
+app.use(setters)
 
 app.use(createPinia())
 app.use(router)

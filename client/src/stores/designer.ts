@@ -1,5 +1,4 @@
 import { deepClone } from '@/utils'
-import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import defaultFormProps from '@/data/form-props'
 import type { ComponentData, FormProps } from '@/types'
@@ -22,7 +21,7 @@ export const useDesignerStore = defineStore('designerStore', () => {
   // 属性配置面板显示的tab页
   const propPanelTab = ref<'component' | 'form'>('component')
   // 表单宽度
-  const width = ref('auto')
+  const width = ref<'auto' | number>('auto')
 
   /* getter */
 
@@ -32,6 +31,11 @@ export const useDesignerStore = defineStore('designerStore', () => {
   const oldestHistory = computed(() => historyIndex.value === 0)
 
   /* action */
+
+  const clearCanvas = () => {
+    componentList.value = []
+    currentComponent.value = null
+  }
 
   /**
    * 添加历史记录
@@ -83,6 +87,7 @@ export const useDesignerStore = defineStore('designerStore', () => {
     latestHistory,
     oldestHistory,
     /* action */
+    clearCanvas,
     pushHistory,
     lastHistory,
     nextHistory,

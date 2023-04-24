@@ -23,11 +23,11 @@ export const deepClone = <T extends Record<string, any>>(obj: T): T => {
  * @param props props配置
  * @returns 真实的props对象
  */
-export const toRealProps = (props: Record<string, PropConfig<any>>) => {
+export const toRealProps = (props: Record<string, PropConfig<any> | undefined>) => {
   const realProps: Record<string, any> = {}
   for (const prop in props) {
-    if (!props[prop].unbind) {
-      realProps[prop] = props[prop].value
+    if (props[prop] && !props[prop]?.unbind) {
+      realProps[prop] = props[prop]?.value
     }
   }
   return realProps

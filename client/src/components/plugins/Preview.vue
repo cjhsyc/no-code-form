@@ -29,9 +29,11 @@ const onclick = () => {
     .el-drawer__header {
       margin: 0;
       padding: 20px;
+      border-bottom: 1px solid var(--color-border);
     }
     .el-drawer__body {
       overflow: auto;
+      padding: 0;
       @include scrollbar();
     }
   }

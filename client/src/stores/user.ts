@@ -1,4 +1,3 @@
-import { defineStore } from 'pinia'
 import type { UserData } from '@/types'
 
 export const useUserStore = defineStore('userStore', () => {

@@ -22,19 +22,19 @@ import { useDesignerStore } from '@/stores/designer'
 const designerStore = useDesignerStore()
 
 const type = ref('auto')
-const width = ref<number>(390)
+const width = ref<number>(designerStore.width === 'auto' ? 750 : designerStore.width)
 
 watch(type, (type) => {
   if (type === 'auto') {
     designerStore.width = 'auto'
   } else {
-    designerStore.width = width.value + 'px'
+    designerStore.width = width.value
   }
 })
 
 watch(width, (width) => {
   if (type.value === 'custom') {
-    designerStore.width = width + 'px'
+    designerStore.width = width
   }
 })
 </script>

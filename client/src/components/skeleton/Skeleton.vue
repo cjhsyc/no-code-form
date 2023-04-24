@@ -6,7 +6,7 @@
       <div class="header-center" v-if="showHeaderCenter"><slot name="headerCenter" /></div>
       <div class="header-right" v-if="showHeaderRight"><slot name="headerRight" /></div>
     </div>
-    <div class="main" v-if="showMain" ref="mainRef" :style="{ height }">
+    <div class="main" v-if="showMain" ref="mainRef">
       <Transition name="main-left">
         <div
           class="main-left"
@@ -90,9 +90,7 @@ const mainRightWidth = ref(0) // 右侧区域的宽度
 const windowHeight = useWindowSize().height // 窗口高度
 
 // 动态计算主内容区域的高度
-const height = computed(() => {
-  return `${windowHeight.value - top.value}px`
-})
+const height = computed(() => `${windowHeight.value - top.value}px`)
 const isCloseMainLeft = ref(false) // 是否关闭左侧区域
 const isCloseMainRight = ref(false) // 是否关闭右侧区域
 
@@ -168,6 +166,7 @@ provide('openMainRight', openMainRight)
     display: flex;
     position: relative;
     overflow: hidden;
+    height: v-bind(height);
     .main-left {
       height: 100%;
       // 超出隐藏，防止收起动画时内部元素超出外边框

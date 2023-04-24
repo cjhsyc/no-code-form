@@ -1,79 +1,81 @@
 <template>
-  <div class="canvas">
-    <el-card class="form-card" :style="style">
-      <el-form
-        v-bind="toRealProps(designerStore.formProps)"
-        class="form"
-        :class="{ hover: formHover && !hoverId }"
-        @mouseover="onmouseenter"
-        @mouseout="onmouseleave"
-        @click="onClickForm"
-        @submit.prevent
-      >
-        <el-row :gutter="10">
-          <VueDraggable
-            class="draggable-panel"
-            v-model="designerStore.componentList"
-            :group="{ name: 'form-item', pull: false, put: ['assets'] }"
-            animation="500"
-            item-key="id"
-            @change="onchange"
-          >
-            <template #item="{ element, index }">
-              <el-col
-                :span="(element as ComponentData).span.value || 24"
-                class="item-col"
-                :class="{
-                  hover: hoverId === element.id,
-                  activated: element.id === designerStore.currentComponent?.id
-                }"
-                @dragstart="ondragstart(element)"
-                @dragend="hasMouseEvent = true"
-                @mouseenter="hasMouseEvent && (hoverId = element.id)"
-                @mouseleave="hasMouseEvent && (hoverId = '')"
-                @click.stop="onclick(element)"
-              >
-                <form-item
-                  :label-width="designerStore.formProps.labelWidth.value"
-                  v-bind="toRealProps((element as ComponentData).formItemProps)"
-                  class="form-item"
+  <el-scrollbar>
+    <div class="canvas">
+      <el-card class="form-card">
+        <el-form
+          v-bind="toRealProps(designerStore.formProps)"
+          class="form"
+          :class="{ hover: formHover && !hoverId }"
+          @mouseover="onmouseenter"
+          @mouseout="onmouseleave"
+          @click="onClickForm"
+          @submit.prevent
+        >
+          <el-row :gutter="10">
+            <VueDraggable
+              class="draggable-panel"
+              v-model="designerStore.componentList"
+              :group="{ name: 'form-item', pull: false, put: ['assets'] }"
+              animation="500"
+              item-key="id"
+              @change="onchange"
+            >
+              <template #item="{ element, index }">
+                <el-col
+                  :span="(element as ComponentData).span.value || 24"
+                  class="item-col"
+                  :class="{
+                    hover: hoverId === element.id,
+                    activated: element.id === designerStore.currentComponent?.id
+                  }"
+                  @dragstart="ondragstart(element)"
+                  @dragend="hasMouseEvent = true"
+                  @mouseenter="hasMouseEvent && (hoverId = element.id)"
+                  @mouseleave="hasMouseEvent && (hoverId = '')"
+                  @click.stop="onclick(element)"
                 >
-                  <component
-                    :is="(element as ComponentData).component"
-                    v-bind="toRealProps((element as ComponentData).props)"
-                    @update:modelValue="(newValue: any) => element.props.modelValue.value = newValue"
-                  ></component>
-                </form-item>
-                <div class="toolbar" v-show="hoverId === element.id">
-                  <el-button
-                    icon="CopyDocument"
-                    size="small"
-                    circle
-                    plain
-                    title="复制"
-                    type="primary"
-                    @click.stop="copyComponent(index)"
-                  />
-                  <el-button
-                    icon="Delete"
-                    size="small"
-                    circle
-                    plain
-                    title="删除"
-                    type="danger"
-                    @click.stop="removeComponent(index)"
-                  />
-                </div>
-              </el-col>
-            </template>
-          </VueDraggable>
-        </el-row>
-        <div class="empty-tips" v-show="!designerStore.componentList.length">
-          从左侧拖入组件进行表单设计
-        </div>
-      </el-form>
-    </el-card>
-  </div>
+                  <form-item
+                    :label-width="designerStore.formProps.labelWidth.value"
+                    v-bind="toRealProps((element as ComponentData).formItemProps)"
+                    class="form-item"
+                  >
+                    <component
+                      :is="(element as ComponentData).component"
+                      v-bind="toRealProps((element as ComponentData).props)"
+                      @update:modelValue="(newValue: any) => element.props.modelValue.value = newValue"
+                    ></component>
+                  </form-item>
+                  <div class="toolbar" v-show="hoverId === element.id">
+                    <el-button
+                      icon="CopyDocument"
+                      size="small"
+                      circle
+                      plain
+                      title="复制"
+                      type="primary"
+                      @click.stop="copyComponent(index)"
+                    />
+                    <el-button
+                      icon="Delete"
+                      size="small"
+                      circle
+                      plain
+                      title="删除"
+                      type="danger"
+                      @click.stop="removeComponent(index)"
+                    />
+                  </div>
+                </el-col>
+              </template>
+            </VueDraggable>
+          </el-row>
+          <div class="empty-tips" v-show="!designerStore.componentList.length">
+            从左侧拖入组件进行表单设计
+          </div>
+        </el-form>
+      </el-card>
+    </div>
+  </el-scrollbar>
 </template>
 
 <script setup lang="ts">
@@ -88,12 +90,9 @@ const hoverId = ref('') // hover时显示轮廓的组件id
 const hasMouseEvent = ref(true) // 表单项是否具有鼠标进入和离开事件
 const formHover = ref(false)
 
-const style = computed(() => {
-  return {
-    maxWidth: designerStore.width === 'auto' ? 'unset' : designerStore.width
-  }
-})
-
+const maxWidth = computed(() =>
+  designerStore.width === 'auto' ? 'unset' : `${designerStore.width}px`
+)
 // 鼠标进入和离开表单
 const onmouseenter = () => {
   formHover.value = true
@@ -157,20 +156,16 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-@use '@/styles/mixin.scss' as *;
-
 .canvas {
   display: flex;
   justify-content: center;
-  height: 100%;
   padding: 10px 20px;
   background-color: var(--color-background-blue);
-  overflow: auto;
-  @include scrollbar();
   .form-card {
     width: 100%;
+    max-width: v-bind(maxWidth);
     height: min-content;
-    min-height: 100%;
+    min-height: calc(100vh - 73px);
     &:deep(.el-card__body) {
       padding: 6px;
     }

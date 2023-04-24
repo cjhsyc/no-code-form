@@ -1,6 +1,6 @@
 <template>
   <div class="render-form">
-    <el-card class="form-card" :style="style">
+    <el-card class="form-card">
       <el-form
         :model="formData"
         ref="formRef"
@@ -24,8 +24,8 @@
                 :is="component.component"
                 v-bind="{
                   ...toRealProps(component.props),
-                  modelValue: formData[component.id],
-                  'onUpdate:modelValue': (newValue:any) => {formData[component.id] = newValue},
+                  modelValue: formData[component.id]?.value,
+                  'onUpdate:modelValue': (newValue:any) => {formData[component.id].value = newValue},
                   onSubmit: component.component === 'widget-submit-button' ? onSubmit : undefined
                 }"
               ></component>
@@ -59,18 +59,16 @@ const props = defineProps({
 const formData = ref<Record<string, any>>({})
 const formRef = ref()
 
-const style = computed(() => {
-  return {
-    maxWidth: props.width === 'auto' ? 'unset' : props.width
-  }
-})
+const maxWidth = computed(() => (props.width === 'auto' ? 'unset' : `${props.width}px`))
 
 watch(
   () => props.componentList,
   (componentList) => {
     formData.value = componentList.reduce((formData, component) => {
       if (component.props.modelValue) {
-        return Object.assign(formData, { [component.id]: component.props.modelValue.value })
+        return Object.assign(formData, {
+          [component.id]: { name: component.formItemProps.label?.value ,value: component.props.modelValue.value }
+        })
       }
       return formData
     }, {})
@@ -88,8 +86,17 @@ const onSubmit = () => {
   display: flex;
   justify-content: center;
   min-height: 100%;
+  padding: 10px;
+  background-color: var(--color-background-blue);
   .form-card {
     width: 100%;
+    max-width: v-bind(maxWidth);
+    :deep(.el-card__body) {
+      padding: 6px;
+      .el-form {
+        padding: 12px;
+      }
+    }
   }
 }
 </style>
