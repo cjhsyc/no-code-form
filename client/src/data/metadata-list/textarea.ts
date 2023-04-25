@@ -21,11 +21,17 @@ export default <Metadata>{
     },
     maxlength: {
       label: '最大输入长度',
-      setter: 'el-input-number'
+      setter: 'el-input-number',
+      attrs: {
+        min: 0
+      }
     },
     minlength: {
       label: '最小输入长度',
-      setter: 'el-input-number'
+      setter: 'el-input-number',
+      attrs: {
+        min: 0
+      }
     },
     placeholder: {
       label: '占位文本',

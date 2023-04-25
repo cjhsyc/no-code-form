@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDesignerStore } from '@/stores/designer'
+import { useDesignerStore } from '@/stores'
 import type { PropConfig } from '@/types'
 import { objectFilter } from '@/utils'
 
@@ -34,23 +34,9 @@ const designerStore = useDesignerStore()
 
 // 需显示的所有属性配置
 const renderProps = computed<Record<string, PropConfig<any>>>(() => {
-  const span = designerStore.currentComponent?.span
-  const hidden = designerStore.currentComponent?.hidden
   // 表单项属性配置
-  const renderProps: Record<string, PropConfig<any> | undefined> = {
-    ...designerStore.currentComponent?.formItemProps
-  }
-  // 栅格宽度配置
-  if (span) {
-    renderProps.span = span
-  }
-  // 组件属性配置，需过滤setter设置为none的属性
-  Object.assign(renderProps, {
+  const renderProps: Record<string, PropConfig<any>> = {
     ...designerStore.currentComponent?.props
-  })
-  // 是否隐藏
-  if (hidden) {
-    renderProps.hidden = hidden
   }
 
   return objectFilter(renderProps, (item: PropConfig<any>) => item.setter !== 'none') as Record<

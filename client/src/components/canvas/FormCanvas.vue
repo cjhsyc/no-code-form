@@ -22,7 +22,7 @@
             >
               <template #item="{ element, index }">
                 <el-col
-                  :span="(element as ComponentData).span.value || 24"
+                  :span="(element as ComponentData).props.span.value || 24"
                   class="item-col"
                   :class="{
                     hover: hoverId === element.id,
@@ -36,7 +36,9 @@
                 >
                   <form-item
                     :label-width="designerStore.formProps.labelWidth.value"
-                    v-bind="toRealProps((element as ComponentData).formItemProps)"
+                    :label="(element as ComponentData).props.label.value"
+                    :show-label="(element as ComponentData).props.showLabel.value"
+                    :required="(element as ComponentData).props.required.value"
                     class="form-item"
                   >
                     <component
@@ -65,6 +67,9 @@
                       @click.stop="removeComponent(index)"
                     />
                   </div>
+                  <el-icon class="hide-icon" v-show="(element as ComponentData).props.hidden.value" :size="12">
+                    <Hide />
+                  </el-icon>
                 </el-col>
               </template>
             </VueDraggable>
@@ -81,9 +86,10 @@
 <script setup lang="ts">
 import type { ComponentData } from '@/types'
 import { deepClone, toRealProps, uuid } from '@/utils'
+import { ElMessageBox } from 'element-plus'
 import VueDraggable from 'vuedraggable'
 
-import { useDesignerStore } from '@/stores/designer'
+import { useDesignerStore } from '@/stores'
 
 const designerStore = useDesignerStore()
 const hoverId = ref('') // hover时显示轮廓的组件id
@@ -129,13 +135,17 @@ const onchange = ({ added }: { added: { element: ComponentData } }) => {
 
 // 删除组件
 const removeComponent = (index: number) => {
-  if (designerStore.componentList[index].id === designerStore.currentComponent?.id) {
-    designerStore.currentComponent = null
-  }
-  designerStore.componentList.splice(index, 1)
-  // 添加历史记录
-  // designerStore.pushHistory()
-  hoverId.value = ''
+  ElMessageBox.confirm('确认要删除吗？', '提示', { type: 'warning' })
+    .then(() => {
+      if (designerStore.componentList[index].id === designerStore.currentComponent?.id) {
+        designerStore.currentComponent = null
+      }
+      designerStore.componentList.splice(index, 1)
+      // 添加历史记录
+      // designerStore.pushHistory()
+      hoverId.value = ''
+    })
+    .catch(() => {})
 }
 
 // 复制组件
@@ -198,6 +208,12 @@ onMounted(() => {
             position: absolute;
             right: 12px;
             top: -12px;
+          }
+          .hide-icon {
+            position: absolute;
+            top: 4px;
+            left: 6px;
+            color: var(--el-color-info);
           }
         }
       }

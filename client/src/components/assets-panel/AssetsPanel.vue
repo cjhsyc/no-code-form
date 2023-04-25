@@ -36,6 +36,7 @@
 <script setup lang="ts">
 import type { CloseMainLeft, Metadata } from '@/types'
 import Assets from './Assets.vue'
+import { useDesignerStore } from '@/stores'
 
 const props = defineProps({
   metadataList: {
@@ -44,6 +45,7 @@ const props = defineProps({
   }
 })
 
+const designerStore = useDesignerStore()
 // 搜索词
 const searchValue = ref('')
 // 关闭素材面板
@@ -54,13 +56,22 @@ const activeNames = ref<string[]>(['input', 'basic'])
 const searchedComponents = computed(() => {
   return props.metadataList.filter((item) => item.name.indexOf(searchValue.value) > -1)
 })
+// 过滤已拖入画布的唯一组件后的组件列表
+const notOnlyComponents = computed(() => {
+  return searchedComponents.value.filter((item) => {
+    if (item.only) {
+      return !designerStore.componentList.find((component) => component.component === item.component)
+    }
+    return true
+  })
+})
 // 表单组件列表
 const inputComponents = computed(() => {
-  return searchedComponents.value.filter((item) => item.category === 'input')
+  return notOnlyComponents.value.filter((item) => item.category === 'input')
 })
 // 基础组件列表
 const basicComponents = computed(() => {
-  return searchedComponents.value.filter((item) => item.category === 'basic')
+  return notOnlyComponents.value.filter((item) => item.category === 'basic')
 })
 </script>
 

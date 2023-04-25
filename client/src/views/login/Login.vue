@@ -65,7 +65,7 @@
 <script setup lang="ts">
 import { reqLogin } from '@/api'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from '@/stores'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()

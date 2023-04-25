@@ -1,10 +1,14 @@
 <template>
   <div class="render-form">
-    <el-card class="form-card">
+    <component
+      :is="port === 'pc' ? 'el-card' : 'div'"
+      :class="[port === 'pc' ? 'form-card' : 'form-div']"
+    >
       <el-form
         :model="formData"
         ref="formRef"
         v-bind="toRealProps(formProps)"
+        :label-position="port === 'pc' ? formProps.labelPosition.value : 'top'"
         class="form"
         @submit.prevent
       >
@@ -12,13 +16,16 @@
           <el-col
             v-for="component in componentList"
             :key="component.id"
-            :span="component.span.value || 24"
             class="item-col"
-            v-show="!component.hidden.value"
+            :span="port === 'pc' ? component.props.span.value : 24"
+            v-show="!component.props.hidden.value"
           >
             <form-item
               :prop="component.id"
-              v-bind="toRealProps(component.formItemProps)"
+              :label-width="formProps.labelWidth.value"
+              :label="component.props.label.value"
+              :show-label="component.props.showLabel.value"
+              :required="component.props.required.value"
               class="form-item"
             >
               <component
@@ -34,7 +41,7 @@
           </el-col>
         </el-row>
       </el-form>
-    </el-card>
+    </component>
   </div>
 </template>
 
@@ -54,6 +61,10 @@ const props = defineProps({
   width: {
     type: String,
     default: 'auto'
+  },
+  port: {
+    type: String as PropType<'pc' | 'mobile'>,
+    default: 'pc'
   }
 })
 
@@ -61,6 +72,7 @@ const formData = ref<Record<string, any>>({})
 const formRef = ref()
 
 const maxWidth = computed(() => (props.width === 'auto' ? 'unset' : `${props.width}px`))
+const bgc = computed(() => (props.port === 'pc' ? 'var(--color-background-blue)' : 'var(--color-background)'))
 
 watch(
   () => props.componentList,
@@ -68,7 +80,10 @@ watch(
     formData.value = componentList.reduce((formData, component) => {
       if (component.props.modelValue) {
         return Object.assign(formData, {
-          [component.id]: { name: component.formItemProps.label?.value ,value: component.props.modelValue.value }
+          [component.id]: {
+            name: component.props.label?.value,
+            value: component.props.modelValue.value
+          }
         })
       }
       return formData
@@ -88,7 +103,7 @@ const onSubmit = () => {
   justify-content: center;
   min-height: 100%;
   padding: 10px;
-  background-color: var(--color-background-blue);
+  background-color: v-bind(bgc);
   .form-card {
     width: 100%;
     max-width: v-bind(maxWidth);
@@ -97,6 +112,12 @@ const onSubmit = () => {
       .el-form {
         padding: 12px;
       }
+    }
+  }
+  .form-div {
+    width: 100%;
+    .el-form {
+      padding: 8px;
     }
   }
 }

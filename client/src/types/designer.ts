@@ -3,15 +3,6 @@
  */
 export interface ComponentData extends Metadata {
   id: string
-  /**
-   * 栅格占据的列数
-   */
-  span: PropConfig<number>
-  formItemProps: FormItemProps
-  /**
-   * 是否隐藏
-   */
-  hidden: PropConfig<boolean>
 }
 
 /**
@@ -96,7 +87,7 @@ export interface FormItemProps extends Record<string, PropConfig<any> | undefine
 /**
  * 表单属性
  */
-export interface FormProps extends Record<string, PropConfig<any> | undefined> {
+export interface FormProps extends Record<string, PropConfig<any>> {
   /**
    * 表单域标签的位置
    */
@@ -108,7 +99,7 @@ export interface FormProps extends Record<string, PropConfig<any> | undefined> {
   /**
    * 是否隐藏必填字段标签旁边的红色星号
    */
-  hideRequiredAsterisk?: PropConfig<boolean>
+  hideRequiredAsterisk: PropConfig<boolean>
   /**
    * 星号的位置
    */
@@ -120,9 +111,9 @@ export interface FormProps extends Record<string, PropConfig<any> | undefined> {
   /**
    * 是否禁用该表单内的所有组件
    */
-  disabled?: PropConfig<boolean>
+  disabled: PropConfig<boolean>
   /**
    * 当校验失败时，滚动到第一个错误表单项
    */
-  scrollToError?: PropConfig<boolean>
+  scrollToError: PropConfig<boolean>
 }

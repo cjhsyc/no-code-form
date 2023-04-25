@@ -6,6 +6,7 @@ export default <Metadata>{
   name: '提交按钮',
   component: 'widget-submit-button',
   category: 'basic',
+  only: true,
   props: {
     content: {
       label: '按钮文字',

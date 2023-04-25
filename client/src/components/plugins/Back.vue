@@ -29,5 +29,11 @@ const goBack = () => {
 .title {
   font-size: 16px;
   font-weight: bolder;
+  width: 160px;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-top: 3px;
 }
 </style>

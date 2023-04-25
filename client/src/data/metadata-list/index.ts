@@ -19,8 +19,8 @@ import type { Metadata } from '@/types'
  */
 export const metadataList: Metadata[] = [
   // 基础组件
-  submitButton,
   title,
+  submitButton,
   // 输入型组件
   input,
   textarea,

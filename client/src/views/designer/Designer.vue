@@ -1,7 +1,7 @@
 <template>
   <skeleton ref="skeletonRef">
     <template #headerLeft>
-      <Back :path="'/home/form'" :title="'新建表单'"/>
+      <Back :path="'/home/form'" :title="designerStore.title" />
     </template>
     <template #headerCenter>
       <div class="header-center">
@@ -10,8 +10,8 @@
     </template>
     <template #headerRight>
       <div class="header-right">
-        <Clear class="flexbox"/>
-        <Preview class="flexbox"/>
+        <Clear class="flexbox" />
+        <Preview class="flexbox" />
       </div>
     </template>
     <template #mainLeft>
@@ -28,6 +28,9 @@
 
 <script setup lang="ts">
 import { metadataList } from '@/data/metadata-list'
+import { useDesignerStore } from '@/stores'
+
+const designerStore = useDesignerStore()
 </script>
 
 <style scoped lang="scss">

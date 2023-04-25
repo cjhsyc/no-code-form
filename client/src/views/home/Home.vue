@@ -55,8 +55,8 @@
 
 <script setup lang="ts">
 import { Menu as IconMenu } from '@element-plus/icons-vue'
-import { useHomeStore } from '@/stores/home'
-import { useUserStore } from '@/stores/user'
+import { useHomeStore } from '@/stores'
+import { useUserStore } from '@/stores'
 
 const homeStore = useHomeStore()
 const userStore = useUserStore()

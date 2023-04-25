@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDesignerStore } from '@/stores/designer'
+import { useDesignerStore } from '@/stores'
 
 const designerStore = useDesignerStore()
 </script>

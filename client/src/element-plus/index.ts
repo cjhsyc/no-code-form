@@ -1,6 +1,7 @@
 export {
   ElAvatar,
   ElButton,
+  ElButtonGroup,
   ElCard,
   ElCascader,
   ElCheckbox,

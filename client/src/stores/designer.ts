@@ -29,6 +29,12 @@ export const useDesignerStore = defineStore('designerStore', () => {
   const latestHistory = computed(() => historyIndex.value === history.value.length - 1)
   // 是否为最老的记录
   const oldestHistory = computed(() => historyIndex.value === 0)
+  // 表单标题
+  const title = computed(
+    () =>
+      componentList.value.find((component) => component.component === 'widget-title')?.props.content
+        .value || '我的表单'
+  )
 
   /* action */
 
@@ -86,6 +92,7 @@ export const useDesignerStore = defineStore('designerStore', () => {
     /* getter */
     latestHistory,
     oldestHistory,
+    title,
     /* action */
     clearCanvas,
     pushHistory,
