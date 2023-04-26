@@ -8,20 +8,23 @@ export const useDesignerStore = defineStore('designerStore', () => {
 
   // 画布表单中的组件列表
   const componentList = ref<ComponentData[]>([])
+  // 表单属性
+  const formProps = ref<FormProps>(defaultFormProps)
+  // 表单宽度
+  const width = ref<'auto' | number>('auto')
+
+  // 发布状态
+  const publish = ref(false)
   // 初始组件列表
   const initialComponentList = ref<ComponentData[]>([])
   // 当前选中的组件
   const currentComponent = ref<ComponentData | null>(null)
-  // 表单属性
-  const formProps = ref<FormProps>(defaultFormProps)
   // 历史记录
   const history = ref<ComponentData[][]>([[]])
   // 历史记录指针
   const historyIndex = ref<number>(0)
   // 属性配置面板显示的tab页
   const propPanelTab = ref<'component' | 'form'>('component')
-  // 表单宽度
-  const width = ref<'auto' | number>('auto')
 
   /* getter */
 
@@ -33,7 +36,7 @@ export const useDesignerStore = defineStore('designerStore', () => {
   const title = computed(
     () =>
       componentList.value.find((component) => component.component === 'widget-title')?.props.content
-        .value || '我的表单'
+        .value || '未命名表单'
   )
 
   /* action */
@@ -89,6 +92,7 @@ export const useDesignerStore = defineStore('designerStore', () => {
     formProps,
     propPanelTab,
     width,
+    publish,
     /* getter */
     latestHistory,
     oldestHistory,

@@ -1,4 +1,5 @@
 import type { AxiosInstance, AxiosRequestConfig } from 'axios'
+import type { FormInfo } from './form'
 
 // 基于axios二次封装的request的类型
 export interface RequestInstance extends AxiosInstance {
@@ -33,3 +34,5 @@ export interface UpdatePasswordParams {
 export interface UpdateAvatarParams {
   file: File
 }
+
+export interface SaveFormParams extends FormInfo {}

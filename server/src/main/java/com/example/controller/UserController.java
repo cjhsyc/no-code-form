@@ -74,14 +74,13 @@ public class UserController {
             file.mkdirs();
         }
         File dest = new File(filePath + System.getProperty("file.separator") + fileName);
-        String imgPath = "/img/avatar/" + fileName;
         try {
             avatarFile.transferTo(dest);
             User user = new User();
             user.setId(id);
-            user.setAvatar(imgPath);
+            user.setAvatar(fileName);
             if (userService.updateById(user)) {
-                return new Message("success", "上传成功", imgPath);
+                return new Message("success", "上传成功", fileName);
             } else {
                 return new Message("error", "上传失败");
             }

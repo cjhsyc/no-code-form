@@ -63,7 +63,7 @@
 </template>
 
 <script setup lang="ts">
-import { reqLogin } from '@/api'
+import { reqLogin, reqSignup } from '@/api'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import { useUserStore } from '@/stores'
 import { useRouter } from 'vue-router'
@@ -118,12 +118,14 @@ const validateConfirm = (rule: any, value: any, callback: any) => {
   }
 }
 
+// 切换登录和注册
 watch(activeName, () => {
   setTimeout(() => {
     formRef.value?.resetFields()
   })
 })
 
+// 登录
 const login = () => {
   formRef.value?.validate((valid) => {
     if (valid) {
@@ -132,7 +134,7 @@ const login = () => {
         username: formData.value.username,
         password: formData.value.password
       }).then((result) => {
-        isLoading.value = true
+        isLoading.value = false
         userStore.setUserData(result.data)
         ElMessage({
           type: result.type,
@@ -144,10 +146,22 @@ const login = () => {
   })
 }
 
+// 注册
 const signup = () => {
   formRef.value?.validate((valid) => {
     if (valid) {
-      console.log('submit!')
+      isLoading.value = true
+      reqSignup({
+        username: formData.value.username,
+        password: formData.value.password
+      }).then((result) => {
+        isLoading.value = false
+        ElMessage({
+          type: result.type,
+          message: result.message
+        })
+        activeName.value = 'login'
+      })
     }
   })
 }

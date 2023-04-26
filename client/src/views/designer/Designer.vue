@@ -12,6 +12,7 @@
       <div class="header-right">
         <Clear class="flexbox" />
         <Preview class="flexbox" />
+        <Save class="flexbox" />
       </div>
     </template>
     <template #mainLeft>

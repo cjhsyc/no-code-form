@@ -22,7 +22,7 @@ const props = defineProps({
 
 const color = computed(() => {
   if (props.content === '') {
-    return 'var(--color-text-gray)'
+    return 'var(--color-text-2)'
   }
   return ''
 })

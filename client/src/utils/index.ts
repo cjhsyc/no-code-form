@@ -1,12 +1,12 @@
 import type { PropConfig, FormItemProps } from '@/types'
 /**
  * 生成随机id
- * @param prefix 前缀，默认为`id`
+ * @param prefix 前缀
  * @returns 随机id
  */
-export const uuid = (prefix: string = 'id') => {
-  const randomNum = Number(Math.random().toString().substring(2)).toString(36)
-  return prefix + '_' + randomNum
+export const uuid = (prefix?: string) => {
+  const randomStr = Number(Math.random().toString().substring(2)).toString(36)
+  return prefix ? prefix + '_' + randomStr : randomStr
 }
 
 /**

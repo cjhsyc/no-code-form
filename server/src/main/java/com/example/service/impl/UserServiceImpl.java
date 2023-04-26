@@ -29,7 +29,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     public Boolean addUser(User user) {
-        user.setAvatar("/img/avatar/user.jpg");
+        user.setAvatar("user.jpg");
         user.setRole("user");
         return userMapper.insert(user) > 0;
     }

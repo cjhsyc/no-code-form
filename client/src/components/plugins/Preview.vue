@@ -30,10 +30,6 @@ const showPreview = ref(false)
 const designerStore = useDesignerStore()
 const port = ref<'pc' | 'mobile'>('pc')
 
-const bgc = computed(() =>
-  port.value === 'pc' ? 'var(--color-background-blue)' : 'var(--color-background)'
-)
-
 const onclick = () => {
   showPreview.value = true
 }
@@ -56,7 +52,7 @@ const onclick = () => {
       padding: 0;
       overflow: auto;
       height: 100%;
-      background-color: v-bind(bgc);
+      background-color: var(--color-background-blue);
       @include scrollbar();
       .container {
         height: 100%;
@@ -74,6 +70,7 @@ const onclick = () => {
           &.mobile-wrapper {
             overflow: auto;
             border-radius: 0 0 40px 40px;
+            background-color: var(--color-background);
             @include scrollbar();
           }
         }

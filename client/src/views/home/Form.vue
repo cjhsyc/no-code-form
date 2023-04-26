@@ -9,14 +9,9 @@
       </div>
     </div>
     <div class="forms">
-      <el-card class="form-card flex-box" shadow="hover">
-        <div class="card-header">
-          <div class="icon">
-            <el-icon :size="18"><list /></el-icon>
-          </div>
-          <div class="title">表单</div>
-        </div>
-        <div class="content"></div>
+      <el-card v-for="form in formList" :key="form.code" class="form-card" shadow="hover">
+        <div class="card-header"></div>
+        <div class="content">{{ form.saveTime }}</div>
         <div class="footer"></div>
       </el-card>
     </div>
@@ -36,17 +31,19 @@
         </div>
       </template>
       <div class="dialog-content">
-        <div class="template empty">
-          <div class="title">空白表单</div>
-          <div class="content">
-            <div class="add-form flex-box" @click="addForm">
-              <el-icon :size="30"><plus /></el-icon>
-            </div>
-          </div>
-        </div>
         <div class="template mine">
           <div class="title">我的模板</div>
-          <div class="content"></div>
+          <div class="content">
+            <el-card class="template-card empty" shadow="never" @click="addForm">
+              <el-icon :size="50"><plus /></el-icon>
+              <div class="text">从空白模板创建</div>
+            </el-card>
+            <el-card class="template-card" shadow="hover">
+              <div class="card-header"></div>
+              <div class="content"></div>
+              <div class="footer"></div>
+            </el-card>
+          </div>
         </div>
         <div class="template recommend">
           <div class="title">推荐模板</div>
@@ -58,10 +55,17 @@
 </template>
 
 <script setup lang="ts">
+import { uuid } from '@/utils'
+import { reqGetForms } from '@/api'
+import { useUserStore } from '@/stores'
+import type { FormInfo } from '@/types'
+
 const router = useRouter()
+const userStore = useUserStore()
 
 const showAddFormDialog = ref(false)
 const searchValue = ref('')
+const formList = ref<FormInfo[]>([])
 
 const openAddFormDialog = () => {
   showAddFormDialog.value = true
@@ -71,11 +75,20 @@ const closeAddFormDialog = () => {
 }
 
 const addForm = () => {
-  router.push('/designer')
+  router.push({ name: 'designer', params: { code: uuid() } })
 }
+
+onBeforeMount(() => {
+  console.log(userStore.id)
+  reqGetForms(userStore.id).then((result) => {
+    formList.value = result.data
+  })
+})
 </script>
 
 <style scoped lang="scss">
+@use '@/styles/mixin.scss' as *;
+
 .form-manage {
   .header {
     margin-bottom: 16px;
@@ -91,30 +104,13 @@ const addForm = () => {
   .forms {
     display: flex;
     margin: -10px;
-    .flex-box {
-      margin: 10px;
-      height: 160px;
-      width: 160px;
-    }
     .form-card {
+      margin: 10px;
+      height: 275px;
+      width: 215px;
+      cursor: pointer;
       &:deep(.el-card__body) {
         padding: 12px;
-      }
-      .card-header {
-        display: flex;
-        align-items: center;
-        margin-bottom: 6px;
-        .icon {
-          height: 26px;
-          padding-right: 6px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          color: var(--color-deep);
-        }
-        .title {
-          line-height: 26px;
-        }
       }
     }
   }
@@ -148,6 +144,8 @@ const addForm = () => {
     .dialog-content {
       height: 75vh;
       padding: 10px;
+      overflow: auto;
+      @include scrollbar();
       .template {
         .title {
           padding: 10px;
@@ -156,22 +154,35 @@ const addForm = () => {
         .content {
           min-height: 160px;
           padding: 0 10px;
-        }
-        &.empty {
-          .flex-box {
-            height: 160px;
-            width: 160px;
-          }
-          .add-form {
-            border-radius: 6px;
-            border: 2px dashed var(--color-border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: var(--color-text-2);
+          margin: -10px;
+          display: flex;
+          .template-card {
+            margin: 10px;
+            height: 275px;
+            width: 215px;
             &:hover {
-              border-color: var(--color-border-hover);
+              transform: translateY(-4px);
+            }
+            .el-card__body {
+              padding: 12px;
+            }
+            &.empty {
+              cursor: pointer;
+              .el-card__body {
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                .el-icon {
+                  color: var(--color-primary);
+                  padding-bottom: 20px;
+                }
+                .text {
+                  font-weight: bolder;
+                  color: var(--color-text-2);
+                }
+              }
             }
           }
         }

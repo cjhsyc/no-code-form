@@ -1,10 +1,11 @@
 import type { UserData } from '@/types'
+import { useStorage } from '@vueuse/core'
 
 export const useUserStore = defineStore('userStore', () => {
-  const id = ref(0)
-  const username = ref('')
-  const role = ref('')
-  const avatar = ref('')
+  const id = useStorage('userId', 0, sessionStorage)
+  const username = useStorage('username', '', sessionStorage)
+  const role = useStorage('role', '', sessionStorage)
+  const avatar = useStorage('avatar', '', sessionStorage)
 
   const setUserData = (userData: UserData) => {
     id.value = userData.id
