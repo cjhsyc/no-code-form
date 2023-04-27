@@ -59,12 +59,16 @@ const props = defineProps({
     default: () => []
   },
   width: {
-    type: String,
+    type: [String, Number],
     default: 'auto'
   },
   port: {
     type: String as PropType<'pc' | 'mobile'>,
     default: 'pc'
+  },
+  containerWidth: {
+    type: String,
+    default: 'auto'
   }
 })
 
@@ -72,7 +76,9 @@ const formData = ref<Record<string, any>>({})
 const formRef = ref()
 
 const maxWidth = computed(() => (props.width === 'auto' ? 'unset' : `${props.width}px`))
-const bgc = computed(() => (props.port === 'pc' ? 'var(--color-background-blue)' : 'var(--color-background)'))
+const bgc = computed(() =>
+  props.port === 'pc' ? 'var(--color-background-blue)' : 'var(--color-background)'
+)
 
 watch(
   () => props.componentList,
@@ -104,6 +110,7 @@ const onSubmit = () => {
   min-height: 100%;
   padding: 10px;
   background-color: v-bind(bgc);
+  width: v-bind(containerWidth);
   .form-card {
     width: 100%;
     max-width: v-bind(maxWidth);

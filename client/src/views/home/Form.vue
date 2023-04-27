@@ -5,14 +5,72 @@
         <el-button icon="plus" type="primary" @click="openAddFormDialog">新建</el-button>
       </div>
       <div class="toolbar">
-        <div class="total">共 2 项</div>
+        <div class="total">共 {{ formDataList.length }} 项</div>
       </div>
     </div>
     <div class="forms">
-      <el-card v-for="form in formList" :key="form.code" class="form-card" shadow="hover">
-        <div class="card-header"></div>
-        <div class="content">{{ form.saveTime }}</div>
-        <div class="footer"></div>
+      <el-card
+        v-for="(form, index) in formDataList"
+        :key="form.code"
+        class="form-card"
+        shadow="hover"
+        @mouseenter="hoverFormCode = form.code"
+        @mouseleave="hoverFormCode = ''"
+      >
+        <div class="preview">
+          <form-render
+            v-bind="{ ...form.renderData }"
+            port="pc"
+            containerWidth="430px"
+          ></form-render>
+        </div>
+        <div class="card-content">
+          <div class="card-header">
+            <div class="title">
+              <div class="name">
+                {{ designerStore.getFormName(form.renderData.componentList) }}
+              </div>
+              <el-badge
+                :value="form.publish ? '已上线' : '未发布'"
+                :type="form.publish ? 'success' : 'danger'"
+              ></el-badge>
+            </div>
+            <el-button
+              :class="{ hidden: form.code !== hoverFormCode }"
+              size="small"
+              type="primary"
+              text
+              @click="editForm(form.code, form.renderData, form.publish)"
+            >
+              编辑
+            </el-button>
+          </div>
+          <div class="footer">
+            <div class="save-time">{{ getDateAgo(new Date(form.saveTime)) }} 保存</div>
+            <el-dropdown>
+              <div class="actions">
+                <el-icon :size="14"><MoreFilled /></el-icon>
+              </div>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item icon="CopyDocument" @click="copyForm(form)"
+                    >复制</el-dropdown-item
+                  >
+                  <el-dropdown-item
+                    :icon="form.publish ? 'CircleCloseFilled' : 'UploadFilled'"
+                    @click="changePublish(form.code, !form.publish, index)"
+                  >
+                    {{ form.publish ? '下线' : '发布' }}
+                  </el-dropdown-item>
+                  <el-dropdown-item icon="DocumentAdd">保存为模板</el-dropdown-item>
+                  <el-dropdown-item icon="delete" @click="removeForm(form.code, index)"
+                    >删除</el-dropdown-item
+                  >
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </div>
+        </div>
       </el-card>
     </div>
     <el-dialog v-model="showAddFormDialog" width="80%" top="5vh" :show-close="false">
@@ -36,13 +94,9 @@
           <div class="content">
             <el-card class="template-card empty" shadow="never" @click="addForm">
               <el-icon :size="50"><plus /></el-icon>
-              <div class="text">从空白模板创建</div>
+              <div class="text">新建空白表单</div>
             </el-card>
-            <el-card class="template-card" shadow="hover">
-              <div class="card-header"></div>
-              <div class="content"></div>
-              <div class="footer"></div>
-            </el-card>
+            <el-card class="template-card" shadow="hover"> </el-card>
           </div>
         </div>
         <div class="template recommend">
@@ -55,17 +109,28 @@
 </template>
 
 <script setup lang="ts">
-import { uuid } from '@/utils'
-import { reqGetForms } from '@/api'
-import { useUserStore } from '@/stores'
-import type { FormInfo } from '@/types'
+import { reqGetForms, reqSaveForm, reqRemoveForm, reqPublishForm } from '@/api'
+import { useDesignerStore, useUserStore } from '@/stores'
+import type { FormData, FormInfo } from '@/types'
+import { getDateAgo, uuid } from '@/utils'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 const router = useRouter()
 const userStore = useUserStore()
+const designerStore = useDesignerStore()
 
+const hoverFormCode = ref('')
 const showAddFormDialog = ref(false)
 const searchValue = ref('')
 const formList = ref<FormInfo[]>([])
+const formDataList = computed<FormData[]>(() => {
+  return formList.value.map((form) => {
+    return {
+      ...form,
+      renderData: JSON.parse(form.renderData)
+    }
+  })
+})
 
 const openAddFormDialog = () => {
   showAddFormDialog.value = true
@@ -74,12 +139,75 @@ const closeAddFormDialog = () => {
   showAddFormDialog.value = false
 }
 
+// 新增表单，进入表单设计器
 const addForm = () => {
+  designerStore.$reset()
   router.push({ name: 'designer', params: { code: uuid() } })
 }
 
+// 编辑表单，进入表单设计器
+const editForm = (code: string, renderData: FormData['renderData'], publish: boolean) => {
+  designerStore.$reset()
+  designerStore.componentList = renderData.componentList
+  designerStore.initialComponentList = renderData.componentList
+  designerStore.formProps = renderData.formProps
+  designerStore.width = renderData.width
+  designerStore.publish = publish
+  router.push({ name: 'designer', params: { code } })
+}
+
+// 复制表单
+const copyForm = (form: FormData) => {
+  const newForm: FormInfo = {
+    userId: form.userId,
+    code: uuid(),
+    renderData: JSON.stringify(form.renderData),
+    saveTime: new Date().toLocaleString(),
+    publish: false
+  }
+  reqSaveForm(newForm).then((result) => {
+    ElMessage({
+      type: result.type,
+      message: result.message.replace('保存', '复制')
+    })
+    if (result.success) {
+      formList.value.push(newForm)
+    }
+  })
+}
+
+// 删除表单
+const removeForm = (code: string, index: number) => {
+  ElMessageBox.confirm('确认要删除吗？', '提示', { type: 'warning' })
+    .then(() => {
+      reqRemoveForm(code).then((result) => {
+        ElMessage({
+          type: result.type,
+          message: result.message
+        })
+        if (result.success) {
+          formList.value.splice(index, 1)
+        }
+      })
+    })
+    .catch(() => {})
+}
+
+// 发布或下线表单
+const changePublish = (code: string, publish: boolean, index: number) => {
+  reqPublishForm(code, publish).then((result) => {
+    ElMessage({
+      type: result.type,
+      message: result.message
+    })
+    if (result.success) {
+      formList.value[index].publish = publish
+    }
+  })
+}
+
+// 获取我的表单列表
 onBeforeMount(() => {
-  console.log(userStore.id)
   reqGetForms(userStore.id).then((result) => {
     formList.value = result.data
   })
@@ -90,6 +218,7 @@ onBeforeMount(() => {
 @use '@/styles/mixin.scss' as *;
 
 .form-manage {
+  height: calc(100% - 66px);
   .header {
     margin-bottom: 16px;
     display: flex;
@@ -104,13 +233,80 @@ onBeforeMount(() => {
   .forms {
     display: flex;
     margin: -10px;
+    flex-wrap: wrap;
+    max-height: calc(100% - 48px);
+    overflow: auto;
+    @include scrollbar();
     .form-card {
       margin: 10px;
       height: 275px;
       width: 215px;
-      cursor: pointer;
       &:deep(.el-card__body) {
-        padding: 12px;
+        padding: 0;
+      }
+      .preview {
+        height: 200px;
+        overflow: hidden;
+        pointer-events: none;
+        user-select: none;
+        background-color: var(--color-background-blue);
+        :deep(.render-form) {
+          transform: scale(0.5);
+          transform-origin: left top;
+        }
+      }
+      .card-content {
+        padding: 5px 8px;
+        height: 70px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        .card-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          .title {
+            display: flex;
+            align-items: center;
+            max-width: 150px;
+            .name {
+              font-size: larger;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+          }
+          .el-button.hidden {
+            opacity: 0;
+            pointer-events: none;
+          }
+        }
+
+        .footer {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          .save-time {
+            font-size: smaller;
+            color: var(--color-text-2);
+          }
+          .actions {
+            height: 20px;
+            width: 20px;
+            border-radius: 2px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 6px;
+            cursor: pointer;
+            &:hover {
+              background-color: var(--color-background-blue);
+            }
+            &:focus-visible {
+              outline: none;
+            }
+          }
+        }
       }
     }
   }

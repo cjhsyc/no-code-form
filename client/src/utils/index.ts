@@ -1,4 +1,4 @@
-import type { PropConfig, FormItemProps } from '@/types'
+import type { PropConfig } from '@/types'
 /**
  * 生成随机id
  * @param prefix 前缀
@@ -73,31 +73,44 @@ export const objectFilter = <T extends Record<string, any>>(
   return filtered
 }
 
-/**
- * 返回初始的表单项属性配置
- * @param label
- * @returns
- */
-export const getInitialFormItemProps = (label: string, category: string): FormItemProps => {
-  return {
-    label: {
-      setter: 'el-input',
-      label: '标签',
-      value: label,
-      attrs: {
-        type: 'textarea',
-        autosize: true,
-        resize: 'none'
-      }
-    },
-    showLabel: {
-      setter: 'el-switch',
-      label: '是否显示标签',
-      value: category === 'input'
-    },
-    required: {
-      setter: category === 'input' ? 'el-switch' : 'none',
-      label: '是否必填'
-    }
+// 定义一个工具函数，接收一个Date类型数据（比当前时间早），返回与当前时间的间隔
+export const getDateAgo = (date: Date): string => {
+  // 获取当前时间
+  const now = new Date()
+  // 计算时间差（毫秒）
+  const diffMs = now.getTime() - date.getTime()
+  // 转换为秒
+  const diffSec = diffMs / 1000
+  // 如果小于60秒，返回“刚刚”
+  if (diffSec < 60) {
+    return '刚刚'
   }
+  // 转换为分钟
+  const diffMin = diffSec / 60
+  // 如果小于60分钟，返回“XX分钟之前”
+  if (diffMin < 60) {
+    return Math.floor(diffMin) + '分钟前'
+  }
+  // 转换为小时
+  const diffHr = diffMin / 60
+  // 如果小于24小时，返回“XX小时之前”
+  if (diffHr < 24) {
+    return Math.floor(diffHr) + '小时前'
+  }
+  // 转换为天
+  const diffDay = diffHr / 24
+  // 如果小于30天，返回“XX天之前”
+  if (diffDay < 30) {
+    return Math.floor(diffDay) + '天前'
+  }
+  // 转换为月
+  const diffMon = diffDay / 30
+  // 如果小于12个月，返回“XX个月之前”
+  if (diffMon < 12) {
+    return Math.floor(diffMon) + '个月前'
+  }
+  // 转换为年
+  const diffYr = diffMon / 12
+  // 返回“XX年之前”
+  return Math.floor(diffYr) + '年前'
 }

@@ -30,4 +30,35 @@ public class FormController {
         queryWrapper.eq("user_id", userId);
         return new Message("success", "", formService.list(queryWrapper));
     }
+
+    @DeleteMapping("/{code}")
+    public Message removeForm(@PathVariable String code) {
+        QueryWrapper<Form> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("code", code);
+        if (formService.remove(queryWrapper)) {
+            return new Message("success", "删除成功");
+        }
+        return new Message("error", "删除失败");
+    }
+
+    @PutMapping("/publish/{code}/{publish}")
+    // 发布或下线表单
+    public Message publishForm(@PathVariable String code, @PathVariable Boolean publish) {
+        Form form = new Form();
+        form.setPublish(publish);
+        QueryWrapper<Form> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("code", code);
+        if (formService.update(form, queryWrapper)) {
+            if (publish) {
+                return new Message("success", "发布成功");
+            } else {
+                return new Message("success", "下线成功");
+            }
+        }
+        if (publish) {
+            return new Message("success", "发布失败");
+        } else {
+            return new Message("success", "下线失败");
+        }
+    }
 }

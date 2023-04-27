@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import { pinia } from '@/stores'
 
 import App from './App.vue'
 // 路由
@@ -32,7 +32,7 @@ app.use(widgets)
 // 注册所有属性设置器组件
 app.use(setters)
 
-app.use(createPinia())
+app.use(pinia)
 app.use(router)
 
 app.mount('#app')

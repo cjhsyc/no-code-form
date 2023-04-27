@@ -1,7 +1,7 @@
 <template>
   <skeleton ref="skeletonRef">
     <template #headerLeft>
-      <Back :path="'/home/form'" :title="designerStore.title" />
+      <Back :path="'/home/form'" :title="designerStore.formName" />
     </template>
     <template #headerCenter>
       <div class="header-center">

@@ -19,7 +19,7 @@ export default <Metadata>{
     type: {
       label: '选择类型',
       setter: 'setter-radio-button',
-      value: 'datetime',
+      value: 'date',
       attrs: {
         options: [
           {

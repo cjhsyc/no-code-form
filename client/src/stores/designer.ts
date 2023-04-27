@@ -12,9 +12,9 @@ export const useDesignerStore = defineStore('designerStore', () => {
   const formProps = ref<FormProps>(defaultFormProps)
   // 表单宽度
   const width = ref<'auto' | number>('auto')
-
   // 发布状态
   const publish = ref(false)
+
   // 初始组件列表
   const initialComponentList = ref<ComponentData[]>([])
   // 当前选中的组件
@@ -33,17 +33,26 @@ export const useDesignerStore = defineStore('designerStore', () => {
   // 是否为最老的记录
   const oldestHistory = computed(() => historyIndex.value === 0)
   // 表单标题
-  const title = computed(
-    () =>
-      componentList.value.find((component) => component.component === 'widget-title')?.props.content
-        .value || '未命名表单'
-  )
+  const formName = computed(() => getFormName(componentList.value))
 
   /* action */
 
+  /**
+   * 清空画布
+   */
   const clearCanvas = () => {
     componentList.value = []
     currentComponent.value = null
+  }
+
+  /**
+   * 根据表单中的标题生成表单名称
+   */
+  const getFormName = (componentList: ComponentData[]) => {
+    return (
+      componentList.find((component) => component.component === 'widget-title')?.props.content
+        .value || '未命名表单'
+    )
   }
 
   /**
@@ -96,12 +105,13 @@ export const useDesignerStore = defineStore('designerStore', () => {
     /* getter */
     latestHistory,
     oldestHistory,
-    title,
+    formName,
     /* action */
     clearCanvas,
     pushHistory,
     lastHistory,
     nextHistory,
-    clearHistory
+    clearHistory,
+    getFormName
   }
 })

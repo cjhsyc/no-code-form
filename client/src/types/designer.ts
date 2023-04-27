@@ -51,40 +51,6 @@ export interface PropConfig<T> {
 }
 
 /**
- * 表单项属性
- */
-export interface FormItemProps extends Record<string, PropConfig<any> | undefined> {
-  /**
-   * 标签文本
-   */
-  label?: PropConfig<string>
-  /**
-   * 标签宽度
-   */
-  labelWidth?: PropConfig<number | string>
-  /**
-   * 是否为必填项
-   */
-  required?: PropConfig<boolean>
-  /**
-   * 是否显示标签
-   */
-  showLabel?: PropConfig<boolean>
-  /**
-   * 表单域验证错误时的提示信息
-   */
-  error?: PropConfig<string>
-  /**
-   * 是否显示校验错误信息
-   */
-  showMessage?: PropConfig<boolean>
-  /**
-   * 是否以行内形式展示校验信息
-   */
-  inlineMessage?: PropConfig<boolean>
-}
-
-/**
  * 表单属性
  */
 export interface FormProps extends Record<string, PropConfig<any>> {

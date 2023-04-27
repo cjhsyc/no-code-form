@@ -1,5 +1,6 @@
 export {
   ElAvatar,
+  ElBadge,
   ElButton,
   ElButtonGroup,
   ElCard,
@@ -15,6 +16,9 @@ export {
   ElDatePicker,
   ElDialog,
   ElDrawer,
+  ElDropdown,
+  ElDropdownItem,
+  ElDropdownMenu,
   ElEmpty,
   ElForm,
   ElFormItem,
