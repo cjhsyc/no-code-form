@@ -40,7 +40,10 @@ export {
   ElSubMenu,
   ElSwitch,
   ElTabPane,
+  ElTable,
+  ElTableColumn,
   ElTabs,
+  ElTag,
   ElTimePicker,
   ElTooltip,
   ElUpload

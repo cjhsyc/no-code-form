@@ -12,7 +12,12 @@
             <div class="title" v-show="!isCollapse">零代码表单</div>
           </Transition>
         </div>
-        <el-menu default-active="form" :collapse="isCollapse" router>
+        <el-menu
+          :default-active="homeStore.activeMenu"
+          :collapse="isCollapse"
+          router
+          @select="onSelectMenu"
+        >
           <el-menu-item index="form">
             <el-icon><icon-menu /></el-icon>
             <template #title>我的表单</template>
@@ -39,12 +44,12 @@
             <el-input
               v-model.trim="homeStore.search"
               prefix-icon="Search"
-              placeholder="搜索"
+              :placeholder="homeStore.searchPlaceholder"
               clearable
             ></el-input>
           </div>
           <div class="avatar">
-            <el-avatar :src="avatarUrl"  />
+            <el-avatar :src="avatarUrl" />
           </div>
         </div>
         <RouterView />
@@ -54,9 +59,8 @@
 </template>
 
 <script setup lang="ts">
+import { useHomeStore, useUserStore } from '@/stores'
 import { Menu as IconMenu } from '@element-plus/icons-vue'
-import { useHomeStore } from '@/stores'
-import { useUserStore } from '@/stores'
 
 const homeStore = useHomeStore()
 const userStore = useUserStore()
@@ -71,7 +75,10 @@ const avatarUrl = computed(() => {
 
 const onClick = () => {
   isCollapse.value = !isCollapse.value
-  console.log(userStore)
+}
+
+const onSelectMenu = (index: string) => {
+  homeStore.activeMenu = index
 }
 </script>
 
