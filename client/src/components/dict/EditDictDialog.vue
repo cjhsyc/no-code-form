@@ -1,6 +1,13 @@
 <template>
   <div class="edit-dict">
-    <el-dialog v-model="showDialog" :title="title" width="600px" class="dict-dialog">
+    <el-dialog
+      v-model="showDialog"
+      :title="title"
+      width="600px"
+      class="dict-dialog"
+      :close-on-click-modal="false"
+      @close="emit('close')"
+    >
       <div class="dict-name form-item">
         <div class="label">字典名称</div>
         <div class="setter" :class="{ empty: isEmpty }">
@@ -47,7 +54,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['update:showDialog', 'update:modelValue', 'save'])
+const emit = defineEmits(['update:showDialog', 'update:modelValue', 'save', 'close'])
 
 const showDialog = computed({
   get: () => props.showDialog,

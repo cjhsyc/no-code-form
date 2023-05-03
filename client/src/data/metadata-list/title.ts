@@ -6,6 +6,7 @@ export default <Metadata>{
   name: '标题',
   component: 'widget-title',
   category: 'basic',
+  only: true,
   props: {
     content: {
       setter: 'el-input',

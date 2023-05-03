@@ -29,9 +29,18 @@
 
 <script setup lang="ts">
 import { metadataList } from '@/data/metadata-list'
-import { useDesignerStore } from '@/stores'
+import { useDesignerStore, useHomeStore, useUserStore } from '@/stores'
+import { reqGetDicts } from '@/api'
 
 const designerStore = useDesignerStore()
+const homeStore = useHomeStore()
+const userStore = useUserStore()
+
+onMounted(() => {
+  reqGetDicts(userStore.id).then((result) => {
+    homeStore.dictList = result.data
+  })
+})
 </script>
 
 <style scoped lang="scss">
