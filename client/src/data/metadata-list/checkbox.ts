@@ -15,7 +15,7 @@ export default <Metadata>{
       attrs: {
         readonly: true
       },
-      tips: '只读，在画布中设置组件的默认值'
+      tips: '只读，在画布中设置该组件的默认值'
     },
     options: {
       label: '选项',

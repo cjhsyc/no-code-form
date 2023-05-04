@@ -129,8 +129,6 @@ const onchange = ({ added }: { added: { element: ComponentData } }) => {
     // 将新增组件设置为当前选中组件
     designerStore.currentComponent = added.element
   }
-  // 添加历史记录
-  // designerStore.pushHistory()
 }
 
 // 删除组件
@@ -141,8 +139,6 @@ const removeComponent = (index: number) => {
         designerStore.currentComponent = null
       }
       designerStore.componentList.splice(index, 1)
-      // 添加历史记录
-      // designerStore.pushHistory()
       hoverId.value = ''
     })
     .catch(() => {})
@@ -155,14 +151,7 @@ const copyComponent = (index: number) => {
     id: uuid(designerStore.componentList[index].component)
   }
   designerStore.componentList.splice(index + 1, 0, newComponent)
-  // 添加历史记录
-  // designerStore.pushHistory()
 }
-
-onMounted(() => {
-  // 清空历史记录
-  // designerStore.clearHistory()
-})
 </script>
 
 <style scoped lang="scss">

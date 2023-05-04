@@ -12,6 +12,9 @@ import './styles/base.css'
 import * as ElementPlusComponents from '@/element-plus'
 // 图标
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+// v-loading
+import { vLoading } from 'element-plus'
+import 'element-plus/theme-chalk/el-loading.css'
 // 二次封装的素材组件
 import widgets from '@/materials/widgets'
 // 属性设置器
@@ -27,6 +30,12 @@ for (const [key, component] of Object.entries(ElementPlusComponents)) {
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
+// v-loading
+app.directive('loading', vLoading)
+app.directive('demo', (el, binding) => {
+  console.log(binding.value.color) // => "white"
+  console.log(binding.value.text) // => "hello!"
+})
 // 注册所有二次封装的素材组件
 app.use(widgets)
 // 注册所有属性设置器组件

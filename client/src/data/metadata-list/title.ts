@@ -37,6 +37,16 @@ export default <Metadata>{
         ]
       }
     },
+    text: {
+      setter: 'el-input',
+      label: '提示文本内容',
+      value: '',
+      attrs: {
+        type: 'textarea',
+        autosize: true,
+        resize: 'none'
+      }
+    },
     align: {
       setter: 'setter-radio-button',
       label: '对齐方式',

@@ -40,7 +40,7 @@
               size="small"
               type="primary"
               text
-              @click="editForm(form.code, form.renderData, form.publish)"
+              @click="editForm(form.code)"
             >
               编辑
             </el-button>
@@ -109,7 +109,7 @@
 </template>
 
 <script setup lang="ts">
-import { reqGetForms, reqSaveForm, reqRemoveForm, reqPublishForm } from '@/api'
+import { reqGetForms, reqPublishForm, reqRemoveForm, reqSaveForm } from '@/api'
 import { useDesignerStore, useUserStore } from '@/stores'
 import type { FormData, FormInfo } from '@/types'
 import { getDateAgo, uuid } from '@/utils'
@@ -141,18 +141,11 @@ const closeAddFormDialog = () => {
 
 // 新增表单，进入表单设计器
 const addForm = () => {
-  designerStore.$reset()
   router.push({ name: 'designer', params: { code: uuid() } })
 }
 
 // 编辑表单，进入表单设计器
-const editForm = (code: string, renderData: FormData['renderData'], publish: boolean) => {
-  designerStore.$reset()
-  designerStore.componentList = renderData.componentList
-  designerStore.initialComponentList = renderData.componentList
-  designerStore.formProps = renderData.formProps
-  designerStore.width = renderData.width
-  designerStore.publish = publish
+const editForm = (code: string) => {
   router.push({ name: 'designer', params: { code } })
 }
 

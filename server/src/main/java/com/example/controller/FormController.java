@@ -31,6 +31,17 @@ public class FormController {
         return new Message("success", "", formService.list(queryWrapper));
     }
 
+    @GetMapping("info/{code}")
+    public Message getFormByCode(@PathVariable String code) {
+        QueryWrapper<Form> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("code", code);
+        Form form = formService.getOne(queryWrapper);
+        if (form.getCode().equals(code)) {
+            return new Message("success", "查询成功", form);
+        }
+        return new Message("error", "查询失败");
+    }
+
     @DeleteMapping("/{code}")
     public Message removeForm(@PathVariable String code) {
         QueryWrapper<Form> queryWrapper = new QueryWrapper<>();

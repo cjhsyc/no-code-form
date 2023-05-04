@@ -13,6 +13,7 @@
         <Clear class="flexbox" />
         <Preview class="flexbox" />
         <Save class="flexbox" />
+        <Actions class="flexbox" />
       </div>
     </template>
     <template #mainLeft>
@@ -30,11 +31,33 @@
 <script setup lang="ts">
 import { metadataList } from '@/data/metadata-list'
 import { useDesignerStore, useHomeStore, useUserStore } from '@/stores'
-import { reqGetDicts } from '@/api'
+import { reqGetDicts, reqGetFormInfo } from '@/api'
+import { ElMessage } from 'element-plus'
 
 const designerStore = useDesignerStore()
 const homeStore = useHomeStore()
 const userStore = useUserStore()
+const route = useRoute()
+
+onBeforeMount(() => {
+  reqGetFormInfo(route.params.code as string).then((result) => {
+    if (result.success) {
+      const renderData = JSON.parse(result.data.renderData)
+      designerStore.setFormData(
+        renderData.componentList,
+        renderData.formProps,
+        renderData.width,
+        result.data.publish
+      )
+    } else {
+      ElMessage({
+        type: result.type,
+        message: result.message
+      })
+      designerStore.$reset()
+    }
+  })
+})
 
 onMounted(() => {
   reqGetDicts(userStore.id).then((result) => {

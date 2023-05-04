@@ -13,3 +13,6 @@ export const reqRemoveForm = (code: string) => request.delete(`form/${code}`)
 // 发布或下线表单
 export const reqPublishForm = (code: string, publish: boolean) =>
   request.put(`form/publish/${code}/${publish}`)
+
+// 获取指定表单的信息
+export const reqGetFormInfo = (code: string) => request.get(`form/info/${code}`)

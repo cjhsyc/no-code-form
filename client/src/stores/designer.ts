@@ -1,7 +1,7 @@
-import { deepClone } from '@/utils'
 import { computed, ref } from 'vue'
 import defaultFormProps from '@/data/form-props'
 import type { ComponentData, FormProps } from '@/types'
+import { deepClone } from '@/utils'
 
 export const useDesignerStore = defineStore('designerStore', () => {
   /* state */
@@ -17,21 +17,18 @@ export const useDesignerStore = defineStore('designerStore', () => {
 
   // 初始组件列表
   const initialComponentList = ref<ComponentData[]>([])
+  // 初始表单属性
+  const initialFormProps = ref<FormProps>(defaultFormProps)
+  // 初始表单宽度
+  const initialWidth = ref<'auto' | number>('auto')
+
   // 当前选中的组件
   const currentComponent = ref<ComponentData | null>(null)
-  // 历史记录
-  const history = ref<ComponentData[][]>([[]])
-  // 历史记录指针
-  const historyIndex = ref<number>(0)
   // 属性配置面板显示的tab页
-  const propPanelTab = ref<'component' | 'form'>('component')
+  const propPanelTab = ref<'component' | 'form'>('form')
 
   /* getter */
 
-  // 是否为最新的记录
-  const latestHistory = computed(() => historyIndex.value === history.value.length - 1)
-  // 是否为最老的记录
-  const oldestHistory = computed(() => historyIndex.value === 0)
   // 表单标题
   const formName = computed(() => getFormName(componentList.value))
 
@@ -46,7 +43,7 @@ export const useDesignerStore = defineStore('designerStore', () => {
   }
 
   /**
-   * 根据表单中的标题生成表单名称
+   * 根据表单中的标题获取表单名称
    */
   const getFormName = (componentList: ComponentData[]) => {
     return (
@@ -56,41 +53,45 @@ export const useDesignerStore = defineStore('designerStore', () => {
   }
 
   /**
-   * 添加历史记录
+   * 设置当前数据
    */
-  const pushHistory = () => {
-    history.value.length = ++historyIndex.value
-    history.value.push(deepClone(componentList.value))
-    console.log('pushHistory')
+  const setFormData = (
+    newComponentList: ComponentData[],
+    newFormProps: FormProps,
+    newWidth: 'auto' | number,
+    newPublish: boolean
+  ) => {
+    componentList.value = newComponentList
+    formProps.value = newFormProps
+    width.value = newWidth
+    publish.value = newPublish
+    currentComponent.value = null
+    propPanelTab.value = 'form'
+    setInitial(newComponentList, newFormProps, newWidth)
   }
+
   /**
-   * 切换至上一级历史记录
+   * 重做
    */
-  const lastHistory = () => {
-    if (historyIndex.value > 0) {
-      componentList.value = history.value[--historyIndex.value]
-      if (!componentList.value.some((component) => component.id === currentComponent.value?.id)) {
-        currentComponent.value = null
-      }
-    }
+  const reset = () => {
+    componentList.value = deepClone(initialComponentList.value)
+    formProps.value = deepClone(initialFormProps.value)
+    width.value = initialWidth.value
+    currentComponent.value = null
+    propPanelTab.value = 'form'
   }
+
   /**
-   * 切换至下一级历史记录
+   * 设置初始数据
    */
-  const nextHistory = () => {
-    if (historyIndex.value < history.value.length - 1) {
-      componentList.value = history.value[++historyIndex.value]
-      if (!componentList.value.some((component) => component.id === currentComponent.value?.id)) {
-        currentComponent.value = null
-      }
-    }
-  }
-  /**
-   * 清空历史记录
-   */
-  const clearHistory = () => {
-    history.value = [[]]
-    historyIndex.value = 0
+  const setInitial = (
+    componentList: ComponentData[],
+    formProps: FormProps,
+    width: 'auto' | number
+  ) => {
+    initialComponentList.value = deepClone(componentList)
+    initialFormProps.value = deepClone(formProps)
+    initialWidth.value = width
   }
 
   return {
@@ -98,20 +99,19 @@ export const useDesignerStore = defineStore('designerStore', () => {
     componentList,
     initialComponentList,
     currentComponent,
+    initialFormProps,
     formProps,
     propPanelTab,
     width,
+    initialWidth,
     publish,
     /* getter */
-    latestHistory,
-    oldestHistory,
     formName,
     /* action */
     clearCanvas,
-    pushHistory,
-    lastHistory,
-    nextHistory,
-    clearHistory,
-    getFormName
+    getFormName,
+    setFormData,
+    reset,
+    setInitial
   }
 })

@@ -1,7 +1,7 @@
 <template>
   <div class="preview">
     <el-button type="success" @click="onclick">预览</el-button>
-    <el-drawer v-model="showPreview" direction="btt" size="100%">
+    <el-drawer v-model="showPreview" direction="btt" size="100%" :destroy-on-close="true">
       <template #header="{ titleId, titleClass }">
         <h4 :id="titleId" :class="titleClass">预览</h4>
         <el-radio-group v-model="port">

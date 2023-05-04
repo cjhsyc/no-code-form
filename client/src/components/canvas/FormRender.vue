@@ -5,7 +5,7 @@
       :class="[port === 'pc' ? 'form-card' : 'form-div']"
     >
       <el-form
-        :model="formData"
+        :model="formModel"
         ref="formRef"
         v-bind="toRealProps(formProps)"
         :label-position="port === 'pc' ? formProps.labelPosition.value : 'top'"
@@ -47,7 +47,7 @@
 
 <script setup lang="ts">
 import type { ComponentData, FormProps } from '@/types'
-import { toRealProps } from '@/utils'
+import { deepClone, toRealProps } from '@/utils'
 
 const props = defineProps({
   formProps: {
@@ -72,8 +72,15 @@ const props = defineProps({
   }
 })
 
-const formData = ref<Record<string, any>>({})
 const formRef = ref()
+const formData = ref<Record<string, any>>({})
+const formModel = computed<Record<string, any>>(() => {
+  const formModel: Record<string, any> = {}
+  for (const key in formData.value) {
+    formModel[key] = formData.value[key].value
+  }
+  return formModel
+})
 
 const maxWidth = computed(() => (props.width === 'auto' ? 'unset' : `${props.width}px`))
 const bgc = computed(() =>
@@ -83,7 +90,7 @@ const bgc = computed(() =>
 watch(
   () => props.componentList,
   (componentList) => {
-    formData.value = componentList.reduce((formData, component) => {
+    formData.value = deepClone(componentList).reduce((formData, component) => {
       if (component.props.modelValue) {
         return Object.assign(formData, {
           [component.id]: {
@@ -99,7 +106,12 @@ watch(
 )
 
 const onSubmit = () => {
-  console.log(formData.value)
+  formRef.value
+    .validate()
+    .then(() => {
+      console.log(formData.value)
+    })
+    .catch(() => {})
 }
 </script>
 

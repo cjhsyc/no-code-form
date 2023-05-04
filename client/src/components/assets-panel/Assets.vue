@@ -18,6 +18,7 @@ import { getFormItemProps } from '@/data/form-item-props'
 import type { ComponentData, Metadata } from '@/types'
 import { deepClone, uuid } from '@/utils'
 import VueDraggable from 'vuedraggable'
+import { useDesignerStore } from '@/stores'
 
 const props = defineProps({
   metadataList: {
@@ -26,6 +27,7 @@ const props = defineProps({
   }
 })
 
+const designerStore = useDesignerStore()
 const metadataList = computed(() => props.metadataList)
 
 // 拖入新组件时添加id和表单项属性并深拷贝

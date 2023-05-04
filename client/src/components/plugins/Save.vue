@@ -24,6 +24,9 @@ const onclick = () => {
       type: result.type,
       message: result.message
     })
+    if (result.success) {
+      designerStore.setInitial(componentList, formProps, width)
+    }
   })
 }
 </script>

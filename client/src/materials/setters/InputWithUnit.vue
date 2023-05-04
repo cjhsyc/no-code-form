@@ -22,6 +22,7 @@ const props = defineProps({
   max: {
     type: Number
   },
+  // modelValue 绑定的是数值类型还是带单位的字符串类型
   stringValue: {
     type: Boolean,
     default: false

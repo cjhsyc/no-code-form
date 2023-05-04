@@ -11,7 +11,7 @@ import { ElMessageBox } from 'element-plus'
 const designerStore = useDesignerStore()
 
 const onclick = () => {
-  ElMessageBox.confirm('确认要删除吗？', '提示', { type: 'warning' })
+  ElMessageBox.confirm('确认要清空当前表单吗？', '提示', { type: 'warning' })
     .then(() => {
       designerStore.clearCanvas()
     })
