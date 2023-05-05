@@ -31,7 +31,7 @@
 <script setup lang="ts">
 import { metadataList } from '@/data/metadata-list'
 import { useDesignerStore, useHomeStore, useUserStore } from '@/stores'
-import { reqGetDicts, reqGetFormInfo } from '@/api'
+import { reqGetDicts, reqGetFormInfo, reqGetRules } from '@/api'
 import { ElMessage } from 'element-plus'
 
 const designerStore = useDesignerStore()
@@ -62,6 +62,9 @@ onBeforeMount(() => {
 onMounted(() => {
   reqGetDicts(userStore.id).then((result) => {
     homeStore.dictList = result.data
+  })
+  reqGetRules(userStore.id).then((result) => {
+    homeStore.ruleList = result.data
   })
 })
 </script>

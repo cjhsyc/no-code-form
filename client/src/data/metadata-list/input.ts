@@ -40,6 +40,12 @@ export default <Metadata>{
         clearable: true
       }
     },
+    rule: {
+      label: '校验规则',
+      setter: 'setter-rule',
+      value: null,
+      unbind: true
+    },
     clearable: {
       label: '是否显示清除按钮',
       setter: 'el-switch'

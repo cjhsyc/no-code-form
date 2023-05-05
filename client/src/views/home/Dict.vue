@@ -105,7 +105,7 @@ const filterHandler = (value: string, row: DictData) => {
   if (value === 'admin') {
     return row.userId === 3
   } else {
-    return row.userId !== 3
+    return row.userId === userStore.id
   }
 }
 

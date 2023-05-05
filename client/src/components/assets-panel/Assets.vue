@@ -5,10 +5,13 @@
     :sort="false"
     :group="{ name: 'assets', pull: 'clone', put: false }"
     :clone="onClone"
+    filter=".immovable"
     item-key="component"
   >
     <template #item="{ element }">
-      <el-button class="draggable" plain size="large">{{ element.name }}</el-button>
+      <el-button class="draggable" plain size="large" :class="{ immovable: isImmovable(element) }">
+        {{ element.name }}
+      </el-button>
     </template>
   </VueDraggable>
 </template>
@@ -29,6 +32,13 @@ const props = defineProps({
 
 const designerStore = useDesignerStore()
 const metadataList = computed(() => props.metadataList)
+
+const isImmovable = (original: Metadata) => {
+  return (
+    original.only &&
+    designerStore.componentList.find((component) => component.component === original.component)
+  )
+}
 
 // 拖入新组件时添加id和表单项属性并深拷贝
 const onClone = (original: Metadata): ComponentData => {
@@ -54,6 +64,9 @@ const onClone = (original: Metadata): ComponentData => {
       border-color: unset;
       border-style: dashed;
       border-width: 2px;
+    }
+    &.immovable {
+      cursor: not-allowed;
     }
   }
 }

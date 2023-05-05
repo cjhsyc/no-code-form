@@ -73,7 +73,11 @@ export const objectFilter = <T extends Record<string, any>>(
   return filtered
 }
 
-// 定义一个工具函数，接收一个Date类型数据（比当前时间早），返回与当前时间的间隔
+/**
+ * 定义一个工具函数，接收一个Date类型数据（比当前时间早），返回与当前时间的间隔
+ * @param date Date类型数据
+ * @returns
+ */
 export const getDateAgo = (date: Date): string => {
   // 获取当前时间
   const now = new Date()
@@ -113,4 +117,30 @@ export const getDateAgo = (date: Date): string => {
   const diffYr = diffMon / 12
   // 返回“XX年之前”
   return Math.floor(diffYr) + '年前'
+}
+
+/**
+ * 定义一个工具函数，接受一个字符串参数，返回一个RegExp类型
+ */
+export const stringToRegExp = (str: string): RegExp => {
+  // 定义一个变量，用来存储修饰符
+  let flags = ''
+  // 定义一个正则表达式，用来匹配修饰符
+  const flagReg = /[gimsuy]+$/
+  // 如果字符串中有修饰符，那么提取出来，并从字符串中去掉
+  if (flagReg.test(str)) {
+    flags = str.match(flagReg)?.[0] || ''
+    str = str.replace(flagReg, '')
+  }
+  // 检查字符串是否以/开头和结尾，如果是，去掉/
+  if (str.startsWith('/') && str.endsWith('/')) {
+    str = str.slice(1, -1)
+  }
+  // 尝试用字符串和修饰符创建一个RegExp对象，如果失败，抛出错误
+  try {
+    const reg = new RegExp(str, flags)
+    return reg
+  } catch (error) {
+    throw new Error('无效的正则表达式字符串')
+  }
 }

@@ -1,3 +1,5 @@
+import type { RuleData } from './rule'
+
 /**
  * 选择器选项
  */
@@ -25,3 +27,8 @@ export interface Option {
  * 对齐方式
  */
 export type Align = 'left' | 'center' | 'right'
+
+/**
+ * 规则信息
+ */
+export type Rule = Pick<RuleData, 'name' | 'rule' | 'message'>

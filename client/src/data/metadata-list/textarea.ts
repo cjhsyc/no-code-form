@@ -40,6 +40,12 @@ export default <Metadata>{
         clearable: true
       }
     },
+    rule: {
+      label: '校验规则',
+      setter: 'setter-rule',
+      value: null,
+      unbind: true
+    },
     readonly: {
       label: '是否只读',
       setter: 'el-switch'

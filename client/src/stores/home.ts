@@ -1,10 +1,11 @@
 import { useStorage } from '@vueuse/core'
-import type { DictInfo } from '@/types'
+import type { DictInfo, RuleData } from '@/types'
 
 export const useHomeStore = defineStore('homeStore', () => {
   const search = ref('')
   const activeMenu = useStorage('activeMenu', 'form', sessionStorage)
   const dictList = ref<DictInfo[]>([])
+  const ruleList = ref<RuleData[]>([])
 
   const searchPlaceholder = computed(() => {
     if (activeMenu.value === 'form') {
@@ -14,7 +15,7 @@ export const useHomeStore = defineStore('homeStore', () => {
     } else if (activeMenu.value === 'rule') {
       return '搜索规则名称'
     }
-    return '搜索'
+    return ''
   })
 
   watch(activeMenu, () => {
@@ -25,6 +26,7 @@ export const useHomeStore = defineStore('homeStore', () => {
     search,
     activeMenu,
     dictList,
+    ruleList,
     // 计算属性
     searchPlaceholder
   }

@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
-const prop = defineProps({
+const props = defineProps({
   modelValue: {
     type: String,
     default: ''
@@ -38,7 +38,7 @@ const emit = defineEmits(['update:modelValue'])
 
 // 选中的图标
 const selectedIcon = computed({
-  get: () => prop.modelValue,
+  get: () => props.modelValue,
   set: (newValue) => emit('update:modelValue', newValue)
 })
 const showDialog = ref(false)
