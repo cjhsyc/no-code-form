@@ -1,10 +1,10 @@
 <template>
   <div class="setter-rule">
-    <el-input :modelValue="ruleName" v-bind="$attrs" readonly>
-      <template #append>
-        <el-button @click="editRule">编辑规则</el-button>
-      </template>
-    </el-input>
+    <el-input :modelValue="ruleName" v-bind="$attrs" readonly> </el-input>
+    <div class="actions">
+      <div class="edit" @click="editRule">编辑规则</div>
+      <div class="remove" v-show="modelValue !== null" @click="removeRule">移除校验规则</div>
+    </div>
     <el-dialog
       v-model="showDialog"
       title="编辑规则"
@@ -120,6 +120,16 @@ const editRule = () => {
   testText.value = ''
 }
 
+const removeRule = () => {
+  ElMessageBox.confirm('确定要移除校验规则吗？', '提示', {
+    type: 'warning'
+  })
+    .then(() => {
+      emit('update:modelValue', null)
+    })
+    .catch(() => {})
+}
+
 const selectRule = (ruleData: RuleData) => {
   ElMessageBox.confirm('确定使用此校验规则吗？将覆盖已输入的规则内容。', '提示', {
     type: 'warning'
@@ -145,6 +155,20 @@ const onSave = () => {
 .setter-rule {
   :deep(.el-dialog__body) {
     padding: 10px 20px;
+  }
+  .actions {
+    display: flex;
+    margin-top: 4px;
+    font-size: smaller;
+    .edit {
+      color: var(--color-primary);
+      cursor: pointer;
+    }
+    .remove {
+      padding-left: 20px;
+      color: var(--el-color-danger);
+      cursor: pointer;
+    }
   }
   .content {
     display: flex;

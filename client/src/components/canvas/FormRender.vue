@@ -9,6 +9,7 @@
         ref="formRef"
         v-bind="toRealProps(formProps)"
         :label-position="port === 'pc' ? formProps.labelPosition.value : 'top'"
+        :rules="rules"
         class="form"
         @submit.prevent
       >
@@ -25,7 +26,6 @@
               :label-width="formProps.labelWidth.value"
               :label="component.props.label.value"
               :show-label="component.props.showLabel.value"
-              :required="component.props.required.value"
               class="form-item"
             >
               <component
@@ -46,8 +46,10 @@
 </template>
 
 <script setup lang="ts">
-import type { ComponentData, FormProps } from '@/types'
+import type { ComponentData, FormProps, Rule } from '@/types'
 import { deepClone, toRealProps } from '@/utils'
+import { stringToRegExp } from '@/utils'
+import type { FormRules, FormItemRule } from 'element-plus'
 
 const props = defineProps({
   formProps: {
@@ -80,6 +82,37 @@ const formModel = computed<Record<string, any>>(() => {
     formModel[key] = formData.value[key].value
   }
   return formModel
+})
+
+const rules = computed<FormRules>(() => {
+  return props.componentList.reduce((rules, component) => {
+    const ruleData: Rule = component.props.rule?.value
+    const ruleItems: FormItemRule[] = []
+    if (component.props.required?.value) {
+      ruleItems.push({
+        required: true,
+        message: `请输入${component.props.label?.value}`,
+        trigger: 'change'
+      })
+    }
+    if (ruleData) {
+      const validatePass = (rule: any, value: any, callback: any) => {
+        if (!value || stringToRegExp(ruleData.rule).test(value)) {
+          callback()
+        } else {
+          callback(new Error(ruleData.message || `请输入正确的${ruleData.name}`))
+        }
+      }
+      ruleItems.push({ validator: validatePass, trigger: 'change' })
+    }
+    if (ruleItems.length) {
+      return {
+        ...rules,
+        [component.id]: ruleItems
+      }
+    }
+    return rules
+  }, {})
 })
 
 const maxWidth = computed(() => (props.width === 'auto' ? 'unset' : `${props.width}px`))

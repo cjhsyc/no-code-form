@@ -10,16 +10,19 @@ export const getFormItemProps = (metadata: Metadata): Record<string, PropConfig<
         type: 'textarea',
         autosize: true,
         resize: 'none'
-      }
+      },
+      unbind: true
     },
     showLabel: {
       setter: 'el-switch',
       label: '是否显示标签',
-      value: metadata.category === 'input'
+      value: metadata.category === 'input',
+      unbind: true
     },
     required: {
       setter: metadata.category === 'input' ? 'el-switch' : 'none',
-      label: '是否必填'
+      label: '是否必填',
+      unbind: true
     },
     span: {
       setter: 'setter-col-span',
