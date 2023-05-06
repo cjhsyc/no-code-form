@@ -19,7 +19,10 @@
             :key="component.id"
             class="item-col"
             :span="port === 'pc' ? component.props.span.value : 24"
-            v-show="!component.props.hidden.value"
+            v-show="
+              showMap[component.id]?.reduce((pre, now) => now || pre) ??
+              !component.props.hidden.value
+            "
           >
             <form-item
               :prop="component.id"
@@ -46,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ComponentData, FormProps, Rule } from '@/types'
+import type { ComponentData, FormProps, Linkage, Rule, SelectOption } from '@/types'
 import { deepClone, toRealProps } from '@/utils'
 import { stringToRegExp } from '@/utils'
 import type { FormRules, FormItemRule } from 'element-plus'
@@ -76,12 +79,51 @@ const props = defineProps({
 
 const formRef = ref()
 const formData = ref<Record<string, any>>({})
-const formModel = computed<Record<string, any>>(() => {
+watch(
+  () => props.componentList,
+  (componentList) => {
+    formData.value = deepClone(componentList).reduce((formData, component) => {
+      if (component.props.modelValue) {
+        return Object.assign(formData, {
+          [component.id]: {
+            name: component.props.label?.value,
+            value: component.props.modelValue.value
+          }
+        })
+      }
+      return formData
+    }, {})
+  },
+  { deep: true, immediate: true }
+)
+const formModel = computed(() => {
   const formModel: Record<string, any> = {}
   for (const key in formData.value) {
     formModel[key] = formData.value[key].value
   }
   return formModel
+})
+
+// 显隐联动Map
+const showMap = computed(() => {
+  const map: Record<string, boolean[]> = {}
+  props.componentList.forEach((component) => {
+    const linkage: Linkage | null = component.props.linkage?.value
+    if (linkage !== null) {
+      for (const key in linkage) {
+        linkage[key].forEach((id) => {
+          const optionValue = component.props.options.value.find(
+            (option: SelectOption) => option.id === key
+          )?.value
+          const show = Array.isArray(formModel.value[component.id])
+            ? formModel.value[component.id].indexOf(optionValue) > -1
+            : formModel.value[component.id] === optionValue
+          map[id] = [...(map[id] || []), show]
+        })
+      }
+    }
+  })
+  return map
 })
 
 const rules = computed<FormRules>(() => {
@@ -118,24 +160,6 @@ const rules = computed<FormRules>(() => {
 const maxWidth = computed(() => (props.width === 'auto' ? 'unset' : `${props.width}px`))
 const bgc = computed(() =>
   props.port === 'pc' ? 'var(--color-background-blue)' : 'var(--color-background)'
-)
-
-watch(
-  () => props.componentList,
-  (componentList) => {
-    formData.value = deepClone(componentList).reduce((formData, component) => {
-      if (component.props.modelValue) {
-        return Object.assign(formData, {
-          [component.id]: {
-            name: component.props.label?.value,
-            value: component.props.modelValue.value
-          }
-        })
-      }
-      return formData
-    }, {})
-  },
-  { deep: true, immediate: true }
 )
 
 const onSubmit = () => {

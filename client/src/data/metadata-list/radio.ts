@@ -35,6 +35,12 @@ export default <Metadata>{
       ],
       tips: '选项值为空的选项会被忽略'
     },
+    linkage: {
+      setter: 'setter-linkage',
+      label: '联动',
+      value: null,
+      unbind: true
+    },
     buttonType: {
       setter: 'el-switch',
       label: '是否为按钮样式'

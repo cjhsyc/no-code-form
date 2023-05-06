@@ -68,10 +68,10 @@
         ref="formRef"
       >
         <el-form-item prop="name" label="规则名称">
-          <el-input v-model="newRule.name"></el-input>
+          <el-input v-model="newRule.name" :readonly="!editable"></el-input>
         </el-form-item>
         <el-form-item prop="rule" label="校验规则">
-          <el-input v-model="newRule.rule" type="textarea" :rows="3" resize="none"></el-input>
+          <el-input v-model="newRule.rule" type="textarea" :rows="3" resize="none" :readonly="!editable"></el-input>
         </el-form-item>
         <el-form-item prop="message" label="校验错误提示信息">
           <el-input
@@ -80,6 +80,7 @@
             :rows="3"
             resize="none"
             placeholder="不填则自动生成（请输入正确的{规则名称}）"
+            :readonly="!editable"
           ></el-input>
         </el-form-item>
         <el-form-item label="测试文本">

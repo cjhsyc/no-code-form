@@ -34,6 +34,12 @@ export default <Metadata>{
       ],
       tips: '选项值为空的选项会被忽略'
     },
+    linkage: {
+      setter: 'setter-linkage',
+      label: '联动',
+      value: null,
+      unbind: true
+    },
     disabled: {
       label: '是否禁用',
       setter: 'el-switch',
@@ -46,7 +52,7 @@ export default <Metadata>{
     },
     type: {
       value: 'default',
-      label: '选项的类型',
+      label: '选项的样式类型',
       setter: 'setter-radio-button',
       attrs: {
         options: [

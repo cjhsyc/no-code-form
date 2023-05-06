@@ -1,4 +1,4 @@
-import type { SelectOption } from './widget'
+import type { SelectOption } from './materials'
 
 /**
  * vueDraggable组件change事件的参数

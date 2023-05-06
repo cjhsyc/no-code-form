@@ -32,7 +32,6 @@
 import { metadataList } from '@/data/metadata-list'
 import { useDesignerStore, useHomeStore, useUserStore } from '@/stores'
 import { reqGetDicts, reqGetFormInfo, reqGetRules } from '@/api'
-import { ElMessage } from 'element-plus'
 
 const designerStore = useDesignerStore()
 const homeStore = useHomeStore()
@@ -50,10 +49,6 @@ onBeforeMount(() => {
         result.data.publish
       )
     } else {
-      ElMessage({
-        type: result.type,
-        message: result.message
-      })
       designerStore.$reset()
     }
   })

@@ -72,6 +72,7 @@
           </div>
         </div>
       </el-card>
+      <el-empty description="暂无表单" :style="{ width: '100%' }"></el-empty>
     </div>
     <el-dialog v-model="showAddFormDialog" width="80%" top="5vh" :show-close="false">
       <template #header="{ titleClass }">

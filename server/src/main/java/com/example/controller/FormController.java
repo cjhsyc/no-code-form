@@ -36,7 +36,7 @@ public class FormController {
         QueryWrapper<Form> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("code", code);
         Form form = formService.getOne(queryWrapper);
-        if (form.getCode().equals(code)) {
+        if (form != null) {
             return new Message("success", "查询成功", form);
         }
         return new Message("error", "查询失败");

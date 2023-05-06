@@ -1,4 +1,4 @@
-import type { SelectOption } from './widget'
+import type { SelectOption } from './materials'
 
 export interface DictEdit {
   name: string

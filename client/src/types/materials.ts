@@ -32,3 +32,10 @@ export type Align = 'left' | 'center' | 'right'
  * 规则信息
  */
 export type Rule = Pick<RuleData, 'name' | 'rule' | 'message'>
+
+/**
+ * 联动信息
+ */
+export interface Linkage {
+  [id: string]: string[]
+}
