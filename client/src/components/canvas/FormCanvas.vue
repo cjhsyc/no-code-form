@@ -67,9 +67,22 @@
                       @click.stop="removeComponent(index)"
                     />
                   </div>
-                  <el-icon class="hide-icon" v-show="(element as ComponentData).props.hidden.value" :size="12">
-                    <Hide />
-                  </el-icon>
+                  <div class="tip-icon">
+                    <el-icon
+                      class="hide-icon"
+                      v-show="(element as ComponentData).props.hidden.value"
+                      :size="12"
+                    >
+                      <Hide />
+                    </el-icon>
+                    <el-icon
+                      class="link-icon"
+                      v-show="(element as ComponentData).props.linkage?.value"
+                      :size="12"
+                    >
+                      <Link />
+                    </el-icon>
+                  </div>
                 </el-col>
               </template>
             </VueDraggable>
@@ -84,7 +97,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ComponentData } from '@/types'
+import type { ComponentData, Linkage } from '@/types'
 import { deepClone, toRealProps, uuid } from '@/utils'
 import { ElMessageBox } from 'element-plus'
 import VueDraggable from 'vuedraggable'
@@ -135,10 +148,26 @@ const onchange = ({ added }: { added: { element: ComponentData } }) => {
 const removeComponent = (index: number) => {
   ElMessageBox.confirm('确认要删除吗？', '提示', { type: 'warning' })
     .then(() => {
-      if (designerStore.componentList[index].id === designerStore.currentComponent?.id) {
+      const id = designerStore.componentList[index].id
+      if (id === designerStore.currentComponent?.id) {
         designerStore.currentComponent = null
       }
       designerStore.componentList.splice(index, 1)
+      // 如果该组件是联动目标组件，删除其相关联动
+      designerStore.componentList.forEach((component) => {
+        const linkage: Linkage = component.props.linkage?.value
+        if (linkage) {
+          Object.keys(linkage).forEach((key) => {
+            linkage[key] = linkage[key].filter((target) => target !== id)
+            if (linkage[key].length === 0) {
+              Reflect.deleteProperty(linkage, key)
+            }
+          })
+          if (Object.keys(linkage).length === 0) {
+            component.props.linkage.value = null
+          }
+        }
+      })
       hoverId.value = ''
     })
     .catch(() => {})
@@ -198,9 +227,9 @@ const copyComponent = (index: number) => {
             right: 12px;
             top: -12px;
           }
-          .hide-icon {
+          .tip-icon {
             position: absolute;
-            top: 4px;
+            top: -4px;
             left: 6px;
             color: var(--el-color-info);
           }

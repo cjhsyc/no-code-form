@@ -35,5 +35,10 @@ export const routes = [
         component: () => import('@/views/home/Rule.vue')
       }
     ]
+  },
+  {
+    path: '/publish/:code',
+    name: 'publish',
+    component: () => import('@/views/publish/Publish.vue')
   }
 ]

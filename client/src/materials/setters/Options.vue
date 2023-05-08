@@ -109,8 +109,8 @@
 
 <script setup lang="ts">
 import { reqRemoveDict, reqSaveDict } from '@/api'
-import { useHomeStore, useUserStore } from '@/stores'
-import type { DictData, SelectOption } from '@/types'
+import { useHomeStore, useUserStore, useDesignerStore } from '@/stores'
+import type { DictData, Linkage, SelectOption } from '@/types'
 import { deepClone, uuid } from '@/utils'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import VueDraggable from 'vuedraggable'
@@ -126,6 +126,7 @@ const emit = defineEmits(['update:modelValue'])
 
 const userStore = useUserStore()
 const homeStore = useHomeStore()
+const designerStore = useDesignerStore()
 const showOptionsDialog = ref(false)
 const hoverDictCode = ref('')
 const dialogTitle = ref('')
@@ -171,7 +172,16 @@ const add = () => {
 
 // 移除一个选项
 const remove = (index: number) => {
+  const optionId = options.value[index].id
   options.value.splice(index, 1)
+  // 移除该选项相关的联动
+  const linkage: Linkage = designerStore.currentComponent?.props.linkage?.value
+  if (linkage && Reflect.has(linkage, optionId)) {
+    Reflect.deleteProperty(linkage, optionId)
+    if (Object.keys(linkage).length === 0 && designerStore.currentComponent) {
+      designerStore.currentComponent.props.linkage.value = null
+    }
+  }
 }
 
 // 批量编辑
@@ -207,6 +217,19 @@ const selectDict = (options: SelectOption[]) => {
 const confirm = () => {
   options.value = temOptions.value
   showOptionsDialog.value = false
+  // 移除已删除选项相关的联动
+  const linkage: Linkage = designerStore.currentComponent?.props.linkage?.value
+  const optionIds = temOptions.value.map((option) => option.id)
+  if (linkage) {
+    Object.keys(linkage).forEach((id) => {
+      if (optionIds.indexOf(id) === -1) {
+        Reflect.deleteProperty(linkage, id)
+      }
+    })
+    if (Object.keys(linkage).length === 0 && designerStore.currentComponent) {
+      designerStore.currentComponent.props.linkage.value = null
+    }
+  }
 }
 
 const editDict = (dictData: DictData, index: number) => {

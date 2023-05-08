@@ -62,19 +62,32 @@
                   >
                     {{ form.publish ? '下线' : '发布' }}
                   </el-dropdown-item>
+                  <el-dropdown-item icon="Share" @click="shareForm(form.code)" v-if="form.publish">
+                    分享
+                  </el-dropdown-item>
                   <el-dropdown-item icon="DocumentAdd">保存为模板</el-dropdown-item>
-                  <el-dropdown-item icon="delete" @click="removeForm(form.code, index)"
-                    >删除</el-dropdown-item
-                  >
+                  <el-dropdown-item icon="delete" @click="removeForm(form.code, index)">
+                    删除
+                  </el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
           </div>
         </div>
       </el-card>
-      <el-empty description="暂无表单" :style="{ width: '100%' }"></el-empty>
+      <el-empty
+        v-if="!formDataList.length"
+        description="暂无表单"
+        :style="{ width: '100%' }"
+      ></el-empty>
     </div>
-    <el-dialog v-model="showAddFormDialog" width="80%" top="5vh" :show-close="false">
+    <el-dialog
+      v-model="showAddFormDialog"
+      width="80%"
+      top="5vh"
+      :show-close="false"
+      class="add-form-dialog"
+    >
       <template #header="{ titleClass }">
         <div class="dialog-header">
           <div class="title" :class="titleClass">新建表单</div>
@@ -106,6 +119,18 @@
         </div>
       </div>
     </el-dialog>
+    <el-dialog
+      v-model="showShareDialog"
+      width="600px"
+      top="30vh"
+      title="分享链接"
+      class="share-dialog"
+    >
+      <div class="link">
+        <el-input :modelValue="shareAddress" readonly></el-input>
+        <el-button type="primary" @click="copyLink">复制链接</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -122,7 +147,9 @@ const designerStore = useDesignerStore()
 
 const hoverFormCode = ref('')
 const showAddFormDialog = ref(false)
+const showShareDialog = ref(false)
 const searchValue = ref('')
+const shareAddress = ref('')
 const formList = ref<FormInfo[]>([])
 const formDataList = computed<FormData[]>(() => {
   return formList.value.map((form) => {
@@ -148,6 +175,12 @@ const addForm = () => {
 // 编辑表单，进入表单设计器
 const editForm = (code: string) => {
   router.push({ name: 'designer', params: { code } })
+}
+
+// 分享已发布的表单
+const shareForm = (code: string) => {
+  shareAddress.value = `http://127.0.0.1:5173/publish/${code}`
+  showShareDialog.value = true
 }
 
 // 复制表单
@@ -197,6 +230,21 @@ const changePublish = (code: string, publish: boolean, index: number) => {
     if (result.success) {
       formList.value[index].publish = publish
     }
+  })
+}
+
+// 复制链接
+const copyLink = () => {
+  navigator.clipboard.writeText(shareAddress.value).then(() => {
+    ElMessage({
+      type: 'success',
+      message: '复制成功'
+    })
+  }).catch(() => {
+    ElMessage({
+      type: 'error',
+      message: '复制失败'
+    })
   })
 }
 
@@ -304,7 +352,7 @@ onBeforeMount(() => {
       }
     }
   }
-  :deep(.el-dialog) {
+  :deep(.el-dialog.add-form-dialog) {
     .el-dialog__header,
     .el-dialog__body {
       margin: 0;
@@ -377,6 +425,11 @@ onBeforeMount(() => {
           }
         }
       }
+    }
+  }
+  :deep(.share-dialog) {
+    .link {
+      display: flex;
     }
   }
 }

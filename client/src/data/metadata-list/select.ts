@@ -36,7 +36,7 @@ export default <Metadata>{
     },
     linkage: {
       setter: 'setter-linkage',
-      label: '联动',
+      label: '选项联动',
       value: null,
       unbind: true
     },
