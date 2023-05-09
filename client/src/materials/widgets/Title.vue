@@ -31,7 +31,7 @@ const color = computed(() => {
   if (props.content === '') {
     return 'var(--color-text-2)'
   }
-  return ''
+  return 'var(--color-text)'
 })
 
 const lineHeight = computed(() => {
@@ -53,12 +53,10 @@ const lineHeight = computed(() => {
     width: 100%;
     text-align: v-bind(align);
     color: v-bind(color);
-    white-space: wrap;
     line-height: v-bind(lineHeight);
   }
   .text {
     padding-top: 10px;
-    white-space: wrap;
     color: var(--color-text-2);
     text-align: v-bind(align);
     line-height: 16px;

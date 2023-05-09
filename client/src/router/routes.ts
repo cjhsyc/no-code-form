@@ -33,6 +33,16 @@ export const routes = [
         path: 'rule',
         name: 'rule',
         component: () => import('@/views/home/Rule.vue')
+      },
+      {
+        path: 'data',
+        name: 'data',
+        component: () => import('@/views/home/Data.vue')
+      },
+      {
+        path: 'template',
+        name: 'template',
+        component: () => import('@/views/home/Template.vue')
       }
     ]
   },
@@ -42,8 +52,13 @@ export const routes = [
     component: () => import('@/views/publish/Publish.vue')
   },
   {
+    path: '/complete',
+    name: 'complete',
+    component: () => import('@/views/other/Complete.vue')
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'notFound',
-    component: () => import('@/views/notFound/NotFound.vue')
+    component: () => import('@/views/other/NotFound.vue')
   }
 ]

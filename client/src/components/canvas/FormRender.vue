@@ -4,8 +4,9 @@
       :is="port === 'pc' ? 'el-card' : 'div'"
       :class="[port === 'pc' ? 'form-card' : 'form-div']"
     >
+      <!-- 缩略图模式下不触发表单校验 -->
       <el-form
-        :model="formModel"
+        :model="props.type === 'thumbnail' ? undefined : formModel"
         ref="formRef"
         v-bind="toRealProps(formProps)"
         :label-position="port === 'pc' ? formProps.labelPosition.value : 'top'"
@@ -50,9 +51,9 @@
 
 <script setup lang="ts">
 import type { ComponentData, FormProps, Linkage, Rule, SelectOption } from '@/types'
-import { deepClone, toRealProps } from '@/utils'
-import { stringToRegExp } from '@/utils'
-import { type FormRules, type FormItemRule, ElMessage } from 'element-plus'
+import { deepClone, stringToRegExp, toRealProps } from '@/utils'
+import { ElMessage, type FormItemRule, type FormRules } from 'element-plus'
+import { reqSaveSubmitData } from '@/api'
 
 const props = defineProps({
   formProps: {
@@ -76,16 +77,19 @@ const props = defineProps({
     default: 'auto'
   },
   type: {
-    type: String as PropType<'preview' | 'publish'>,
+    type: String as PropType<'thumbnail' | 'preview' | 'publish'>,
     default: 'preview'
   }
 })
 
+const route = useRoute()
+const router = useRouter()
 const formRef = ref()
 const formData = ref<Record<string, any>>({})
 watch(
   () => props.componentList,
   (componentList) => {
+    console.log('componentList')
     formData.value = deepClone(componentList).reduce((formData, component) => {
       if (component.props.modelValue) {
         return Object.assign(formData, {
@@ -170,11 +174,23 @@ const onSubmit = () => {
   formRef.value
     .validate()
     .then(() => {
-      console.log(formData.value)
-      if(props.type === 'publish') {
-        console.log('submit')
+      if (props.type === 'publish') {
+        reqSaveSubmitData({
+          formCode: route.params.code as string,
+          submitTime: new Date().toLocaleString(),
+          formData: JSON.stringify(formData.value)
+        }).then((result) => {
+          if (result.success) {
+            router.push('/complete')
+          } else {
+            ElMessage({
+              type: result.type,
+              message: result.message
+            })
+          }
+        })
       }
-      if(props.type === 'preview') {
+      if (props.type === 'preview') {
         ElMessage({
           type: 'warning',
           message: '预览状态不支持提交'

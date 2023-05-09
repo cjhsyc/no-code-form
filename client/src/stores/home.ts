@@ -14,6 +14,8 @@ export const useHomeStore = defineStore('homeStore', () => {
       return '搜索字典名称'
     } else if (activeMenu.value === 'rule') {
       return '搜索规则名称'
+    } else if (activeMenu.value === 'template') {
+      return '搜索模板名称'
     }
     return ''
   })

@@ -34,6 +34,7 @@ export {
   ElRadioButton,
   ElRadioGroup,
   ElRate,
+  ElResult,
   ElRow,
   ElScrollbar,
   ElSelect,

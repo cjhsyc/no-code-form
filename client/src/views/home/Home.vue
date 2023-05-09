@@ -22,6 +22,10 @@
             <el-icon><icon-menu /></el-icon>
             <template #title>我的表单</template>
           </el-menu-item>
+          <el-menu-item index="template">
+            <el-icon><icon-menu /></el-icon>
+            <template #title>我的模板</template>
+          </el-menu-item>
           <el-menu-item index="dict">
             <el-icon><document /></el-icon>
             <template #title>字典管理</template>

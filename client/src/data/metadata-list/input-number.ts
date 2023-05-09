@@ -4,7 +4,7 @@ import type { Metadata } from '@/types'
  */
 export default <Metadata>{
   name: '数字输入框',
-  component: 'el-input-number',
+  component: 'widget-input-number',
   category: 'input',
   props: {
     modelValue: {

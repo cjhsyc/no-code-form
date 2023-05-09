@@ -22,6 +22,7 @@
             v-bind="{ ...form.renderData }"
             port="pc"
             containerWidth="430px"
+            type="thumbnail"
           ></form-render>
         </div>
         <div class="card-content">
