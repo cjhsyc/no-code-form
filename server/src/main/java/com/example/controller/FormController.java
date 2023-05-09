@@ -42,6 +42,18 @@ public class FormController {
         return new Message("error", "查询失败");
     }
 
+    @GetMapping("publish/{code}")
+    public Message getPublishByCode(@PathVariable String code) {
+        QueryWrapper<Form> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("code", code);
+        queryWrapper.eq("publish", true);
+        Form form = formService.getOne(queryWrapper);
+        if (form != null) {
+            return new Message("success", "查询成功", form);
+        }
+        return new Message("error", "查询失败");
+    }
+
     @DeleteMapping("/{code}")
     public Message removeForm(@PathVariable String code) {
         QueryWrapper<Form> queryWrapper = new QueryWrapper<>();

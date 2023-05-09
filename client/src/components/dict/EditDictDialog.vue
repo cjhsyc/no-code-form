@@ -24,7 +24,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="emit('update:showDialog', false)">取消</el-button>
-          <el-button v-show="editable" type="primary" @click="onSave"> 保存 </el-button>
+          <el-button v-show="editable" type="primary" @click="onSave">保存</el-button>
         </span>
       </template>
     </el-dialog>
@@ -34,6 +34,7 @@
 <script setup lang="ts">
 import type { DictEdit } from '@/types'
 import { deepClone } from '@/utils'
+import { ElMessage } from 'element-plus'
 
 const props = defineProps({
   showDialog: {
@@ -75,10 +76,17 @@ const onInput = () => {
 
 const onSave = () => {
   if (modelValue.value.name) {
-    emit('save', {
-      ...modelValue.value,
-      options: modelValue.value.options.filter((item) => item.value)
-    })
+    if (modelValue.value.options.find((item) => !item.value)) {
+      ElMessage({
+        type: 'warning',
+        message: '选项值不能为空'
+      })
+    } else {
+      emit('save', {
+        ...modelValue.value,
+        options: modelValue.value.options
+      })
+    }
   } else {
     isEmpty.value = true
   }

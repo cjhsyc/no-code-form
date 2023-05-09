@@ -49,7 +49,18 @@
             ></el-input>
           </div>
           <div class="avatar">
-            <el-avatar :src="avatarUrl" />
+            <el-dropdown trigger="click" popper-class="avatar-dropdown">
+              <el-avatar :src="avatarUrl" />
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item class="username" disabled>
+                    用户名：<span>{{ userStore.username }}</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item divided>设置</el-dropdown-item>
+                  <el-dropdown-item divided @click="signOut">退出登录</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
           </div>
         </div>
         <RouterView />
@@ -61,6 +72,9 @@
 <script setup lang="ts">
 import { useHomeStore, useUserStore } from '@/stores'
 import { Menu as IconMenu } from '@element-plus/icons-vue'
+import { ElMessageBox } from 'element-plus'
+
+const router = useRouter()
 
 const homeStore = useHomeStore()
 const userStore = useUserStore()
@@ -79,6 +93,13 @@ const onClick = () => {
 
 const onSelectMenu = (index: string) => {
   homeStore.activeMenu = index
+}
+
+const signOut = () => {
+  ElMessageBox.confirm('确认要退出登录吗？', '提示', { type: 'warning' }).then(() => {
+    userStore.signOut()
+    router.push('/login')
+  }).catch(() => {})
 }
 </script>
 
@@ -145,6 +166,18 @@ const onSelectMenu = (index: string) => {
       .el-avatar {
         cursor: pointer;
       }
+    }
+  }
+}
+</style>
+
+<style lang="scss">
+.avatar-dropdown {
+  .username {
+    cursor: default;
+    color: var(--color-text);
+    span {
+      font-weight: bolder;
     }
   }
 }

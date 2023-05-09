@@ -27,7 +27,7 @@
         <div class="card-content">
           <div class="card-header">
             <div class="title">
-              <div class="name">
+              <div class="name" :title="designerStore.getFormName(form.renderData.componentList)">
                 {{ designerStore.getFormName(form.renderData.componentList) }}
               </div>
               <el-badge
@@ -53,6 +53,9 @@
               </div>
               <template #dropdown>
                 <el-dropdown-menu>
+                  <el-dropdown-item icon="View" @click="preview(form.renderData)"
+                    >预览</el-dropdown-item
+                  >
                   <el-dropdown-item icon="CopyDocument" @click="copyForm(form)"
                     >复制</el-dropdown-item
                   >
@@ -131,6 +134,7 @@
         <el-button type="primary" @click="copyLink">复制链接</el-button>
       </div>
     </el-dialog>
+    <preview-drawer v-model="showPreview" :renderData="previewRenderData"></preview-drawer>
   </div>
 </template>
 
@@ -148,6 +152,8 @@ const designerStore = useDesignerStore()
 const hoverFormCode = ref('')
 const showAddFormDialog = ref(false)
 const showShareDialog = ref(false)
+const showPreview = ref(false)
+const previewRenderData = ref<FormData['renderData']>()
 const searchValue = ref('')
 const shareAddress = ref('')
 const formList = ref<FormInfo[]>([])
@@ -175,6 +181,12 @@ const addForm = () => {
 // 编辑表单，进入表单设计器
 const editForm = (code: string) => {
   router.push({ name: 'designer', params: { code } })
+}
+
+// 预览表单
+const preview = (renderData: FormData['renderData']) => {
+  previewRenderData.value = renderData
+  showPreview.value = true
 }
 
 // 分享已发布的表单
@@ -235,17 +247,20 @@ const changePublish = (code: string, publish: boolean, index: number) => {
 
 // 复制链接
 const copyLink = () => {
-  navigator.clipboard.writeText(shareAddress.value).then(() => {
-    ElMessage({
-      type: 'success',
-      message: '复制成功'
+  navigator.clipboard
+    .writeText(shareAddress.value)
+    .then(() => {
+      ElMessage({
+        type: 'success',
+        message: '复制成功'
+      })
     })
-  }).catch(() => {
-    ElMessage({
-      type: 'error',
-      message: '复制失败'
+    .catch(() => {
+      ElMessage({
+        type: 'error',
+        message: '复制失败'
+      })
     })
-  })
 }
 
 // 获取我的表单列表
@@ -430,6 +445,9 @@ onBeforeMount(() => {
   :deep(.share-dialog) {
     .link {
       display: flex;
+      .el-button {
+        margin-left: 10px;
+      }
     }
   }
 }

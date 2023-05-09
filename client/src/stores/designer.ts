@@ -32,6 +32,13 @@ export const useDesignerStore = defineStore('designerStore', () => {
   // 表单标题
   const formName = computed(() => getFormName(componentList.value))
 
+  // 表单渲染数据
+  const renderData = computed(() => ({
+    componentList: componentList.value,
+    formProps: formProps.value,
+    width: width.value
+  }))
+
   /* action */
 
   /**
@@ -107,6 +114,7 @@ export const useDesignerStore = defineStore('designerStore', () => {
     publish,
     /* getter */
     formName,
+    renderData,
     /* action */
     clearCanvas,
     getFormName,

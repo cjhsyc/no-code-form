@@ -16,3 +16,6 @@ export const reqPublishForm = (code: string, publish: boolean) =>
 
 // 获取指定表单的信息
 export const reqGetFormInfo = (code: string) => request.get(`form/info/${code}`)
+
+// 获取已发布表单的信息
+export const reqGetPublishInfo = (code: string) => request.get(`form/publish/${code}`)

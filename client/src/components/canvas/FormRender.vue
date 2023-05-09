@@ -52,7 +52,7 @@
 import type { ComponentData, FormProps, Linkage, Rule, SelectOption } from '@/types'
 import { deepClone, toRealProps } from '@/utils'
 import { stringToRegExp } from '@/utils'
-import type { FormRules, FormItemRule } from 'element-plus'
+import { type FormRules, type FormItemRule, ElMessage } from 'element-plus'
 
 const props = defineProps({
   formProps: {
@@ -74,6 +74,10 @@ const props = defineProps({
   containerWidth: {
     type: String,
     default: 'auto'
+  },
+  type: {
+    type: String as PropType<'preview' | 'publish'>,
+    default: 'preview'
   }
 })
 
@@ -167,6 +171,15 @@ const onSubmit = () => {
     .validate()
     .then(() => {
       console.log(formData.value)
+      if(props.type === 'publish') {
+        console.log('submit')
+      }
+      if(props.type === 'preview') {
+        ElMessage({
+          type: 'warning',
+          message: '预览状态不支持提交'
+        })
+      }
     })
     .catch(() => {})
 }

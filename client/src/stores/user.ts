@@ -14,11 +14,19 @@ export const useUserStore = defineStore('userStore', () => {
     avatar.value = userData.avatar
   }
 
+  const signOut = () => {
+    id.value = 0
+    username.value = ''
+    role.value = ''
+    avatar.value = ''
+  }
+
   return {
     id,
     username,
     role,
     avatar,
-    setUserData
+    setUserData,
+    signOut
   }
 })

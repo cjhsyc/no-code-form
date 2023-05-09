@@ -40,5 +40,10 @@ export const routes = [
     path: '/publish/:code',
     name: 'publish',
     component: () => import('@/views/publish/Publish.vue')
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'notFound',
+    component: () => import('@/views/notFound/NotFound.vue')
   }
 ]

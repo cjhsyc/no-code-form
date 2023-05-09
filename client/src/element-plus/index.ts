@@ -23,6 +23,7 @@ export {
   ElForm,
   ElFormItem,
   ElIcon,
+  ElImage,
   ElInput,
   ElInputNumber,
   ElMenu,

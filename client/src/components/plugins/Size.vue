@@ -21,20 +21,24 @@ import { useDesignerStore } from '@/stores'
 
 const designerStore = useDesignerStore()
 
-const type = ref('auto')
-const width = ref<number>(designerStore.width === 'auto' ? 750 : designerStore.width)
-
-watch(type, (type) => {
-  if (type === 'auto') {
-    designerStore.width = 'auto'
-  } else {
-    designerStore.width = width.value
+// 上一次自定义时的宽度
+const lastWidth = ref(750)
+const type = computed({
+  get: () => (designerStore.width === 'auto' ? 'auto' : 'custom'),
+  set: (newValue) => {
+    if (newValue === 'auto' && designerStore.width !== 'auto') {
+      lastWidth.value = designerStore.width
+      designerStore.width = 'auto'
+    }
+    if (newValue === 'custom') {
+      designerStore.width = lastWidth.value
+    }
   }
 })
-
-watch(width, (width) => {
-  if (type.value === 'custom') {
-    designerStore.width = width
+const width = computed({
+  get: () => (designerStore.width === 'auto' ? 750 : designerStore.width),
+  set: (newValue) => {
+    designerStore.width = newValue
   }
 })
 </script>
