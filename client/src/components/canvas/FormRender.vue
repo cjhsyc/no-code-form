@@ -6,7 +6,7 @@
     >
       <!-- 缩略图模式下不触发表单校验 -->
       <el-form
-        :model="props.type === 'thumbnail' ? undefined : formModel"
+        :model="props.type === 'thumbnail' ? undefined : formData"
         ref="formRef"
         v-bind="toRealProps(formProps)"
         :label-position="port === 'pc' ? formProps.labelPosition.value : 'top'"
@@ -36,8 +36,8 @@
                 :is="component.component"
                 v-bind="{
                   ...toRealProps(component.props),
-                  modelValue: formData[component.id]?.value,
-                  'onUpdate:modelValue': (newValue:any) => {formData[component.id].value = newValue},
+                  modelValue: formData[component.id],
+                  'onUpdate:modelValue': (newValue:any) => {formData[component.id] = newValue},
                   onSubmit: component.component === 'widget-submit-button' ? onSubmit : undefined
                 }"
               ></component>
@@ -93,10 +93,7 @@ watch(
     formData.value = deepClone(componentList).reduce((formData, component) => {
       if (component.props.modelValue) {
         return Object.assign(formData, {
-          [component.id]: {
-            name: component.props.label?.value,
-            value: component.props.modelValue.value
-          }
+          [component.id]: component.props.modelValue.value
         })
       }
       return formData
@@ -104,13 +101,6 @@ watch(
   },
   { deep: true, immediate: true }
 )
-const formModel = computed(() => {
-  const formModel: Record<string, any> = {}
-  for (const key in formData.value) {
-    formModel[key] = formData.value[key].value
-  }
-  return formModel
-})
 
 // 显隐联动Map
 const showMap = computed(() => {
@@ -123,9 +113,9 @@ const showMap = computed(() => {
           const optionValue = component.props.options.value.find(
             (option: SelectOption) => option.id === key
           )?.value
-          const show = Array.isArray(formModel.value[component.id])
-            ? formModel.value[component.id].indexOf(optionValue) > -1
-            : formModel.value[component.id] === optionValue
+          const show = Array.isArray(formData.value[component.id])
+            ? formData.value[component.id].indexOf(optionValue) > -1
+            : formData.value[component.id] === optionValue
           map[id] = [...(map[id] || []), show]
         })
       }

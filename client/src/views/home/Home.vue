@@ -23,11 +23,11 @@
             <template #title>我的表单</template>
           </el-menu-item>
           <el-menu-item index="template">
-            <el-icon><icon-menu /></el-icon>
+            <el-icon><Tickets /></el-icon>
             <template #title>我的模板</template>
           </el-menu-item>
           <el-menu-item index="dict">
-            <el-icon><document /></el-icon>
+            <el-icon><Coin /></el-icon>
             <template #title>字典管理</template>
           </el-menu-item>
           <el-menu-item index="rule">
@@ -46,11 +46,32 @@
         <div class="content-header">
           <div class="search">
             <el-input
+              v-if="homeStore.activeMenu !== 'data'"
               v-model.trim="homeStore.search"
               prefix-icon="Search"
               :placeholder="homeStore.searchPlaceholder"
               clearable
             ></el-input>
+            <el-select
+              v-else
+              v-model="homeStore.search"
+              placeholder="请选择表单"
+              @change="onChange"
+            >
+              <el-option
+                v-for="item in homeStore.submitFormList"
+                :key="item.code"
+                :value="item.code"
+                :label="designerStore.getFormName(item.renderData.componentList)"
+              >
+                <span style="float: left">
+                  {{ designerStore.getFormName(item.renderData.componentList) }}
+                </span>
+                <span style="float: right; color: var(--el-text-color-secondary); font-size: 13px"
+                  >已收集 {{ item.submitCount }} 条</span
+                >
+              </el-option>
+            </el-select>
           </div>
           <div class="avatar">
             <el-dropdown trigger="click" popper-class="avatar-dropdown">
@@ -60,7 +81,9 @@
                   <el-dropdown-item class="username" disabled>
                     用户名：<span>{{ userStore.username }}</span>
                   </el-dropdown-item>
-                  <el-dropdown-item divided>设置</el-dropdown-item>
+                  <el-dropdown-item divided>修改用户名</el-dropdown-item>
+                  <el-dropdown-item>修改密码</el-dropdown-item>
+                  <el-dropdown-item>上传头像</el-dropdown-item>
                   <el-dropdown-item divided @click="signOut">退出登录</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
@@ -74,12 +97,14 @@
 </template>
 
 <script setup lang="ts">
-import { useHomeStore, useUserStore } from '@/stores'
+import { useHomeStore, useUserStore, useDesignerStore } from '@/stores'
+import type { SelectOption } from '@/types'
 import { Menu as IconMenu } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
 
 const router = useRouter()
 
+const designerStore = useDesignerStore()
 const homeStore = useHomeStore()
 const userStore = useUserStore()
 const isCollapse = ref(false)
@@ -100,10 +125,45 @@ const onSelectMenu = (index: string) => {
 }
 
 const signOut = () => {
-  ElMessageBox.confirm('确认要退出登录吗？', '提示', { type: 'warning' }).then(() => {
-    userStore.signOut()
-    router.push('/login')
-  }).catch(() => {})
+  ElMessageBox.confirm('确认要退出登录吗？', '提示', { type: 'warning' })
+    .then(() => {
+      userStore.signOut()
+      router.push('/login')
+    })
+    .catch(() => {})
+}
+
+const onChange = (code: string) => {
+  const form = homeStore.submitFormList.find((item) => item.code === code)
+  homeStore.formInputItemList =
+    form?.renderData.componentList
+      .filter((component) => component.category === 'input')
+      .map((component) => {
+        return {
+          label: component.props.label.value,
+          prop: component.id,
+          formatter: (row: Record<string, any>) => {
+            if (component.props.options) {
+              const getLabel = (value: string) => {
+                return (
+                  component.props.options.value.find(
+                    (option: SelectOption) => option.value === value
+                  )?.label || value
+                )
+              }
+              if (Array.isArray(row[component.id])) {
+                return row[component.id].map((item: string) => getLabel(item)).join(', ')
+              } else {
+                return getLabel(row[component.id])
+              }
+            }
+            if (Array.isArray(row[component.id]) && component.component === 'widget-time-picker') {
+              return row[component.id].join(component.props.rangeSeparator.value)
+            }
+            return row[component.id]
+          }
+        }
+      }) || []
 }
 </script>
 

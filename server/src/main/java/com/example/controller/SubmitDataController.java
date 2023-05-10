@@ -30,6 +30,6 @@ public class SubmitDataController {
 
     @GetMapping("form/list/{id}")
     public Message getSubmitFormList(@PathVariable Integer id) {
-        return new Message("success", "");
+        return new Message("success", "", submitDataService.getSubmitFormList(id));
     }
 }

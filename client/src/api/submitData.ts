@@ -8,4 +8,4 @@ export const reqSaveSubmitData = (params: SaveSubmitDataParams) => request.post(
 export const reqGetSubmitData = (code: string) => request.get(`data/${code}`)
 
 // 获取表单列表（包含已收集多少条数据）
-export const reqGetFormList = (userId: number) => request.get(`data/form/list/${userId}`)
+export const reqGetSubmitFormList = (userId: number) => request.get(`data/form/list/${userId}`)

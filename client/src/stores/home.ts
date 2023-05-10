@@ -1,11 +1,15 @@
 import { useStorage } from '@vueuse/core'
-import type { DictInfo, RuleData } from '@/types'
+import type { DictInfo, RuleData, SubmitForm } from '@/types'
 
 export const useHomeStore = defineStore('homeStore', () => {
   const search = ref('')
   const activeMenu = useStorage('activeMenu', 'form', sessionStorage)
   const dictList = ref<DictInfo[]>([])
   const ruleList = ref<RuleData[]>([])
+  const submitFormList = ref<SubmitForm[]>([])
+  const formInputItemList = ref<
+    { label: string; prop: string; formatter: (row: Record<string, any>) => string }[]
+  >([])
 
   const searchPlaceholder = computed(() => {
     if (activeMenu.value === 'form') {
@@ -29,6 +33,8 @@ export const useHomeStore = defineStore('homeStore', () => {
     activeMenu,
     dictList,
     ruleList,
+    submitFormList,
+    formInputItemList,
     // 计算属性
     searchPlaceholder
   }
