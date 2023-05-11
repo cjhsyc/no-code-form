@@ -9,7 +9,7 @@
     <div class="content">
       <el-table
         class="rule-table"
-        :data="homeStore.ruleList"
+        :data="filteredRuleList"
         height="100%"
         size="large"
         @cell-mouse-enter="onMouseenter"
@@ -59,7 +59,13 @@
         </el-table-column>
       </el-table>
     </div>
-    <el-dialog v-model="showDialog" :title="title" width="800px" :close-on-click-modal="false" top="10vh">
+    <el-dialog
+      v-model="showDialog"
+      :title="title"
+      width="800px"
+      :close-on-click-modal="false"
+      top="10vh"
+    >
       <el-form
         :model="newRule"
         label-position="top"
@@ -71,7 +77,13 @@
           <el-input v-model="newRule.name" :readonly="!editable"></el-input>
         </el-form-item>
         <el-form-item prop="rule" label="校验规则">
-          <el-input v-model="newRule.rule" type="textarea" :rows="3" resize="none" :readonly="!editable"></el-input>
+          <el-input
+            v-model="newRule.rule"
+            type="textarea"
+            :rows="3"
+            resize="none"
+            :readonly="!editable"
+          ></el-input>
         </el-form-item>
         <el-form-item prop="message" label="校验错误提示信息">
           <el-input
@@ -95,7 +107,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="showDialog = false">取消</el-button>
-          <el-button v-show="editable" type="primary" @click="onSave"> 保存 </el-button>
+          <el-button v-show="editable" type="primary" @click="onSave">保存</el-button>
         </span>
       </template>
     </el-dialog>
@@ -122,6 +134,11 @@ const testText = ref('')
 const testResult = computed(
   () => newRule.value.rule && stringToRegExp(newRule.value.rule).test(testText.value)
 )
+const filteredRuleList = computed(() => {
+  return homeStore.ruleList.filter((rule) => {
+    return rule.name.indexOf(homeStore.search) >= 0
+  })
+})
 
 const newRule = ref({
   code: '',

@@ -9,7 +9,7 @@
     <div class="content">
       <el-table
         class="dict-table"
-        :data="dictList"
+        :data="filteredDictList"
         height="100%"
         size="large"
         @cell-mouse-enter="onMouseenter"
@@ -87,6 +87,11 @@ const homeStore = useHomeStore()
 const dictList = computed<DictData[]>(() => {
   return homeStore.dictList.map((dict) => {
     return { ...dict, options: JSON.parse(dict.options) }
+  })
+})
+const filteredDictList = computed(() => {
+  return dictList.value.filter((dict) => {
+    return dict.name.indexOf(homeStore.search) > -1
   })
 })
 

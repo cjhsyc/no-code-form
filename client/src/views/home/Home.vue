@@ -57,6 +57,7 @@
               v-model="homeStore.search"
               placeholder="请选择表单"
               @change="onChange"
+              filterable
             >
               <el-option
                 v-for="item in homeStore.submitFormList"
@@ -75,15 +76,14 @@
           </div>
           <div class="avatar">
             <el-dropdown trigger="click" popper-class="avatar-dropdown">
-              <el-avatar :src="avatarUrl" />
+              <el-avatar :src="avatarUrl" fit="cover" />
               <template #dropdown>
                 <el-dropdown-menu>
                   <el-dropdown-item class="username" disabled>
                     用户名：<span>{{ userStore.username }}</span>
                   </el-dropdown-item>
-                  <el-dropdown-item divided>修改用户名</el-dropdown-item>
-                  <el-dropdown-item>修改密码</el-dropdown-item>
-                  <el-dropdown-item>上传头像</el-dropdown-item>
+                  <el-dropdown-item divided @click="updatePwd">修改密码</el-dropdown-item>
+                  <el-dropdown-item @click="uploadAvatar">上传头像</el-dropdown-item>
                   <el-dropdown-item divided @click="signOut">退出登录</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
@@ -91,16 +91,57 @@
           </div>
         </div>
         <RouterView />
+        <el-dialog v-model="showAvatarDialog" title="上传头像" width="500px">
+          <el-upload
+            drag
+            :action="getUploadUrl()"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
+            method="put"
+          >
+            <el-icon class="el-icon--upload">
+              <upload-filled />
+            </el-icon>
+            <div class="el-upload__text">将文件拖到此处或点击上传</div>
+            <template #tip>
+              <p class="el-upload__tip">只能上传 {{ uploadTypes.join('、') }} 文件, 且不超过3M</p>
+            </template>
+          </el-upload>
+        </el-dialog>
+        <el-dialog v-model="showPwdDialog" title="上传头像" width="500px">
+          <el-form
+            :model="updatePwdData"
+            label-position="top"
+            :rules="rules"
+            require-asterisk-position="right"
+            ref="formRef"
+          >
+            <el-form-item label="请输入旧密码" prop="oldPassword">
+              <el-input v-model="updatePwdData.oldPassword"></el-input>
+            </el-form-item>
+            <el-form-item label="请输入新密码" prop="password">
+              <el-input v-model="updatePwdData.password"></el-input>
+            </el-form-item>
+          </el-form>
+          <template #footer>
+            <span class="dialog-footer">
+              <el-button @click="showPwdDialog = false">取消</el-button>
+              <el-button type="primary" @click="onSavePwd">保存</el-button>
+            </span>
+          </template>
+        </el-dialog>
       </div>
     </template>
   </skeleton>
 </template>
 
 <script setup lang="ts">
-import { useHomeStore, useUserStore, useDesignerStore } from '@/stores'
-import type { SelectOption } from '@/types'
+import { useDesignerStore, useHomeStore, useUserStore } from '@/stores'
+import type { ResponseData, SelectOption } from '@/types'
 import { Menu as IconMenu } from '@element-plus/icons-vue'
-import { ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox, type FormRules } from 'element-plus'
+import { reqUpdatePassword } from '@/api'
 
 const router = useRouter()
 
@@ -115,6 +156,19 @@ const avatarUrl = computed(() => {
     return ''
   }
 })
+
+const showPwdDialog = ref(false)
+const formRef = ref()
+const updatePwdData = ref({
+  oldPassword: '',
+  password: ''
+})
+const rules = ref<FormRules>({
+  oldPassword: [{ required: true, message: '请输入旧密码', trigger: 'change' }],
+  password: [{ required: true, message: '请输入新密码', trigger: 'change' }]
+})
+const showAvatarDialog = ref(false)
+const uploadTypes = ref(['jpg', 'jpeg', 'png', 'gif'])
 
 const onClick = () => {
   isCollapse.value = !isCollapse.value
@@ -133,6 +187,7 @@ const signOut = () => {
     .catch(() => {})
 }
 
+// 数据看板中选中的表单改变时
 const onChange = (code: string) => {
   const form = homeStore.submitFormList.find((item) => item.code === code)
   homeStore.formInputItemList =
@@ -164,6 +219,71 @@ const onChange = (code: string) => {
           }
         }
       }) || []
+}
+
+const updatePwd = () => {
+  updatePwdData.value = {
+    oldPassword: '',
+    password: ''
+  }
+  showPwdDialog.value = true
+}
+
+const onSavePwd = () => {
+  formRef.value
+    .validate()
+    .then(() => {
+      reqUpdatePassword({
+        id: userStore.id,
+        ...updatePwdData.value
+      }).then((result) => {
+        ElMessage({
+          type: result.type,
+          message: result.message
+        })
+        if (result.success) {
+          showPwdDialog.value = false
+        }
+      })
+    })
+    .catch(() => {})
+}
+
+const uploadAvatar = () => {
+  showAvatarDialog.value = true
+}
+
+const getUploadUrl = () => {
+  return `${import.meta.env.VITE_REQUEST_BASE_URL}/user/avatar/${userStore.id}`
+}
+
+const beforeAvatarUpload = (file: File) => {
+  const ltCode = 3
+  const isLt3M = file.size / 1024 / 1024
+  const isExistFileType = uploadTypes.value.includes(file.type.replace(/image\//, ''))
+
+  if (isLt3M > ltCode || isLt3M <= 0) {
+    ElMessage.error(`图片大小范围是 0~${ltCode}MB!`)
+    return false
+  }
+  if (!isExistFileType) {
+    ElMessage.error(`图片只支持 ${uploadTypes.value.join('、')} 格式!`)
+    return false
+  }
+
+  return isLt3M && isExistFileType
+}
+
+const handleAvatarSuccess = (response: ResponseData) => {
+  ElMessage({
+    message: response.message,
+    type: response.type
+  })
+
+  if (response.success) {
+    userStore.avatar = response.data
+    showAvatarDialog.value = false
+  }
 }
 </script>
 
@@ -229,6 +349,9 @@ const onChange = (code: string) => {
     .avatar {
       .el-avatar {
         cursor: pointer;
+        :deep(> img) {
+          width: 100%;
+        }
       }
     }
   }

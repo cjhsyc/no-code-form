@@ -8,7 +8,13 @@
         :label="item.label"
         :formatter="item.formatter"
       />
-      <el-table-column prop="submitTime" label="提交时间" sortable fixed="right"></el-table-column>
+      <el-table-column
+        v-if="homeStore.formInputItemList.length"
+        prop="submitTime"
+        label="提交时间"
+        sortable
+        fixed="right"
+      ></el-table-column>
     </el-table>
   </div>
 </template>

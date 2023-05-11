@@ -10,7 +10,7 @@
     </div>
     <div class="forms">
       <el-card
-        v-for="(form, index) in formDataList"
+        v-for="(form, index) in filteredFormDataList"
         :key="form.code"
         class="form-card"
         shadow="hover"
@@ -141,7 +141,7 @@
 
 <script setup lang="ts">
 import { reqGetForms, reqPublishForm, reqRemoveForm, reqSaveForm } from '@/api'
-import { useDesignerStore, useUserStore } from '@/stores'
+import { useDesignerStore, useUserStore, useHomeStore } from '@/stores'
 import type { FormData, FormInfo } from '@/types'
 import { getDateAgo, uuid } from '@/utils'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -149,6 +149,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 const router = useRouter()
 const userStore = useUserStore()
 const designerStore = useDesignerStore()
+const homeStore = useHomeStore()
 
 const hoverFormCode = ref('')
 const showAddFormDialog = ref(false)
@@ -164,6 +165,11 @@ const formDataList = computed<FormData[]>(() => {
       ...form,
       renderData: JSON.parse(form.renderData)
     }
+  })
+})
+const filteredFormDataList = computed(() => {
+  return formDataList.value.filter((form) => {
+    return designerStore.getFormName(form.renderData.componentList).indexOf(homeStore.search) >= 0
   })
 })
 
