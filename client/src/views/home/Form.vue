@@ -54,12 +54,12 @@
               </div>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item icon="View" @click="preview(form.renderData)"
-                    >预览</el-dropdown-item
-                  >
-                  <el-dropdown-item icon="CopyDocument" @click="copyForm(form)"
-                    >复制</el-dropdown-item
-                  >
+                  <el-dropdown-item icon="View" @click="preview(form.renderData)">
+                    预览
+                  </el-dropdown-item>
+                  <el-dropdown-item icon="CopyDocument" @click="copyForm(form)">
+                    复制
+                  </el-dropdown-item>
                   <el-dropdown-item
                     :icon="form.publish ? 'CircleCloseFilled' : 'UploadFilled'"
                     @click="changePublish(form.code, !form.publish, index)"
@@ -69,7 +69,12 @@
                   <el-dropdown-item icon="Share" @click="shareForm(form.code)" v-if="form.publish">
                     分享
                   </el-dropdown-item>
-                  <el-dropdown-item icon="DocumentAdd">保存为模板</el-dropdown-item>
+                  <el-dropdown-item
+                    icon="DocumentAdd"
+                    @click="saveAsTemplate(JSON.stringify(form.renderData))"
+                  >
+                    保存为模板
+                  </el-dropdown-item>
                   <el-dropdown-item icon="delete" @click="removeForm(form.code, index)">
                     删除
                   </el-dropdown-item>
@@ -87,7 +92,7 @@
     </div>
     <el-dialog
       v-model="showAddFormDialog"
-      width="80%"
+      width="970px"
       top="5vh"
       :show-close="false"
       class="add-form-dialog"
@@ -114,12 +119,72 @@
               <el-icon :size="50"><plus /></el-icon>
               <div class="text">新建空白表单</div>
             </el-card>
-            <el-card class="template-card" shadow="hover"> </el-card>
+            <el-card
+              v-for="template in filteredTemplateList"
+              :key="template.code"
+              class="template-card"
+              shadow="hover"
+              @mouseenter="hoverTemplateCode = template.code"
+              @mouseleave="hoverTemplateCode = ''"
+            >
+              <div class="preview">
+                <form-render
+                  v-bind="{ ...template.renderData }"
+                  port="pc"
+                  containerWidth="430px"
+                  type="thumbnail"
+                ></form-render>
+              </div>
+              <div class="card-content">
+                <div
+                  v-show="hoverTemplateCode !== template.code"
+                  class="name"
+                  :title="designerStore.getFormName(template.renderData.componentList)"
+                >
+                  {{ designerStore.getFormName(template.renderData.componentList) }}
+                </div>
+                <div class="actions" v-show="hoverTemplateCode === template.code">
+                  <el-button @click="preview(template.renderData)">预览</el-button>
+                  <el-button type="primary" @click="createForm(template.code)">使用</el-button>
+                </div>
+              </div>
+            </el-card>
           </div>
         </div>
         <div class="template recommend">
           <div class="title">推荐模板</div>
-          <div class="content"></div>
+          <div class="content">
+            <el-card
+              v-for="template in filteredShareTemplateList"
+              :key="template.code"
+              class="template-card"
+              shadow="hover"
+              @mouseenter="hoverShareTemplateCode = template.code"
+              @mouseleave="hoverShareTemplateCode = ''"
+            >
+              <div class="preview">
+                <form-render
+                  v-bind="{ ...template.renderData }"
+                  port="pc"
+                  containerWidth="430px"
+                  type="thumbnail"
+                ></form-render>
+              </div>
+              <div class="card-content">
+                <div
+                  v-show="hoverShareTemplateCode !== template.code"
+                  class="name"
+                  :title="designerStore.getFormName(template.renderData.componentList)"
+                >
+                  {{ designerStore.getFormName(template.renderData.componentList) }}
+                </div>
+                <div class="actions" v-show="hoverShareTemplateCode === template.code">
+                  <el-button @click="preview(template.renderData)">预览</el-button>
+                  <el-button type="primary" @click="createForm(template.code)">使用</el-button>
+                </div>
+              </div>
+            </el-card>
+          </div>
         </div>
       </div>
     </el-dialog>
@@ -140,9 +205,17 @@
 </template>
 
 <script setup lang="ts">
-import { reqGetForms, reqPublishForm, reqRemoveForm, reqSaveForm } from '@/api'
-import { useDesignerStore, useUserStore, useHomeStore } from '@/stores'
-import type { FormData, FormInfo } from '@/types'
+import {
+  reqGetForms,
+  reqGetShareTemplates,
+  reqGetTemplates,
+  reqPublishForm,
+  reqRemoveForm,
+  reqSaveForm,
+  reqSaveTemplate
+} from '@/api'
+import { useDesignerStore, useHomeStore, useUserStore } from '@/stores'
+import type { FormData, FormInfo, TemplateData, TemplateInfo } from '@/types'
 import { getDateAgo, uuid } from '@/utils'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
@@ -152,6 +225,8 @@ const designerStore = useDesignerStore()
 const homeStore = useHomeStore()
 
 const hoverFormCode = ref('')
+const hoverTemplateCode = ref('')
+const hoverShareTemplateCode = ref('')
 const showAddFormDialog = ref(false)
 const showShareDialog = ref(false)
 const showPreview = ref(false)
@@ -173,7 +248,39 @@ const filteredFormDataList = computed(() => {
   })
 })
 
+const templateList = ref<TemplateData[]>([])
+const filteredTemplateList = computed<TemplateData[]>(() => {
+  return templateList.value.filter((template) => {
+    return (
+      designerStore.getFormName(template.renderData.componentList).indexOf(searchValue.value) >= 0
+    )
+  })
+})
+const shareTemplateList = ref<TemplateData[]>([])
+const filteredShareTemplateList = computed<TemplateData[]>(() => {
+  return shareTemplateList.value.filter((template) => {
+    return (
+      designerStore.getFormName(template.renderData.componentList).indexOf(searchValue.value) >= 0
+    )
+  })
+})
 const openAddFormDialog = () => {
+  reqGetTemplates(userStore.id).then((result) => {
+    templateList.value = result.data.map((template: TemplateInfo) => {
+      return {
+        ...template,
+        renderData: JSON.parse(template.renderData)
+      }
+    })
+  })
+  reqGetShareTemplates().then((result) => {
+    shareTemplateList.value = result.data.map((template: TemplateInfo) => {
+      return {
+        ...template,
+        renderData: JSON.parse(template.renderData)
+      }
+    })
+  })
   showAddFormDialog.value = true
 }
 const closeAddFormDialog = () => {
@@ -194,6 +301,21 @@ const editForm = (code: string) => {
 const preview = (renderData: FormData['renderData']) => {
   previewRenderData.value = renderData
   showPreview.value = true
+}
+
+const saveAsTemplate = (renderData: string) => {
+  reqSaveTemplate({
+    userId: userStore.id,
+    code: uuid(),
+    renderData: renderData,
+    share: false,
+    saveTime: new Date().toLocaleString()
+  }).then((result) => {
+    ElMessage({
+      type: result.type,
+      message: result.message
+    })
+  })
 }
 
 // 分享已发布的表单
@@ -268,6 +390,10 @@ const copyLink = () => {
         message: '复制失败'
       })
     })
+}
+
+const createForm = (code: string) => {
+  router.push({ name: 'designer', params: { code: uuid(), templateCode: code } })
 }
 
 // 获取我的表单列表
@@ -416,15 +542,13 @@ onBeforeMount(() => {
           padding: 0 10px;
           margin: -10px;
           display: flex;
+          flex-wrap: wrap;
           .template-card {
             margin: 10px;
             height: 275px;
             width: 215px;
-            &:hover {
-              transform: translateY(-4px);
-            }
             .el-card__body {
-              padding: 12px;
+              padding: 0;
             }
             &.empty {
               cursor: pointer;
@@ -441,6 +565,34 @@ onBeforeMount(() => {
                 .text {
                   font-weight: bolder;
                   color: var(--color-text-2);
+                }
+              }
+            }
+            &:hover {
+              transform: translateY(-4px);
+            }
+            .preview {
+              height: 220px;
+              overflow: hidden;
+              pointer-events: none;
+              user-select: none;
+              background-color: var(--color-background-blue);
+              .render-form {
+                transform: scale(0.5);
+                transform-origin: left top;
+              }
+            }
+            .card-content {
+              padding: 10px;
+              .name {
+                font-size: larger;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              }
+              .actions {
+                .el-button {
+                  width: 90px;
                 }
               }
             }

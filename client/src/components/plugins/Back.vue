@@ -21,7 +21,7 @@ const props = defineProps({
 const router = useRouter()
 
 const goBack = () => {
-  router.push(props.path)
+  router.go(-1)
 }
 </script>
 

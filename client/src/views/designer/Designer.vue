@@ -31,7 +31,7 @@
 <script setup lang="ts">
 import { metadataList } from '@/data/metadata-list'
 import { useDesignerStore, useHomeStore, useUserStore } from '@/stores'
-import { reqGetDicts, reqGetFormInfo, reqGetRules } from '@/api'
+import { reqGetDicts, reqGetFormInfo, reqGetRules, reqGetTemplateInfo } from '@/api'
 
 const designerStore = useDesignerStore()
 const homeStore = useHomeStore()
@@ -39,19 +39,35 @@ const userStore = useUserStore()
 const route = useRoute()
 
 onBeforeMount(() => {
-  reqGetFormInfo(route.params.code as string).then((result) => {
-    if (result.success) {
-      const renderData = JSON.parse(result.data.renderData)
-      designerStore.setFormData(
-        renderData.componentList,
-        renderData.formProps,
-        renderData.width,
-        result.data.publish
-      )
-    } else {
-      designerStore.$reset()
-    }
-  })
+  if (!route.params.templateCode) {
+    reqGetFormInfo(route.params.code as string).then((result) => {
+      if (result.success) {
+        const renderData = JSON.parse(result.data.renderData)
+        designerStore.setFormData(
+          renderData.componentList,
+          renderData.formProps,
+          renderData.width,
+          result.data.publish
+        )
+      } else {
+        designerStore.$reset()
+      }
+    })
+  } else {
+    reqGetTemplateInfo(route.params.templateCode as string).then((result) => {
+      if (result.success) {
+        const renderData = JSON.parse(result.data.renderData)
+        designerStore.setFormData(
+          renderData.componentList,
+          renderData.formProps,
+          renderData.width,
+          false
+        )
+      } else {
+        designerStore.$reset()
+      }
+    })
+  }
 })
 
 onMounted(() => {

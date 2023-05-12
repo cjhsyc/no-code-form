@@ -4,7 +4,7 @@ export const routes = [
     redirect: '/home'
   },
   {
-    path: '/designer/:code',
+    path: '/designer/:code/:templateCode?',
     name: 'designer',
     component: () => import('@/views/designer/Designer.vue')
   },

@@ -6,11 +6,11 @@
     >
       <!-- 缩略图模式下不触发表单校验 -->
       <el-form
-        :model="props.type === 'thumbnail' ? undefined : formData"
+        :model="formData"
         ref="formRef"
         v-bind="toRealProps(formProps)"
         :label-position="port === 'pc' ? formProps.labelPosition.value : 'top'"
-        :rules="rules"
+        :rules="props.type === 'thumbnail' ? undefined :rules"
         class="form"
         @submit.prevent
       >
@@ -89,7 +89,6 @@ const formData = ref<Record<string, any>>({})
 watch(
   () => props.componentList,
   (componentList) => {
-    console.log('componentList')
     formData.value = deepClone(componentList).reduce((formData, component) => {
       if (component.props.modelValue) {
         return Object.assign(formData, {
