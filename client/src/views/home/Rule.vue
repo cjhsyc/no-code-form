@@ -190,7 +190,7 @@ const editRule = (ruleData: RuleData, index: number) => {
     message: ruleData.message
   }
   editable.value = userStore.id === ruleData.userId
-  title.value = userStore.id !== ruleData.userId ? '字典详情' : '编辑字典'
+  title.value = userStore.id !== ruleData.userId ? '规则详情' : '编辑规则'
   showDialog.value = true
   editingId.value = index
   testText.value = ''

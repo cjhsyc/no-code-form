@@ -109,7 +109,7 @@
             </template>
           </el-upload>
         </el-dialog>
-        <el-dialog v-model="showPwdDialog" title="上传头像" width="500px">
+        <el-dialog v-model="showPwdDialog" title="修改密码" width="500px">
           <el-form
             :model="updatePwdData"
             label-position="top"

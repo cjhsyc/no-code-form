@@ -43,6 +43,7 @@ onBeforeMount(() => {
 
 .publish {
   height: 100vh;
+  overflow: auto;
   @include scrollbar();
 }
 </style>
